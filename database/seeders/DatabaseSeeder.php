@@ -166,8 +166,8 @@ class DatabaseSeeder extends Seeder
                 'slug' => Str::slug($name),
                 'is_visible' => true,
                 'price' => random_int(1000, 5000),
-                'from' => $faker->date($format = 'Y-m-d', $max = 'now'),
-                'to' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                // 'from' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                // 'to' => $faker->date($format = 'Y-m-d', $max = 'now'),
             ]);
         }
 
@@ -183,10 +183,10 @@ class DatabaseSeeder extends Seeder
         $categories_count = Category::count();
         $plans_count = Plan::count();
         foreach ($subscribers as $key => $subscriber) {
-            $category = Category::find(random_int(1, $categories_count));
             $plan = Plan::find(random_int(1, $plans_count));
             for ($i = 0; $i < 2; $i++) {
-                $categories[] = [
+                $category = Category::find(random_int(1, $categories_count));
+                $array[] = [
                     'id' => $category->id,
                     'name' => $category->name,
                     'slug' => $category->slug,
@@ -204,7 +204,7 @@ class DatabaseSeeder extends Seeder
                     'facebook' => $faker->url(),
                     'instagram' => $faker->url(),
                 ],
-                'categories' => $categories,
+                'categories' => $array,
 
             ]);
         }

@@ -16,8 +16,8 @@ class Plan extends Model
         'slug',
         'price',
         'is_visible',
-        'from',
-        'to',
+        // 'from',
+        // 'to',
     ];
 
     protected $casts = [

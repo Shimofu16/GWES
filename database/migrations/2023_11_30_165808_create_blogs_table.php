@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('subscriber_company_id')->references('id')->on('subscriber_companies');
+            $table->text('title');
+            $table->longText('description');
+            $table->text('images');
+            $table->date('date');
             $table->timestamps();
         });
     }

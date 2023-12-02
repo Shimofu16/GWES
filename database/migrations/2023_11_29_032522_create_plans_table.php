@@ -20,8 +20,8 @@ return new class extends Migration
             // $table->enum('status', PlanStatusEnum::toArray());
             $table->boolean('is_visible')->default(true);
             $table->double('price');
-            $table->date('from');
-            $table->date('to');
+            // $table->date('from');
+            // $table->date('to');
             $table->timestamps();
         });
     }

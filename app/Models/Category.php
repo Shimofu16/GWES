@@ -16,6 +16,6 @@ class Category extends Model
 
     public function subscribersCount()
     {
-        return Subscriber::whereJsonContains('categories', ['id' =>  $this->id])->count();
+        return SubscriberCompany::whereJsonContains('categories', ['id' =>  $this->id])->count();
     }
 }

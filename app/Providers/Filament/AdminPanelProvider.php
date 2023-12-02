@@ -33,6 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->profile()
             ->navigationGroups([
                 'Manage Clients',
                 'Manage Website',

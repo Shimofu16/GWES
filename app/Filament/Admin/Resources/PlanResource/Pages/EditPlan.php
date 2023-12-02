@@ -24,7 +24,7 @@ class EditPlan extends EditRecord
  }
 
  // Change the Success Message
- protected function getUpdateNotification(): ?Notification
+ protected function getSavedNotification(): ?Notification
  {
      return Notification::make()
          ->success()
