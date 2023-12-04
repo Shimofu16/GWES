@@ -41,19 +41,19 @@ class PlanResource extends Resource
                 Group::make([
                     Section::make('Plan Details')
                         ->schema([
-                            TextInput::make('name')
-                                ->autofocus()
-                                ->required()
-                                ->placeholder('Enter the plan name')
-                                ->label('Name')
-                                ->live(onBlur: true)
-                                ->afterStateUpdated(fn ($state, Forms\Set $set) =>  $set('slug', Str::slug($state))),
-                            TextInput::make('slug')
-                                ->disabled()
-                                ->label('Slug')
-                                ->dehydrated()
-                                ->required()
-                                ->unique(Plan::class, 'slug', ignoreRecord: true),
+                            // TextInput::make('name')
+                            //     ->autofocus()
+                            //     ->required()
+                            //     ->placeholder('Enter the plan name')
+                            //     ->label('Name')
+                            //     ->live(onBlur: true)
+                            //     ->afterStateUpdated(fn ($state, Forms\Set $set) =>  $set('slug', Str::slug($state))),
+                            // TextInput::make('slug')
+                            //     ->disabled()
+                            //     ->label('Slug')
+                            //     ->dehydrated()
+                            //     ->required()
+                            //     ->unique(Plan::class, 'slug', ignoreRecord: true),
                             MarkdownEditor::make('description')
                                 ->columnSpanFull()
                                 ->required(),
@@ -95,6 +95,7 @@ class PlanResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Availability')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('description')
@@ -107,12 +108,17 @@ class PlanResource extends Resource
                     ->money('PHP')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('Duration')
-                    ->getStateUsing(function (Plan $record): string {
-                        return date('F-d-Y', strtotime($record->from)) . " - " . date('F-d-Y', strtotime($record->to));
+                TextColumn::make('discount_price')
+                    ->money('PHP')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('discount_percentage')
+                    ->getStateUsing(function ($record) {
+                        return number_format($record->discount_percentage) . '%';
                     })
                     ->sortable()
                     ->searchable(),
+
 
             ])
             ->filters([
@@ -144,7 +150,7 @@ class PlanResource extends Resource
     {
         return [
             'index' => Pages\ListPlans::route('/'),
-            'create' => Pages\CreatePlan::route('/create'),
+            // 'create' => Pages\CreatePlan::route('/create'),
             'edit' => Pages\EditPlan::route('/{record}/edit'),
         ];
     }

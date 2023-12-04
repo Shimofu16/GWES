@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PlanAvailabilityEnum;
 use App\Enums\PlanStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,11 +18,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('slug')->unique();
-            // $table->enum('status', PlanStatusEnum::toArray());
             $table->boolean('is_visible')->default(true);
             $table->double('price');
-            // $table->date('from');
-            // $table->date('to');
+            $table->double('discount_price')->nullable();
+            $table->double('discount_percentage')->nullable();
+            $table->enum('availability',PlanAvailabilityEnum::toArrayAll());
             $table->timestamps();
         });
     }

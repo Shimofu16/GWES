@@ -21,15 +21,22 @@ class SubscriberCompany extends Model
         'socials',
         'price_range',
         'categories',
+        'due_date',
     ];
 
     protected $casts = [
         'socials' => Json::class,
         'categories' => Json::class,
+        'due_date' => 'date',
     ];
 
     public function subscriber()
     {
         return $this->belongsTo(Subscriber::class);
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
     }
 }

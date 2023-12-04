@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Enums\PlanAvailabilityEnum;
 use Faker\Factory;
 use App\Models\Plan;
 use App\Models\User;
@@ -12,6 +13,7 @@ use App\Models\Client;
 use App\Models\Category;
 use App\Models\Subscriber;
 use App\Models\SubscriberCompany;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -158,16 +160,21 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
-        for ($i = 0; $i < 3; $i++) {
-            $name =  $faker->name;
+        foreach (PlanAvailabilityEnum::cases() as $key => $case) {
+            // to months
+            $name =  $case->value . ' Month' . ($key != 0 ? 's' : '');
+            $price = random_int(1000, 5000);
+            $discount_price = random_int(500, 1500);
+            $discount_percentage = $discount_price / $price * 100;
             Plan::create([
                 'name' => $name,
                 'description' => $faker->text(),
                 'slug' => Str::slug($name),
                 'is_visible' => true,
-                'price' => random_int(1000, 5000),
-                // 'from' => $faker->date($format = 'Y-m-d', $max = 'now'),
-                // 'to' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                'price' => $price,
+                'discount_price' => $discount_price,
+                'discount_percentage' => $discount_percentage,
+                'availability' => $case->value,
             ]);
         }
 
@@ -205,6 +212,7 @@ class DatabaseSeeder extends Seeder
                     'instagram' => $faker->url(),
                 ],
                 'categories' => $array,
+                'due_date' => Carbon::now()->addMonths($plan->availability)
 
             ]);
         }

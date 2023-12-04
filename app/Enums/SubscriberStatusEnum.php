@@ -3,16 +3,17 @@ namespace App\Enums;
 
 use Illuminate\Support\Str;
 
-enum PlanStatusEnum : string
+enum SubscriberStatusEnum : string
 {
-    case VISIBLE = 'visible';
-    case HIDDEN = 'hidden';
+    case ACTIVE = 'active';
+    case INACTIVE = 'inactive';
+    case PENDING = 'pending';
 
     public static function toArray(): array
     {
         $array = [];
         foreach (self::cases() as $case) {
-            $array[$case->value] = Str::ucfirst($case->value);
+            $array[$case->value] = $case->value;
         }
         return $array;
     }

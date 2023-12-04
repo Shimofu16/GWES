@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources;
 
 use Filament\Forms;
+use App\Models\Plan;
 use Filament\Tables;
 use App\Models\Category;
 use Filament\Forms\Form;
@@ -10,22 +11,25 @@ use App\Models\Subscriber;
 use Filament\Tables\Table;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use App\Enums\SubscriberStatusEnum;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\SelectColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Infolists\Components\ImageEntry;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Infolists\Components\Group as InfoListGroup;
 use App\Filament\Admin\Resources\SubscriberResource\Pages;
 use Filament\Infolists\Components\Section as InfolistSection;
 use App\Filament\Admin\Resources\SubscriberResource\RelationManagers;
-use App\Models\Plan;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\MarkdownEditor;
-use Filament\Forms\Components\Select;
+use Filament\Infolists\Components\Fieldset;
 
 class SubscriberResource extends Resource
 {
@@ -109,12 +113,18 @@ class SubscriberResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        ->headerActions([
+
+        ])
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                ->searchable(),
                 TextColumn::make('email')
                     ->icon('heroicon-m-envelope'),
                 TextColumn::make('phone')
                     ->icon('heroicon-m-phone'),
+                SelectColumn::make('status')
+                    ->options(SubscriberStatusEnum::toArray()),
 
             ])
             ->filters([
@@ -152,50 +162,76 @@ class SubscriberResource extends Resource
 
     public static function infolist(Infolist $infolist): Infolist
     {
-        return $infolist->schema([
-            InfolistSection::make('Company Information')
-                ->schema([
-                    ImageEntry::make('company.logo')
-                        ->square(),
-                    TextEntry::make('company.name')
-                        ->label('Name'),
-                    TextEntry::make('company.phone')
-                        ->label('Phone'),
-                    TextEntry::make('company.price_range')
-                        ->getStateUsing(function (Subscriber $record) {
-                            $string = explode(' - ', $record->company->price_range);
-                            return number_format($string[0]) . ' - ' . number_format($string[1]);
-                        })
-                        ->label('Price Range'),
-                    TextEntry::make('company.address')
-                        ->label('Address')
-                        ->columnSpanFull(),
-                    TextEntry::make('company.description')
-                        ->label('Description')
-                        ->columnSpanFull(),
+        return $infolist
+            ->schema([
+                InfoListGroup::make([
+                    InfolistSection::make('Company Information')
+                        ->schema([
+                            ImageEntry::make('company.logo')
+                                ->square(),
+                            TextEntry::make('company.name')
+                                ->label('Name'),
+                            TextEntry::make('company.phone')
+                                ->label('Phone'),
+                            TextEntry::make('company.price_range')
+                                ->getStateUsing(function (Subscriber $record) {
+                                    $string = explode(' - ', $record->company->price_range);
+                                    return number_format($string[0]) . ' - ' . number_format($string[1]);
+                                })
+                                ->label('Price Range'),
+                            TextEntry::make('company.address')
+                                ->label('Address')
+                                ->columnSpanFull(),
+                            TextEntry::make('company.description')
+                                ->label('Description')
+                                ->columnSpanFull(),
+
+                        ])
+                        ->columns(4)
+                ])
+                    ->columnSpanFull(),
+                InfoListGroup::make([
+                    InfolistSection::make('Other')
+                        ->schema([
+                            InfoListGroup::make([
+                                Fieldset::make('Plan')
+                                    ->schema([
+                                        TextEntry::make('company.plan.name')
+                                            ->label('Availability'),
+                                        TextEntry::make('company.plan.price')
+                                            ->money('PHP')
+                                            ->label('Price'),
+                                        TextEntry::make('company.due_date')
+                                            ->label('Due Date')
+                                            ->date()
+
+                                    ])
+                            ]),
+                            InfoListGroup::make([
+                                TextEntry::make('company.socials')
+                                    ->label('Socials')
+                                    ->listWithLineBreaks()
+                                    ->bulleted()
+                                    ->openUrlInNewTab(),
+                                TextEntry::make('company.categories')
+                                    ->getStateUsing(function (Subscriber $record) {
+                                        $categories = array();
+                                        foreach ($record->company->categories as $key => $category) {
+                                            if (!in_array($category['name'], $categories)) {
+                                                $categories[] = $category['name'];
+                                            }
+                                        }
+                                        return implode(', ', $categories);
+                                    })
+                                    ->label('Categories')
+                                    ->listWithLineBreaks()
+                                    ->bulleted(),
+                            ])
+                        ])
+                        ->columns(2),
 
                 ])
-                ->columns(4),
-            InfolistSection::make('Other')
-                ->schema([
-                    TextEntry::make('company.socials')
-                        ->label('Socials')
-                        ->listWithLineBreaks()
-                        ->bulleted(),
-                    TextEntry::make('company.categories')
-                        ->getStateUsing(function (Subscriber $record) {
-                            $categories = array();
-                            foreach ($record->company->categories as $key => $category) {
-                                if (!in_array($category['name'], $categories)) {
-                                    $categories[] = $category['name'];
-                                }
-                            }
-                            return implode(', ', $categories);
-                        })
-                        ->label('Categories')
-                        ->listWithLineBreaks()
-                        ->bulleted(),
-                ]),
-        ]);
+                    ->columnSpanFull(),
+            ]);
     }
 }

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('description');
             $table->json('socials');
             $table->json('categories'); // array of categories id,  name, slug.
+            $table->date('due_date');
             $table->timestamps();
         });
     }

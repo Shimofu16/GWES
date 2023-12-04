@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\PlanStatusEnum;
+use App\Enums\PlanAvailabilityEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,12 +16,19 @@ class Plan extends Model
         'slug',
         'price',
         'is_visible',
-        // 'from',
-        // 'to',
+        'discount_price',
+        'discount_percentage',
+        'availability',
     ];
 
+
     protected $casts = [
-        // 'status' => PlanStatusEnum::class,
+        'availability' => PlanAvailabilityEnum::class,
         'is_visible' => 'boolean',
     ];
+
+    public function companies()
+    {
+        return $this->hasMany(SubscriberCompany::class);
+    }
 }
