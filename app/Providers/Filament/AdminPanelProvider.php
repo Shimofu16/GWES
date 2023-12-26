@@ -38,9 +38,22 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->profile()
             ->navigationGroups([
-                'Manage Clients',
-                'Manage Website',
+                NavigationGroup::make()
+                    ->label('Subscribers')
+                    ->icon('heroicon-o-building-office-2'),
+
+                NavigationGroup::make()
+                    ->label('Settings')
+                    ->icon('heroicon-o-cog-6-tooth'),
+
+                NavigationGroup::make()
+                    ->label('Clients')
+                    ->icon('heroicon-o-users'),
+
+
             ])
+
+            // ->topNavigation()
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->pages([])
@@ -61,5 +74,4 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ]);
     }
-    
 }

@@ -22,6 +22,7 @@ class SubscriberCompany extends Model
         'price_range',
         'categories',
         'due_date',
+        'status',
     ];
 
     protected $casts = [

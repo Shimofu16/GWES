@@ -22,9 +22,9 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    // protected static ?string $navigationIcon = 'heroicon-o-funnel';
 
-    protected static ?string $navigationGroup = 'Manage Website';
+    protected static ?string $navigationGroup = 'Settings';
 
     public static function form(Form $form): Form
     {
@@ -50,7 +50,8 @@ class CategoryResource extends Resource
                                     ->unique(Category::class, 'slug', ignoreRecord: true),
 
                             ]),
-                    ]),
+                    ])
+                    ->columnSpanFull(),
 
             ]);
     }
@@ -101,8 +102,8 @@ class CategoryResource extends Resource
     {
         return [
             'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            // 'create' => Pages\CreateCategory::route('/create'),
+            // 'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 }

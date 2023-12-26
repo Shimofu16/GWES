@@ -16,15 +16,18 @@ class Subscriber extends Model
         'name',
         'email',
         'phone',
-        'status',
     ];
 
-    protected $casts = [
-
+    protected $appends = [
+        'active_companies',
     ];
 
-    public function company()
+    public function getActiveCompaniesAttribute(){
+        return $this->companies()->where('status', SubscriberStatusEnum::ACTIVE->value)->get();
+    }
+
+    public function companies()
     {
-        return $this->hasOne(SubscriberCompany::class);
+        return $this->hasMany(SubscriberCompany::class);
     }
 }

@@ -13,17 +13,13 @@ class Plan extends Model
     protected $fillable = [
         'name',
         'description',
-        'slug',
         'price',
+        'billing_cycle',
         'is_visible',
-        'discount_price',
-        'discount_percentage',
-        'availability',
     ];
 
 
     protected $casts = [
-        'availability' => PlanAvailabilityEnum::class,
         'is_visible' => 'boolean',
     ];
 

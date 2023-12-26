@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SubscriberStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,7 +24,10 @@ return new class extends Migration
             $table->string('description');
             $table->json('socials');
             $table->json('categories'); // array of categories id,  name, slug.
+            $table->string('proof_of_payment');
+            $table->string('payment_method')->default('GCash');
             $table->date('due_date');
+            $table->enum('status', SubscriberStatusEnum::toArray())->default(SubscriberStatusEnum::PENDING); // pending, active, inactive, deleted
             $table->timestamps();
         });
     }

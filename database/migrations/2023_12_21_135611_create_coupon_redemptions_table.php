@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\SubscriberStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscribers', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('phone')->nullable();
-            $table->softDeletes();
+        Schema::create('coupon_redemptions', function (Blueprint $table) {
+            $table->foreignId('coupon_id')->references('id')->on('coupons');
+            $table->foreignId('subscriber_company_id')->references('id')->on('subscriber_companies');
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscribers');
+        Schema::dropIfExists('coupon_redemptions');
     }
 };

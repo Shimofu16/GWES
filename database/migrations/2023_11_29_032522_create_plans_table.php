@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\BillingCycleEnum;
 use App\Enums\PlanAvailabilityEnum;
 use App\Enums\PlanStatusEnum;
 use Illuminate\Database\Migrations\Migration;
@@ -13,16 +14,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->string('slug')->unique();
-            $table->boolean('is_visible')->default(true);
             $table->double('price');
-            $table->double('discount_price')->nullable();
-            $table->double('discount_percentage')->nullable();
-            $table->enum('availability',PlanAvailabilityEnum::toArrayAll());
+            $table->enum('billing_cycle', BillingCycleEnum::toArray());
+            $table->boolean('is_visible')->default(true);
             $table->timestamps();
         });
     }
