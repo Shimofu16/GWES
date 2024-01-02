@@ -16,7 +16,7 @@ class ListPendingSubscribers extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make('New Subscriber'),
+            // Actions\CreateAction::make('New Subscriber'),
         ];
     }
 

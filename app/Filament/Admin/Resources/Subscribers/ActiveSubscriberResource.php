@@ -17,11 +17,14 @@ use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ActiveSubscriberResource extends Resource
@@ -76,10 +79,36 @@ class ActiveSubscriberResource extends Resource
                     ->label('Companies'),
             ])
             ->bulkActions([
-
+                DeleteBulkAction::make('delete')
+                    ->action(function (Collection $records) {
+                        try {
+                            foreach ($records as $record) {
+                                $record->companies()->delete();
+                                $record->delete();
+                            }
+                            Notification::make()
+                                ->success()
+                                ->title('Deleted Subscribers')
+                                ->body('Successfully deleted Subscribers.')
+                                ->duration(5000)
+                                ->send();
+                            return redirect('admin/active/subscribers');
+                        } catch (\Throwable $th) {
+                            Notification::make()
+                                ->danger()
+                                ->title('Error')
+                                ->body($th->getMessage())
+                                ->duration(5000)
+                                ->send();
+                        }
+                    })
+                    ->icon('heroicon-o-trash')
+                    ->requiresConfirmation()
+                    ->modalHeading('Delete Subscribers')
+                    ->modalDescription('Are your sure you want to delete these subscribers?')
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                // Tables\Actions\CreateAction::make(),
             ]);
     }
 
@@ -193,8 +222,8 @@ class ActiveSubscriberResource extends Resource
     {
         return [
             'index' => Pages\ListActiveSubscribers::route('/'),
-            'create' => Pages\CreateActiveSubscriber::route('/create'),
-            'edit' => Pages\EditActiveSubscriber::route('/{record}/edit'),
+            // 'create' => Pages\CreateActiveSubscriber::route('/create'),
+            // 'edit' => Pages\EditActiveSubscriber::route('/{record}/edit'),
         ];
     }
 }

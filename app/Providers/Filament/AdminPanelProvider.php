@@ -43,12 +43,19 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-building-office-2'),
 
                 NavigationGroup::make()
+                    ->label('Subscriptions')
+                    ->icon('heroicon-o-tag')
+                    ->collapsed(),
+
+                NavigationGroup::make()
                     ->label('Settings')
-                    ->icon('heroicon-o-cog-6-tooth'),
+                    ->icon('heroicon-o-cog-6-tooth')
+                    ->collapsed(),
 
                 NavigationGroup::make()
                     ->label('Clients')
-                    ->icon('heroicon-o-users'),
+                    ->icon('heroicon-o-users')
+                    ->collapsed(),
 
 
             ])

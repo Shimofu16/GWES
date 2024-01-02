@@ -20,7 +20,7 @@ class SubscriberSeeder extends Seeder
     public function run(): void
     {
         $faker = Factory::create();
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 5; $i++) {
 
             Subscriber::create([
                 'name' => $faker->name,

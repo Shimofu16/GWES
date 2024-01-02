@@ -18,6 +18,7 @@ return new class extends Migration
             $table->longText('description');
             $table->text('images');
             $table->date('date');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

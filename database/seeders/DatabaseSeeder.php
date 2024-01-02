@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             ClientSeeder::class,
-            PlanSeeder::class,
-            SubscriberSeeder::class,
+            // PlanSeeder::class,
+            // SubscriberSeeder::class,
         ]);
     }
 }

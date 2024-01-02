@@ -14,6 +14,7 @@ class SubscriberCompany extends Model
         'subscriber_id',
         'plan_id',
         'logo',
+        'picture',
         'name',
         'description',
         'address',
@@ -39,5 +40,10 @@ class SubscriberCompany extends Model
     public function plan()
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    public static function search($search){
+        return self::query()
+        ->where('name', 'LIKE', "%{$search}%");
     }
 }

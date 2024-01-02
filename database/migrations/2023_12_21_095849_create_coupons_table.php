@@ -14,9 +14,7 @@ return new class extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('plan_id')->nullable()->references('id')->on('plans');
             $table->string('code', 255)->unique(); // Increased string length for flexibility
-            $table->string('description', 255)->nullable();
             $table->enum('discount_type', DiscountTypeEnum::toArray()); // Simplified enum values
             $table->decimal('discount_value', 10, 2)->default(0); // Removed nullable, as it's always applicable
             $table->unsignedInteger('subscription_duration')->nullable(); // Renamed to 'subscription_duration' for clarity
@@ -24,6 +22,7 @@ return new class extends Migration
             $table->dateTime('expiry_date')->nullable();
             $table->unsignedInteger('max_redemptions')->nullable(); // Made unsigned for consistency
             $table->integer('redemption_count')->default(0); // Added to track redemptions
+            $table->softDeletes();
             $table->timestamps();
         });
     }

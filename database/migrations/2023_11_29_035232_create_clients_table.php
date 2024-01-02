@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->json('groom'); // array of bride info (name, birthday, age)
             $table->json('bride'); // array of bride info (name, birthday, age)
+            $table->softDeletes();
             $table->timestamps();
         });
     }

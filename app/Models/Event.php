@@ -12,7 +12,6 @@ class Event extends Model
     protected $fillable = [
         'client_id',
         'coordinator_name',
-        'type',
         'province',
         'city',
         'address',

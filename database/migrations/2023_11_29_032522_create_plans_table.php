@@ -2,7 +2,7 @@
 
 use App\Enums\BillingCycleEnum;
 use App\Enums\PlanAvailabilityEnum;
-use App\Enums\PlanStatusEnum;
+use App\Enums\PlanTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,8 +20,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->double('price');
+            $table->unsignedInteger('categories');
+            $table->unsignedInteger('socials');
+            $table->unsignedInteger('duration');
             $table->enum('billing_cycle', BillingCycleEnum::toArray());
+            $table->enum('type', PlanTypeEnum::toArray());
             $table->boolean('is_visible')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

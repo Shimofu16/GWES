@@ -16,8 +16,10 @@ use Filament\Infolists\Components\Section as InfoListSection;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -77,12 +79,12 @@ class PendingSubscriberResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    BulkAction::make('Accept')
+                    BulkAction::make('set_to_active')
                         ->action(function (Collection $records) {
                             try {
                                 foreach ($records as $record) {
@@ -92,8 +94,8 @@ class PendingSubscriberResource extends Resource
                                 }
                                 Notification::make()
                                     ->success()
-                                    ->title('Accepted Subscribers')
-                                    ->body('Subscribers accepted successfully.')
+                                    ->title('Updated Status')
+                                    ->body('Subscribers status successfully changed to active')
                                     ->duration(5000)
                                     ->send();
                                 return redirect('admin/pending/subscribers');
@@ -108,13 +110,71 @@ class PendingSubscriberResource extends Resource
                             }
                         })
                         ->icon('heroicon-o-check-circle')
+                        ->color(Color::Emerald)
                         ->requiresConfirmation()
                         ->modalHeading('Accept Subscribers')
-                        ->modalDescription('Are you sure you want to accept these subscribers?')
+                        ->modalDescription('Are you sure you want to accept these subscribers?'),
+                    BulkAction::make('set_to_inactive')
+                        ->action(function (Collection $records) {
+                            try {
+                                foreach ($records as $record) {
+                                    $record->update([
+                                        'status' => SubscriberStatusEnum::INACTIVE->value,
+                                    ]);
+                                }
+                                Notification::make()
+                                    ->success()
+                                    ->title('Updated Status')
+                                    ->body('Subscribers status successfully changed to inactive')
+                                    ->duration(5000)
+                                    ->send();
+                                return redirect('admin/pending/subscribers');
+                                // return redirect()->route(ListPendingSubscribers::getRouteName());
+                            } catch (\Throwable $th) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Error')
+                                    ->body($th->getMessage())
+                                    ->duration(5000)
+                                    ->send();
+                            }
+                        })
+                        ->icon('heroicon-o-x-circle')
+                        ->color(Color::Amber)
+                        ->requiresConfirmation()
+                        ->modalHeading('Update Status')
+                        ->modalDescription('Are you sure you want to set inactive status for these subscribers?'),
+
+                    DeleteBulkAction::make('delete')
+                        ->action(function (Collection $records) {
+                            try {
+                                foreach ($records as $record) {
+                                    $record->delete();
+                                }
+                                Notification::make()
+                                    ->success()
+                                    ->title('Deleted Subscribers')
+                                    ->body('Successfully deleted Subscribers.')
+                                    ->duration(5000)
+                                    ->send();
+                                return redirect('admin/pending/subscribers');
+                            } catch (\Throwable $th) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title('Error')
+                                    ->body($th->getMessage())
+                                    ->duration(5000)
+                                    ->send();
+                            }
+                        })
+                        ->icon('heroicon-o-trash')
+                        ->requiresConfirmation()
+                        ->modalHeading('Delete Subscribers')
+                        ->modalDescription('Are your sure you want to delete these subscribers?')
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                // Tables\Actions\CreateAction::make(),
             ]);
     }
 
@@ -193,8 +253,8 @@ class PendingSubscriberResource extends Resource
     {
         return [
             'index' => Pages\ListPendingSubscribers::route('/'),
-            'create' => Pages\CreatePendingSubscriber::route('/create'),
-            'edit' => Pages\EditPendingSubscriber::route('/{record}/edit'),
+            // 'create' => Pages\CreatePendingSubscriber::route('/create'),
+            // 'edit' => Pages\EditPendingSubscriber::route('/{record}/edit'),
         ];
     }
 }

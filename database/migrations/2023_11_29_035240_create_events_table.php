@@ -15,10 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('client_id')->references('id')->on('clients');
             $table->string('coordinator_name');
-            $table->string('type');
-            $table->string('province')->default('Laguna');
-            $table->string('city');
-            $table->string('address');
+            $table->string('address'); // street, barangay, city, province(laguna), postal code
             $table->dateTime('date_start');
             $table->dateTime('date_end');
             $table->timestamps();
