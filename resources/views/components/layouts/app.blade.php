@@ -14,9 +14,10 @@
     </head>
     <body class="bg-[#fffdef]">
         @include('components.layouts.header')
-        <main class="mt-[90px] lg:mt-[180px] container mx-auto">
+        <main class="mt-[90px] lg:mt-[180px]">
             {{ $slot }}
         </main>
+        @include('components.layouts.footer')
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 

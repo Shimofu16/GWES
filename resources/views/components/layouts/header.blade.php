@@ -1,10 +1,11 @@
 <nav class="bg-[#c4bcaf] fixed w-full z-20 top-0 start-0">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" class="h-10 rounded-full" alt="Great Wedding Logo" />
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white  lg:hidden">
+            <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" class="h-10 rounded-full" alt="Great Wedding Logo"
+                loading="lazy" />
+            {{-- <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white  lg:hidden">
                 GWD
-            </span>
+            </span> --}}
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white hidden lg:block">
                 {{ Config::get('app.name') }}
             </span>
@@ -43,11 +44,19 @@
                         class="block py-1 px-2  rounded  hover:bg-white hover:text-[#c4bcaf] {{ Route::is('home.index') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}"
                         aria-current="page">Home</a>
                 </li>
-                <li>
+                <li class="relative">
                     <a href="#"
-                        class="block py-1 px-2   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}">
+                        class="block py-1 px-2   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}"
+                        id="suppliers">
                         Supplier
                     </a>
+                    <div id="suppliers-dropdown" class="hidden  mt-1 max-h-64 w-100 overflow-y-auto absolute">
+                        <div class="px-3 bg-white shadow-lg rounded-md  border ">
+                            <div class="grid">
+                                asdasdasdasdasd asd asd asd dsa
+                            </div>
+                        </div>
+                    </div>
                 </li>
                 <li>
                     <a href="#"
@@ -65,3 +74,16 @@
         </div>
     </div>
 </nav>
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#suppliers').mouseenter(function() {
+                $('#suppliers-dropdown').show();
+            });
+
+            $('#suppliers-dropdown').mouseleave(function() {
+                $(this).hide();
+            });
+        });
+    </script>
+@endpush

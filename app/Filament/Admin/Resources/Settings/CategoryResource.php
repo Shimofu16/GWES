@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Settings;
 
+use App\Enums\CategoryTypeEnum;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Admin\Resources\Settings\CategoryResource\Pages;
 use App\Filament\Admin\Resources\Settings\CategoryResource\Pages\ManageCategories;
 use App\Filament\Admin\Resources\Settings\CategoryResource\RelationManagers;
+use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
@@ -42,6 +44,10 @@ class CategoryResource extends Resource
                             ->label('Name')
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn ($state, Forms\Set $set) =>  $set('slug', Str::slug($state))),
+                        Select::make('type')
+                            ->options(CategoryTypeEnum::toArray())
+                            ->required(),
+
                         TextInput::make('slug')
                             ->disabled()
                             ->label('Slug')
