@@ -10,19 +10,19 @@
         </div>
         <input type="text" id="search-navbar"
             class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search for supplier..." wire:model.live.debounce.150ms="search" list="suppliers" wire:focusout="resetSearch">
+            placeholder="Search for supplier..." wire:model.live.debounce.150ms="search" list="suppliers"
+            wire:focusout="resetSearch">
     </div>
     <div
-        class="shadow-lg rounded-md py-2 border mt-1 max-h-64 w-100 overflow-y-auto bg-white absolute  {{ $search ? 'block' : 'hidden' }}">
+        class="shadow-lg rounded-md py-2 border mt-1 max-h-64 w-100 overflow-y-auto bg-white absolute px-2 {{ $search ? 'block' : 'hidden' }}">
         @forelse ($suppliers as $key=> $supplier)
-            <a href="{{ route('home.index',['id' => $key]) }}" wire:key="{{ $key }}"
-                class=" hover:bg-[#c4bcaf] hover:text-white rounded px-2">
+            <a href="{{ route('suppliers.show', ['supplier_id' => $key]) }}" wire:key="{{ $key }}"
+                class="hover:bg-[#c4bcaf] hover:text-white rounded ">
                 {{ $supplier }}
             </a>
             <br>
         @empty
-            <button type="button"
-                class=" px-2">
+            <button type="button">
                 No Suppliers Found
             </button>
         @endforelse

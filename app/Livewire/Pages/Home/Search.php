@@ -15,22 +15,35 @@ class Search extends Component
 
 
 
-    public function resetSearch(){
+    public function resetSearch()
+    {
         $this->reset('search');
     }
 
     public function search()
     {
-        return Category::query()->where('name', 'like', '%' . $this->search . '%')->pluck('name','id');
+        return SubscriberCompany::query()
+            ->whereHas('companyCategories', function ($query) {
+                $query->whereHas('category', function ($que) {
+                    $que->where('name', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->OrWhere('name', 'like', '%' . $this->search . '%')
+            ->pluck('name', 'id');
+    }
+
+    public function placeholder(array $params = [])
+    {
+        return view('livewire.placeholders.skeleton', $params);
     }
 
     public function render()
     {
-        return view('livewire.pages.home.search', [
-            'suppliers' =>   $this->search() 
-        ]);
-        /* return view('livewire.pages.home.search', [
-            'suppliers' => $this->search ? SubscriberCompany::search($this->search)->pluck('name') : SubscriberCompany::pluck('name')
-        ]); */
+        return view(
+            'livewire.pages.home.search',
+            [
+                'suppliers' =>   $this->search()
+            ]
+        );
     }
 }

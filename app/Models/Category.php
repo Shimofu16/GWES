@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
@@ -17,8 +18,8 @@ class Category extends Model
         'deleted_at'
     ];
 
-    public function subscribersCount()
+    public function companies(): HasMany
     {
-        return SubscriberCompany::whereJsonContains('categories', ['id' =>  $this->id])->count();
+        return $this->hasMany(SubscriberCompanyCategory::class);
     }
 }

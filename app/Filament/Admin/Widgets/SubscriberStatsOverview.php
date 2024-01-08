@@ -13,14 +13,9 @@ class SubscriberStatsOverview extends BaseWidget
     {
         $year = now()->year;
         $subscriberCounts = [];
-        $eventCounts = [];
         for ($month = 1; $month <= 12; $month++) {
-            $events = Event::query();
             $subscribers = Subscriber::query();
             $subscriberCounts[]  = $subscribers->whereMonth('created_at', $month)
-                ->whereYear('created_at', $year)
-                ->count();
-            $eventCounts[] = $events->whereMonth('created_at', $month)
                 ->whereYear('created_at', $year)
                 ->count();
         }
@@ -28,9 +23,6 @@ class SubscriberStatsOverview extends BaseWidget
         return [
             Stat::make('Subscribers', $subscribers->count())
                 ->chart($subscriberCounts)
-                ->color('success'),
-            Stat::make('Events', $events->count())
-                ->chart($eventCounts)
                 ->color('success'),
         ];
     }

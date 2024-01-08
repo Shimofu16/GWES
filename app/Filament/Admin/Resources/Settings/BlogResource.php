@@ -47,15 +47,20 @@ class BlogResource extends Resource
             ->schema([
                 Section::make()
                     ->schema([
-                        TextInput::make('title'),
-                        DatePicker::make('date'),
+                        TextInput::make('title')
+                            ->required(),
+                        DatePicker::make('date')
+                            ->required(),
                         Select::make('subscriber_company_id')
-                            ->options(SubscriberCompany::pluck('id', 'name'))
+                            ->options(SubscriberCompany::pluck('name', 'id'))
                             ->label('Company')
+                            ->required()
                             ->columnSpanFull(),
                         MarkdownEditor::make('description')
+                            ->required()
                             ->columnSpanFull(),
                         FileUpload::make('images')
+                            ->required()
                             ->image()
                             ->directory('blogs')
                             // ->multiple()
@@ -81,10 +86,12 @@ class BlogResource extends Resource
             ->schema([
                 ComponentsSection::make()
                     ->schema([
-                        TextEntry::make('title'),
+                        TextEntry::make('title')
+                            ->searchable(),
                         TextEntry::make('date')
                             ->date(),
-                        TextEntry::make('company.name'),
+                        TextEntry::make('company.name')
+                            ->searchable(),
                         TextEntry::make('description')
                             ->columnSpanFull(),
                         ImageEntry::make('images')

@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('subscriber_company_categories', function (Blueprint $table) {
             $table->id();
-            $table->json('groom'); // array of bride info (name, birthday, age)
-            $table->json('bride'); // array of bride info (name, birthday, age)
-            $table->softDeletes();
+            $table->foreignId('subscriber_company_id')->references('id')->on('subscriber_companies');
+            $table->foreignId('category_id')->references('id')->on('categories');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('subscriber_company_categories');
     }
 };

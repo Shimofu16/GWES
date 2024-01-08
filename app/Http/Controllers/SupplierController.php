@@ -3,17 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\SubscriberCompany;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class SupplierController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($query, $id)
     {
+        $suppliers = SubscriberCompany::query();
+        if ($query === 'category') {
+            $suppliers->whereJsonContains('categories', ['id' => $id]);
+        }
 
-        return view('frontend.pages.home.index');
+        if ($query === 'supplier') {
+            $suppliers->find($id);
+        }
+
+        return view('frontend.pages.suppliers.index', compact('suppliers'));
     }
 
     /**
@@ -35,15 +44,16 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+
+        return view('frontend.pages.suppliers.show', compact('suppliers'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(int $category_id)
     {
         //
     }
@@ -51,7 +61,7 @@ class HomeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $category_id)
     {
         //
     }
@@ -59,7 +69,7 @@ class HomeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $category_id)
     {
         //
     }

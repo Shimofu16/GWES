@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('feed_backs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->references('id')->on('clients');
-            $table->string('coordinator_name');
-            $table->string('address'); // street, barangay, city, province(laguna), postal code
-            $table->dateTime('date_start');
-            $table->dateTime('date_end');
+            $table->string('name')->default('anonymous');
+            $table->string('email')->nullable();
+            $table->string('context')->nullable();
+            $table->boolean('is_visible')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('feed_backs');
     }
 };

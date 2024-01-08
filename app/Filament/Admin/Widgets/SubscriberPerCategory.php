@@ -20,7 +20,7 @@ class SubscriberPerCategory extends ApexChartWidget
      *
      * @var string|null
      */
-    protected static ?string $heading = 'SubscriberPerCategory';
+    protected static ?string $heading = 'Subscribers Per Category';
 
     /**
      * Chart options (series, labels, types, size, animations...)

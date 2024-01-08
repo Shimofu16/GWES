@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Casts\Json;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class SubscriberCompany extends Model
 {
@@ -12,9 +15,7 @@ class SubscriberCompany extends Model
 
     protected $fillable = [
         'subscriber_id',
-        'plan_id',
         'logo',
-        'picture',
         'name',
         'description',
         'address',
@@ -32,18 +33,28 @@ class SubscriberCompany extends Model
         'due_date' => 'date',
     ];
 
-    public function subscriber()
+    protected $appends = ['payment'];
+
+    public function getPaymentAttribute()
+    {
+        return   $this->payments()
+            ->where('latest', true)
+
+            ->first();
+    }
+
+    public function subscriber(): BelongsTo
     {
         return $this->belongsTo(Subscriber::class);
     }
 
-    public function plan()
+    public function payments(): HasMany
     {
-        return $this->belongsTo(Plan::class);
+        return $this->hasMany(Payment::class);
     }
 
-    public static function search($search){
-        return self::query()
-        ->where('name', 'LIKE', "%{$search}%");
+    public function companyCategories(): HasMany
+    {
+        return $this->hasMany(SubscriberCompanyCategory::class);
     }
 }

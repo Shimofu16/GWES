@@ -4,10 +4,11 @@ namespace App\Filament\Admin\Resources\Subscribers\PendingSubscriberResource\Pag
 
 use Filament\Actions;
 use Illuminate\Support\Str;
-use App\Enums\SubscriberStatusEnum;
+use App\Enums\PaymentStatusEnum;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Admin\Resources\Subscribers\PendingSubscriberResource;
 use Filament\Resources\Pages\ListRecords\Tab;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class ListPendingSubscribers extends ListRecords
 {
@@ -38,16 +39,26 @@ class ListPendingSubscribers extends ListRecords
     {
         // $tabs = ['all' => Tab::make('All')->badge($this->getModel()::count())];
 
-        foreach (SubscriberStatusEnum::toArray() as $status) {
+        foreach (PaymentStatusEnum::toArray() as $status) {
             if ($status != 'active') {
 
                 $name = Str::ucfirst($status);
-                $subscriber_count = $this->getModel()::query()->where('status', $status)->count();
+                $subscriber_count = $this->getModel()::query()->with('payments')
+                    ->whereHas('payments', function ($q) use ($status) {
+                        $q->where('latest', true)
+                            ->where('status',  $status);
+                    })
+                    ->count();
                 $tabs[$status] = Tab::make($name)
                     ->badge($subscriber_count)
-                    ->icon(SubscriberStatusEnum::getIcon($status))
+                    ->icon(PaymentStatusEnum::getIcon($status))
                     ->modifyQueryUsing(function ($query) use ($status) {
-                        return $query->where('status', $status);
+                        $query
+                            ->with('payments')
+                            ->whereHas('payments', function ($q) use ($status) {
+                                $q->where('latest', true)
+                                    ->where('status',  $status);
+                            });
                     });
             }
         }

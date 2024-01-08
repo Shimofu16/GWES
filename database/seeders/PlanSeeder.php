@@ -6,6 +6,7 @@ use Faker\Factory;
 use Illuminate\Support\Str;
 use App\Enums\BillingCycleEnum;
 use App\Enums\DiscountTypeEnum;
+use App\Enums\PlanTypeEnum;
 use App\Models\Coupon;
 use App\Models\Plan;
 use Illuminate\Database\Seeder;
@@ -20,21 +21,25 @@ class PlanSeeder extends Seeder
     {
         $faker = Factory::create();
         for ($i = 0; $i < 3; $i++) {
+            $price = $faker->randomNumber(3);
             $billing_cycle = $faker->randomElement(BillingCycleEnum::toArray());
-            $count = $faker->numberBetween($min = 1, $max = 3);
-            $plan = $count . ' ' . (($billing_cycle == "monthly") ? 'month' : 'year') . ($count > 1 ? 's' : '');
+            $type = $faker->randomElement(PlanTypeEnum::toArray());
+            $duration = $faker->numberBetween($min = 1, $max = 3);
+            // $plan = $price . ' ' . (($billing_cycle == "monthly") ? 'month' : 'year') . ($duration > 1 ? 's' : '');
+            $plan = 'Plan ' . $price;
             Plan::create([
                 'name' => $plan,
-                'description' => $faker->text(),
-                'price' => $faker->randomNumber(3),
+                'price' => $price,
+                'socials' => $duration,
+                'duration' => $duration,
                 'billing_cycle' => $billing_cycle,
+                'type' => $type,
                 'is_visible' => $faker->boolean(),
             ]);
         }
 
         Coupon::create([
             'code' => 'FISRTSUB',
-            'description' => 'For first subscribers!',
             'discount_type' => DiscountTypeEnum::FREE_SUBSCRIPTION->value,
             'subscription_duration' => 1,
             'start_date' => now(),

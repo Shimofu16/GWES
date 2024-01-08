@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\Json;
 use App\Enums\PlanAvailabilityEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,16 +14,19 @@ class Plan extends Model
 
     protected $fillable = [
         'name',
-        'description',
         'price',
+        'socials',
+        'duration',
         'billing_cycle',
-        'is_visible',
+        'type',
         'deleted_at'
     ];
 
 
     protected $casts = [
         'is_visible' => 'boolean',
+        // 'billing_cycle' => enum,
+        // 'type' => enum,
     ];
 
     public function companies()

@@ -5,10 +5,12 @@
                 <h1 class="text-center sm:text-start text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819]">
                     Great
                     Wedding's Directory</h1>
-                <h1 class="text-center sm:text-start text-xl md:text-2xl lg:text-3xl  pb-4 mt-2">We provide a
+                <h1 class="text-center sm:text-start text-xl md:text-2xl lg:text-3xl  pb-4 mt-2">Connect with soon-to-wed
+                    couples & Suppliers through Great Weddings Directory.</h1>
+                {{--  <h1 class="text-center sm:text-start text-xl md:text-2xl lg:text-3xl  pb-4 mt-2">We provide a
                     comprehensive
                     list of
-                    suppliers for all your wedding needs. </h1>
+                    suppliers for all your wedding needs. </h1> --}}
 
                 <div class="text-center sm:text-start mt-3">
                     <a href="#"
@@ -120,7 +122,7 @@
             </div>
         </div>
     </section>
-    <section class="container mx-auto px-3 mt-[50px] sm:mt-[100px]">
+    <section class="container mx-auto px-5 mt-[50px] sm:mt-[100px]">
         <div class="flex flex-col md:flex-row justify-center">
             <div class="flex flex-col justify-center items-center w-full">
                 <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819]">About Us</h1>
@@ -134,27 +136,28 @@
                         Wedding's Directory
                     </span>
                 </h1>
-                <p>
-                    Lorem ipsum dolor sit amet, consecteturadipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                <p class="text-justify">
+                    One search engine that can help clients find reliable wedding suppliers, an online platform that
+                    offers a wide range of vetted and trusted vendors for weddings.
 
-                    Lorem ipsum dolor sit amet, consecteturadipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                    By using Great Weddings Suppliers Directory, clients can search for suppliers based on their
+                    specific location and wedding category, such as venues, photographers, caterers, florists, and more.
+                    The platform provides detailed vendor profiles, including their Facebook Page and Contact Number,
+                    this helps clients in making informed decisions and finding the right supplier that suits their
+                    preferences and needs.
+
+                    Overall, Great Weddings Suppliers Directory acts as a reliable and comprehensive search engine that
+                    assists clients in finding and connecting with trustworthy wedding suppliers for their special day.
                 </p>
             </div>
         </div>
     </section>
-    <section class="container mx-auto px-3 mt-[50px] sm:mt-[100px]">
+    <section class="container mx-auto px-5 mt-[50px] sm:mt-[100px]">
         <div class="flex flex-col md:flex-row justify-center">
             <div class="flex flex-col justify-center w-full">
-                <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-5">Mission</h1>
-                <p>
+                <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-5">Mission
+                </h1>
+                <p class="text-justify">
                     Our Mission is to simplify the wedding planning process, saving precious time ensuring stress free
                     journey and be the ease and peace of mind our directory brings in every wedding planning journey.
                 </p>
@@ -162,8 +165,8 @@
             <div class="flex flex-col justify-center items-center w-full">
                 <img src="{{ asset('assets/images/default/wed4.jpg') }}" id="mission-pic1"
                     class="object-cover  pb-4" alt="Your Image" loading="lazy">
-                <img src="{{ asset('assets/images/default/wed2.jpg') }}" id="mission-pic2" class="object-cover" alt="Your Image"
-                    loading="lazy">
+                <img src="{{ asset('assets/images/default/wed2.jpg') }}" id="mission-pic2" class="object-cover"
+                    alt="Your Image" loading="lazy">
             </div>
         </div>
     </section>
@@ -184,7 +187,6 @@
         </style>
     @endpush
     @push('scripts')
-        <script src="{{ asset('assets/packages/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('assets/packages/owl carousel/owl.carousel.min.js') }}"></script>
         <script>
             $(document).ready(function() {

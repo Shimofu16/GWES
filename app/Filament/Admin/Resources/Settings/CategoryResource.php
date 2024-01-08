@@ -52,7 +52,6 @@ class CategoryResource extends Resource
                             ->disabled()
                             ->label('Slug')
                             ->dehydrated()
-                            ->required()
                             ->unique(Category::class, 'slug', ignoreRecord: true),
 
                     ])
@@ -83,10 +82,11 @@ class CategoryResource extends Resource
                             );
                         }
                     ),
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                ->searchable(),
                 TextColumn::make('subscriber.count')
                     ->getStateUsing(function (Category $record) {
-                        return $record->subscribersCount();
+                        return $record->companies()->count();
                     }),
             ])
             ->filters([

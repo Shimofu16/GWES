@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\Blog;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class BlogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
-        return view('frontend.pages.home.index');
+        $blogs = Blog::paginate(6);
+        return view('frontend.pages.blog.index', compact('blogs'));
     }
 
     /**

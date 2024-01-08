@@ -2,7 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Subscribers;
 
-use App\Enums\SubscriberStatusEnum;
+use App\Enums\PaymentStatusEnum;
 use App\Filament\Admin\Resources\Subscribers\PendingSubscriberResource\Pages;
 use App\Filament\Admin\Resources\Subscribers\PendingSubscriberResource\Pages\ListPendingSubscribers;
 use App\Filament\Admin\Resources\Subscribers\PendingSubscriberResource\RelationManagers;
@@ -10,9 +10,13 @@ use App\Models\SubscriberCompany;
 use App\Models\Subscribers\PendingSubscriber;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Section as InfoListSection;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
@@ -38,13 +42,23 @@ class PendingSubscriberResource extends Resource
     // badge
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('status', '!=', SubscriberStatusEnum::ACTIVE->value)
+        return static::getModel()::query()
+            ->with('payments')
+            ->whereHas('payments', function ($query) {
+                $query->where('latest', true)
+                    ->where('status', '!=', PaymentStatusEnum::ACTIVE->value);
+            })
             ->count();
     }
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('status', '!=', SubscriberStatusEnum::ACTIVE->value);
+        return parent::getEloquentQuery()
+            ->with('payments','companyCategories')
+            ->whereHas('payments', function ($query) {
+                $query->where('latest', true)
+                    ->where('status', '!=', PaymentStatusEnum::ACTIVE->value);
+            });
     }
 
     public static function form(Form $form): Form
@@ -88,9 +102,13 @@ class PendingSubscriberResource extends Resource
                         ->action(function (Collection $records) {
                             try {
                                 foreach ($records as $record) {
-                                    $record->update([
-                                        'status' => SubscriberStatusEnum::ACTIVE->value,
-                                    ]);
+                                    $record->payments()
+                                        ->where('latest', true)
+                                        ->where('status', '!=', PaymentStatusEnum::ACTIVE->value)
+                                        ->first()
+                                        ->update([
+                                            'status' => PaymentStatusEnum::ACTIVE->value,
+                                        ]);
                                 }
                                 Notification::make()
                                     ->success()
@@ -114,18 +132,22 @@ class PendingSubscriberResource extends Resource
                         ->requiresConfirmation()
                         ->modalHeading('Accept Subscribers')
                         ->modalDescription('Are you sure you want to accept these subscribers?'),
-                    BulkAction::make('set_to_inactive')
+                    BulkAction::make('set_status_to_renewal')
                         ->action(function (Collection $records) {
                             try {
                                 foreach ($records as $record) {
-                                    $record->update([
-                                        'status' => SubscriberStatusEnum::INACTIVE->value,
-                                    ]);
+                                    $record->payments()
+                                        ->where('latest', true)
+                                        ->where('status', '!=', PaymentStatusEnum::ACTIVE->value)
+                                        ->first()
+                                        ->update([
+                                            'status' => PaymentStatusEnum::RENEWAL->value,
+                                        ]);
                                 }
                                 Notification::make()
                                     ->success()
                                     ->title('Updated Status')
-                                    ->body('Subscribers status successfully changed to inactive')
+                                    ->body('Subscribers status successfully changed to renewal')
                                     ->duration(5000)
                                     ->send();
                                 return redirect('admin/pending/subscribers');
@@ -189,63 +211,107 @@ class PendingSubscriberResource extends Resource
     {
         return $infolist
             ->schema([
-                InfoListSection::make('Company Information')
-                    ->schema([
-                        ImageEntry::make('logo')
-                            ->label('Logo')
-                            ->height('70px')
-                            ->width('70px')
-                            ->circular(),
-                        TextEntry::make('name')
-                            ->label('Name'),
-                        TextEntry::make('phone')
-                            ->label('Phone'),
-                        TextEntry::make('price_range')
-                            ->getStateUsing(function ($record) {
-                                $string = explode(' - ', $record->price_range);
-                                return number_format($string[0]) . ' - ' . number_format($string[1]);
-                            })
-                            ->label('Price Range'),
-                        TextEntry::make('address')
-                            ->label('Address')
-                            ->columnSpanFull(),
-                        TextEntry::make('description')
-                            ->label('Description')
-                            ->columnSpanFull(),
-                        TextEntry::make('categories')
-                            ->getStateUsing(function (SubscriberCompany $record) {
-                                $categories = array();
-                                foreach ($record->categories as $key => $category) {
-                                    if (!in_array($category['name'], $categories)) {
-                                        $categories[] = $category['name'];
-                                    }
-                                }
-                                return $categories;
-                            })
-                            ->label('Categories')
-                            ->bulleted()
-                            ->columnSpan(1),
-                        TextEntry::make('socials')
-                            ->label('Socials')
-                            ->listWithLineBreaks()
-                            ->bulleted()
-                            ->openUrlInNewTab()
-                            ->copyable()
-                            ->columnSpan(3),
+                Tabs::make('Tabs')
+                    ->tabs([
+                        Tab::make('Company Information')
+                            ->schema([
+                                InfoListSection::make('Company Information')
+                                    ->schema([
+                                        ImageEntry::make('logo')
+                                            ->label('Logo')
+                                            ->height('70px')
+                                            ->width('70px')
+                                            ->circular(),
+                                        TextEntry::make('name')
+                                            ->label('Name'),
+                                        TextEntry::make('phone')
+                                            ->label('Phone'),
+                                        TextEntry::make('price_range')
+                                            ->getStateUsing(function ($record) {
+                                                $string = explode(' - ', $record->price_range);
+                                                return number_format($string[0]) . ' - ' . number_format($string[1]);
+                                            })
+                                            ->label('Price Range'),
+                                        TextEntry::make('address')
+                                            ->label('Address')
+                                            ->columnSpanFull(),
+                                        TextEntry::make('description')
+                                            ->label('Description')
+                                            ->columnSpanFull(),
+                                        TextEntry::make('companyCategories')
+                                            ->getStateUsing(function (SubscriberCompany $record) {
+                                                // dd($record);
+                                                $categories = array();
+                                                foreach ($record->companyCategories as $key => $category) {
+                                                    if (!in_array($category->category->name, $categories)) {
+                                                        $categories[] = $category->category->name;
+                                                    }
+                                                }
+                                                return $categories;
+                                            })
+                                            ->label('Categories')
+                                            ->bulleted()
+                                            ->columnSpan(1),
+                                        TextEntry::make('socials')
+                                            ->label('Socials')
+                                            ->listWithLineBreaks()
+                                            ->bulleted()
+                                            ->openUrlInNewTab()
+                                            ->copyable()
+                                            ->columnSpan(3),
+                                    ])
+                                    ->columns(4),
+                                InfoListSection::make('Owner Information')
+                                    ->schema([
+                                        TextEntry::make('subscriber.name')
+                                            ->label('Name'),
+                                        TextEntry::make('subscriber.email')
+                                            ->icon('heroicon-o-envelope')
+                                            ->label('Email'),
+                                        TextEntry::make('subscriber.phone')
+                                            ->icon('heroicon-m-phone')
+                                            ->label('Phone'),
+                                    ])
+                                    ->columns(3)
+                            ]),
+                        Tab::make('Payments')
+                            ->schema([
+                                InfoListSection::make()
+                                    ->schema([
+                                        TextEntry::make('payment.plan.name')
+                                            ->label('Plan'),
+                                        TextEntry::make('payment.total')
+                                            ->money('PHP')
+                                            ->label('Price'),
+                                        TextEntry::make('payment.due_date')
+                                            ->label('Due Date')
+                                            ->date(),
+                                        TextEntry::make('payment.payment_method')
+                                            ->label('Payment Method'),
+                                        IconEntry::make('payment.status')
+                                            ->label('Status')
+                                            ->icon(fn (string $state): string => match ($state) {
+                                                'pending' => 'heroicon-o-clock',
+                                                'active' => 'heroicon-o-check-circle',
+                                                'renewal' => 'heroicon-o-x-circle',
+                                            })
+                                            ->color(fn (string $state): string => match ($state) {
+                                                'pending' => 'info',
+                                                'active' => 'success',
+                                                'renewal' => 'danger',
+                                                default => 'gray',
+                                            }),
+                                        ImageEntry::make('payment.proof_of_payment')
+                                            ->label('Proof of Payment')
+                                            ->height('100%')
+                                            ->width('100%')
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->columns(3)
+                            ])
                     ])
-                    ->columns(4),
-                InfoListSection::make('Owner Information')
-                    ->schema([
-                        TextEntry::make('subscriber.name')
-                            ->label('Name'),
-                        TextEntry::make('subscriber.email')
-                            ->icon('heroicon-o-envelope')
-                            ->label('Email'),
-                        TextEntry::make('subscriber.phone')
-                            ->icon('heroicon-m-phone')
-                            ->label('Phone'),
-                    ])
-                    ->columns(3)
+                    ->contained(false)
+                    ->columnSpanFull(),
             ]);
     }
 

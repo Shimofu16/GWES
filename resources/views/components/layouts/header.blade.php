@@ -41,32 +41,47 @@
                 class="flex flex-col p-4 md:p-0 mt-4 font-medium  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 ">
                 <li>
                     <a href="{{ route('home.index') }}"
-                        class="block py-1 px-2  rounded  hover:bg-white hover:text-[#c4bcaf] {{ Route::is('home.index') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}"
+                        class="block py-1 px-2 mt-2 sm:mt-0  rounded  hover:bg-white hover:text-[#c4bcaf] {{ Route::is('home.index') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}"
                         aria-current="page">Home</a>
                 </li>
                 <li class="relative">
-                    <a href="#"
-                        class="block py-1 px-2   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}"
+                    <a href="{{ route('suppliers.index') }}"
+                        class="block py-1 px-2 mt-2 sm:mt-0   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('suppliers.index') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}"
                         id="suppliers">
                         Supplier
                     </a>
-                    <div id="suppliers-dropdown" class="hidden  mt-1 max-h-64 w-100 overflow-y-auto absolute">
-                        <div class="px-3 bg-white shadow-lg rounded-md  border ">
-                            <div class="grid">
-                                asdasdasdasdasd asd asd asd dsa
+                    <div id="suppliers-dropdown" class="hidden  mt-1 max-h-64 w-100 overflow-auto absolute">
+                        <div class="px-3 pt-4 pb-3 bg-white shadow-lg rounded-md  border ">
+                            <div class="flex flex-col sm:flex-row">
+                                @foreach (App\Enums\CategoryTypeEnum::toArray() as $case)
+                                    @php
+                                        $categories = App\Models\Category::where('type', $case)->get();
+                                    @endphp
+                                    @isset($categories)
+                                        <div class="border-solid border-r-5 flex flex-col w-full me-3">
+                                            <span class="font-semibold text-[#9b4819] mb-2 pointer-events-none">
+                                                {{ $case }}
+                                            </span>
+                                            @foreach ($categories as $category)
+                                                <a href="{{ route('suppliers.index', ['category_id' => $category->id]) }}"
+                                                    class="rounded hover:text-white hover:bg-[#c4bcaf] px-1">{{ $category->name }}</a>
+                                            @endforeach
+                                        </div>
+                                    @endisset
+                                @endforeach
                             </div>
                         </div>
                     </div>
                 </li>
                 <li>
-                    <a href="#"
-                        class="block py-1 px-2   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}">
+                    <a href="{{ route('blogs.index') }}"
+                        class="block py-1 px-2 mt-2 sm:mt-0   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('blogs.index') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}">
                         Blogs
                     </a>
                 </li>
                 <li>
                     <a href="#"
-                        class="block py-1 px-2   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}">
+                        class="block py-1 px-2 mt-2 sm:mt-0   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}">
                         FeedBack
                     </a>
                 </li>
@@ -74,16 +89,3 @@
         </div>
     </div>
 </nav>
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#suppliers').mouseenter(function() {
-                $('#suppliers-dropdown').show();
-            });
-
-            $('#suppliers-dropdown').mouseleave(function() {
-                $(this).hide();
-            });
-        });
-    </script>
-@endpush
