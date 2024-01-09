@@ -13,7 +13,7 @@ class FeedBack extends Model
     protected $fillable = [
         'name',
         'email',
-        'content',
+        'context',
         'deleted_at',
     ];
 }

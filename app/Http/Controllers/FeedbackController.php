@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Blog;
+use App\Models\FeedBack;
 use Illuminate\Http\Request;
 
-class BlogController extends Controller
+class FeedbackController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $blogs = Blog::paginate(6);
-        return view('frontend.pages.blog.index', compact('blogs'));
+        $feedbacks = FeedBack::where('is_visible', true)->get();
+        return view('frontend.pages.feedback.index', compact('feedbacks'));
     }
 
     /**
@@ -21,7 +21,7 @@ class BlogController extends Controller
      */
     public function create()
     {
-        //
+        return view('frontend.pages.feedback.create');
     }
 
     /**
@@ -29,16 +29,28 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $request->validate([
+                'context' => ['required'],
+            ]);
+
+            FeedBack::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'context' => $request->context
+            ]);
+            return redirect()->back()->with('success', 'Successfully submitted a feedback. ');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($blog_id)
+    public function show(string $id)
     {
-        $blog = Blog::find($blog_id);
-        return view('frontend.pages.blog.show', compact('blog'));
+        //
     }
 
     /**

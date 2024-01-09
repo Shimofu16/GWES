@@ -22,7 +22,7 @@ class BlogSeeder extends Seeder
             foreach ($suppliers as $key => $supplier) {
                 Blog::create([
                     'subscriber_company_id' => $key,
-                    'title' => $faker->title,
+                    'title' => $faker->text(),
                     'description' => $faker->realTextBetween(),
                     'images' => $faker->imageUrl(),
                     'date' => $faker->date

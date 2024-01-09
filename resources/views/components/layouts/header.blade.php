@@ -1,6 +1,6 @@
 <nav class="bg-[#c4bcaf] fixed w-full z-20 top-0 start-0">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <a href="{{ route('home.index') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" class="h-10 rounded-full" alt="Great Wedding Logo"
                 loading="lazy" />
             {{-- <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white  lg:hidden">
@@ -75,13 +75,13 @@
                 </li>
                 <li>
                     <a href="{{ route('blogs.index') }}"
-                        class="block py-1 px-2 mt-2 sm:mt-0   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('blogs.index') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}">
+                        class="block py-1 px-2 mt-2 sm:mt-0   rounded hover:bg-white hover:text-[#c4bcaf] {{ (Route::is('blogs.index') || Route::is('blogs.show')) ? 'bg-white text-[#c4bcaf]' : 'text-white' }}">
                         Blogs
                     </a>
                 </li>
                 <li>
-                    <a href="#"
-                        class="block py-1 px-2 mt-2 sm:mt-0   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}">
+                    <a href="{{ route('feedbacks.index') }}"
+                        class="block py-1 px-2 mt-2 sm:mt-0   rounded hover:bg-white hover:text-[#c4bcaf] {{ (Route::is('feedbacks.index') || Route::is('feedbacks.create')) ? 'bg-white text-[#c4bcaf]' : 'text-white' }}">
                         FeedBack
                     </a>
                 </li>
