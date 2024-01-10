@@ -11,7 +11,16 @@ class Coupon extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-       'code',
+        'code',
+        'discount_type',
+        'discount_value',
+        'subscription_duration',
+        'start_date',
+        'expiry_date',
+        'max_redemptions',
+        'redemption_count',
         'deleted_at'
     ];
+
+
 }

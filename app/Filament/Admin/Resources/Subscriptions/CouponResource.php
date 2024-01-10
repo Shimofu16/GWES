@@ -4,7 +4,7 @@ namespace App\Filament\Admin\Resources\Subscriptions;
 
 use App\Filament\Admin\Resources\Subscriptions\CouponResource\Pages;
 use App\Filament\Admin\Resources\Subscriptions\CouponResource\RelationManagers;
-use App\Models\Subscriptions\Coupon;
+use App\Models\Coupon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;

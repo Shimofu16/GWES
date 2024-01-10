@@ -12,9 +12,12 @@ class Payment extends Model
 
     protected $fillable = [
         'subscriber_company_id',
+        'plan_id',
         'proof_of_payment',
         'payment_method',
+        'total',
         'due_date',
+        'latest',
         'status',
     ];
 
