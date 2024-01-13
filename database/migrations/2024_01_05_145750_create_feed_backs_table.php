@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('feed_backs', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->default('anonymous');
+            $table->string('name')->nullable()->default('anonymous');
             $table->string('email')->nullable();
             $table->string('context')->nullable();
             $table->boolean('is_visible')->default(false);

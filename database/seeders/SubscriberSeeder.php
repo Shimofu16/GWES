@@ -65,7 +65,7 @@ class SubscriberSeeder extends Seeder
                         'total' => $plan->price,
                         'latest' => true
                     ]);
-                    for ($i = 0; $i < 3; $i++) {
+                    for ($i = 0; $i < $plan->categories; $i++) {
                         SubscriberCompanyCategory::create([
                             'subscriber_company_id' => $subscriber_company_id,
                             'category_id' =>  Category::find(random_int(1, $categories_count))->id,

@@ -1,8 +1,7 @@
 <section class="container mx-auto px-3 lg:px-0">
-    <div class="flex justify-between items-center mb-3">
-        <div class="search ">
-
-            <div class="relative hidden md:block">
+    <div class="flex justify-between flex-wrap mb-3">
+        <div class="search mb-2 sm:mb-0">
+            <div class="relative">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                     <svg class="w-4 h-4  text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 20 20">

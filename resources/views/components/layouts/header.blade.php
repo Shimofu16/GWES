@@ -3,10 +3,10 @@
         <a href="{{ route('home.index') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" class="h-10 rounded-full" alt="Great Wedding Logo"
                 loading="lazy" />
-            {{-- <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white  lg:hidden">
+            {{-- <span class="self-center text-2xl font-semibold whitespace-nowrap text-white  lg:hidden">
                 GWD
             </span> --}}
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white hidden lg:block">
+            <span class="self-center text-2xl font-semibold whitespace-nowrap text-white hidden lg:block">
                 {{ Config::get('app.name') }}
             </span>
 

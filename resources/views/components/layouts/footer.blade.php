@@ -2,33 +2,48 @@
     <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div class="md:flex md:justify-between">
             <div class="mb-6 md:mb-0 me-3 md:w-full">
-                <a href="/" class="flex flex-col items-center">
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white mb-3">
-                        {{ Config::get('app.name') }}
-                    </span>
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" class="h-20 me-3 rounded-full"
+                <div class="flex flex-col items-center justify-center">
+
+                    <a href="/" class="">
+                        <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">
+                            {{ Config::get('app.name') }}
+                        </span>
+                        <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" class="h-20 rounded-full mx-auto my-3"
                         alt="{{ Config::get('app.name') }}" />
-                </a>
+                    </a>
+                    <a href="{{ route('suppliers.create') }}"
+                        class="transform hover:scale-105 transition-all duration-200 bg-white text-[#c4bcaf] hover:text-[#ae9371]
+                             font-bold
+                             px-3 py-2.5 text-center rounded-full mx-auto self-center mb-3">
+                        Become a Supplier
+                    </a>
+                </div>
             </div>
             <div>
                 <div class="grid grid-cols-2 gap-4 sm:gap-3">
                     <div>
                         <div>
-                            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Follow us</h2>
-                            <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase text-white">Follow us</h2>
+                            <ul class="text-gray-500 text-white font-medium">
                                 <li class="mb-4 text-white flex flex-col sm:flex-row ">
                                     <span class="me-1 text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="10" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="10"
+                                            viewBox="0 0 320 512">
+                                            <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                            <path fill="#ffffff"
+                                                d="M80 299.3V512H196V299.3h86.5l18-97.8H196V166.9c0-51.7 20.3-71.5 72.7-71.5c16.3 0 29.4 .4 37 1.2V7.9C291.4 4 256.4 0 236.2 0C129.3 0 80 50.5 80 159.4v42.1H14v97.8H80z" />
+                                        </svg>
                                     </span>
-                                    <span class="break-words">
-                                        GreatWeddings Directory
-                                    </span>
+                                    <a href="https://www.facebook.com/profile.php?id=61555285290523" class="break-words">
+
+                                        Great Weddings Directory
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                         <div>
-                            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Address</h2>
-                            <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase text-white">Address</h2>
+                            <ul class="text-gray-500 text-white font-medium">
                                 <li class="mb-4 text-white flex flex-col sm:flex-row ">
                                     <span class="me-1 text-white">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -39,7 +54,8 @@
                                                 d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                                         </svg>
                                     </span>
-                                    <a href="https://maps.app.goo.gl/hww47QrVcKhmEs4PA" class="hover:underline break-words">
+                                    <a href="https://maps.app.goo.gl/hww47QrVcKhmEs4PA"
+                                        class="hover:underline break-words">
                                         2nd flr. Aqua altria bldg. brgy san antonio Los baños laguna
                                     </a>
                                 </li>
@@ -47,8 +63,8 @@
                         </div>
                     </div>
                     <div>
-                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Contacts</h2>
-                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase text-white">Contacts</h2>
+                        <ul class="text-gray-500 text-white font-medium">
                             <li class="mb-4 text-white flex flex-col xl:flex-row ">
                                 <span class="me-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -77,8 +93,8 @@
                         </ul>
                     </div>
                     {{-- <div>
-                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Legal</h2>
-                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase text-white">Legal</h2>
+                        <ul class="text-gray-500 text-white font-medium">
                             <li class="mb-4">
                                 <a href="#" class="hover:underline">Privacy Policy</a>
                             </li>

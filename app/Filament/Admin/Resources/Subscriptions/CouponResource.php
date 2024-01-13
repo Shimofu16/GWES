@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -31,7 +32,21 @@ class CouponResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('code')
+                    ->searchable(),
+                TextColumn::make('discount_type'),
+                TextColumn::make('discount_type'),
+                TextColumn::make('value / duration')
+                    ->getStateUsing(function (Coupon $record) {
+                        $value = '';
+                        if ($record->discount_value != 0.00) {
+                            $value = $record->discount_value;
+                        }
+                        if ($record->subscription_duration) {
+                            $value = $record->subscription_duration . 'Month' .  ($record->subscription_duration > 2) ? 's' : '';
+                        }
+                        return $value;
+                    }),
             ])
             ->filters([
                 //

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->double('price');
-            $table->unsignedInteger('socials');
+            $table->unsignedInteger('categories');
             $table->unsignedInteger('duration');
             $table->enum('billing_cycle', BillingCycleEnum::toArray());
             $table->enum('type', PlanTypeEnum::toArray());

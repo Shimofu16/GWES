@@ -35,7 +35,7 @@ class SubscriberPerCategory extends ApexChartWidget
         $categories = Category::all();
         foreach ($categories as $category) {
             $labels[] = $category->name;
-            $series[] = $category->subscribersCount();
+            $series[] = $category->companies()->count();
         }
         return [
             'chart' => [

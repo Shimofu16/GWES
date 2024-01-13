@@ -18,7 +18,7 @@
                         <div class="flex flex-col ">
                             <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Owner Information</h2>
                             <div class="relative mb-4">
-                                <label for="owner_name" class="leading-7 text-sm text-gray-600">Name <span
+                                <label for="owner_name" class="leading-7 text-sm text-gray-600">Owner Name <span
                                         class="text-red-500">*</span></label>
                                 <input type="text" id="owner_name" name="owner_name" wire:model='owner_name'
                                     class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                             <div class="relative mb-4">
-                                <label for="owner_phone" class="leading-7 text-sm text-gray-600">Phone No. <span
+                                <label for="owner_phone" class="leading-7 text-sm text-gray-600">Owner Phone No. <span
                                         class="text-red-500">*</span></label>
                                 <input type="text" id="owner_phone" name="owner_phone" wire:model='owner_phone'
                                     class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
@@ -40,7 +40,7 @@
                                 </div>
                             </div>
                             <div class="relative mb-4">
-                                <label for="owner_email" class="leading-7 text-sm text-gray-600">Email <span
+                                <label for="owner_email" class="leading-7 text-sm text-gray-600">Owner Email <span
                                         class="text-red-500">*</span></label>
                                 <input type="email" id="owner_email" name="owner_email" wire:model='owner_email'
                                     class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
@@ -76,105 +76,105 @@
                                 </div>
                                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_logos" class="leading-7 text-sm text-gray-600">Logo <span
+                                        <label for="company_logos" class="leading-7 text-sm text-gray-600">Company Logo <span
                                                 class="text-red-500">*</span></label>
                                         <input
                                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
                                             id="company_logos" type="file" name="company_logos"
-                                            wire:model='company_logos.{{ $i }}'>
-                                        <div wire:loading wire:target="company_logos.{{ $i }}">Uploading...</div>
+                                            wire:model='companies.{{ $i }}.logo'>
+                                        <div wire:loading wire:target="companies.{{ $i }}.logo">Uploading...</div>
                                         <div>
-                                            @error('company_logos')
+                                            @error('companies.*.logo')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_names" class="leading-7 text-sm text-gray-600">Name <span
+                                        <label for="company_names" class="leading-7 text-sm text-gray-600">Company Name <span
                                                 class="text-red-500">*</span></label>
                                         <input type="text" id="company_names" name="company_names"
-                                            wire:model='company_names.{{ $i }}'
+                                            wire:model='companies.{{ $i }}.name'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                         <div>
-                                            @error('company_names')
+                                            @error('companies.*.name')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_phones" class="leading-7 text-sm text-gray-600">Phone no. <span
+                                        <label for="company_phones" class="leading-7 text-sm text-gray-600">Company Phone no. <span
                                                 class="text-red-500">*</span></label>
                                         <input type="text" id="company_phones" name="company_phones"
-                                            wire:model='company_phones.{{ $i }}'
+                                            wire:model='companies.{{ $i }}.phone'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                         <div>
-                                            @error('company_phones')
+                                            @error('companies.*.phone')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_addresses" class="leading-7 text-sm text-gray-600">Address <span
+                                        <label for="company_addresses" class="leading-7 text-sm text-gray-600">Company Address <span
                                                 class="text-red-500">*</span></label>
                                         <input type="text" id="company_addresses" name="company_addresses"
-                                            wire:model='company_addresses.{{ $i }}'
+                                            wire:model='companies.{{ $i }}.address'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                         <div>
-                                            @error('company_addresses')
+                                            @error('companies.*.address')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_price_ranges" class="leading-7 text-sm text-gray-600">Price
+                                        <label for="company_price_ranges" class="leading-7 text-sm text-gray-600">Company Price
                                             Range <span class="text-red-500">*</span></label>
                                         <input type="text" id="company_price_ranges" name="company_price_ranges"
-                                            wire:model='company_price_ranges.{{ $i }}'
+                                            wire:model='companies.{{ $i }}.price_range'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                             placeholder="Ex: 10000 - 20000">
                                         <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                                         </p>
                                         <div>
-                                            @error('company_price_ranges')
+                                            @error('companies.*.price_range')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_socials" class="leading-7 text-sm text-gray-600">Socials <span
+                                        <label for="company_socials" class="leading-7 text-sm text-gray-600">Company Socials (3)<span
                                                 class="text-red-500">*</span></label>
-                                        <textarea id="company_socials" name="company_socials" wire:model='company_socials.{{ $i }}'
+                                        <textarea id="company_socials" name="company_socials" wire:model='companies.{{ $i }}.socials'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                                             rows="3" placeholder="Ex: https://facebook.com, https://instagra.com, https://twitter.com/"></textarea>
                                         <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                                             Make sure to add a comma and space after links.
                                         </p>
                                         <div>
-                                            @error('company_socials')
+                                            @error('companies.*.socials')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_plans" class="leading-7 text-sm text-gray-600">Plan <span
+                                        <label for="company_plans" class="leading-7 text-sm text-gray-600">Company Plan <span
                                                 class="text-red-500">*</span></label>
-                                        <select id="company_plans" wire:model='company_plans.{{ $i }}'
+                                        <select id="company_plans" wire:model='companies.{{ $i }}.plan'
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                             <option selected>Choose a Plan</option>
                                             @foreach ($plans as $key => $plan)
                                                 <option value="{{ $plan->id }}">{{ $plan->name }} -
-                                                    {{ $plan->type }}</option>
+                                                    {{ $plan->type }} - {{ $plan->categories }}</option>
                                             @endforeach
                                         </select>
 
                                         <div>
-                                            @error('company_plans')
+                                            @error('companies.*.plan')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_categories" class="leading-7 text-sm text-gray-600">Categories
+                                        <label for="company_categories" class="leading-7 text-sm text-gray-600">Company Categories
                                             <span class="text-red-500">*</span>
                                         </label>
                                         <div class="flex flex-wrap lg:w-1/2">
@@ -182,7 +182,7 @@
                                                 <div class="flex items-center mb-2 me-2">
                                                     <input id="company_categories{{ $i }}{{ $key }}"
                                                         type="checkbox" value="{{ $key }}"
-                                                        wire:model.prevent='company_categories.{{ $i }}.{{ $key }}'
+                                                        wire:model.prevent='companies.{{ $i }}.categories.{{ $key }}'
                                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2">
                                                     <label for="company_categories{{ $i }}{{ $key }}"
                                                         class="ms-2 text-sm font-medium text-gray-900 ">{{ $category }}</label>
@@ -191,22 +191,22 @@
                                         </div>
 
                                         <div>
-                                            @error('company_categories')
+                                            @error('companies.*.categories')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_descriptions" class="leading-7 text-sm text-gray-600">Description
+                                        <label for="company_descriptions" class="leading-7 text-sm text-gray-600">Company Description
                                             <span class="text-red-500">*</span></label>
                                         <textarea id="company_descriptions" name="company_descriptions"
-                                            wire:model='company_descriptions.{{ $i }}'
+                                            wire:model='companies.{{ $i }}.description'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
                                         <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                                             Write a short description about your company.
                                         </p>
                                         <div>
-                                            @error('company_descriptions')
+                                            @error('companies.*.description')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
                                         </div>
@@ -285,10 +285,10 @@
                                         </p>
                                     </div>
                                     <ol class="list-decimal list-inside">
-                                        <li>Initiate a money transfer to the following account</li>
+                                        <li>Initiate a money transfer to the following account: <strong>(0966) 790 2816</strong></li>
                                         <li>Once the transfer is completed, please take a screenshot of the transaction
                                             confirmation.</li>
-                                        <li>Send the screenshot to this messenger account.</li>
+                                        <li>Upload the screenshot as proof of payment</li>
                                     </ol>
                                     <p class="mt-4">Your prompt attention to this matter is greatly appreciated, and it will
                                         help us ensure the timely processing of your service.</p>
@@ -298,7 +298,7 @@
                             </div>
                             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
                                 <div class="col-span-2  relative ">
-                                    <label for="proof_of_payment" class="leading-7 text-sm text-gray-600">Proof of
+                                    <label for="proof_of_payment" class="leading-7 text-sm text-gray-600">Company Proof of
                                         Payment<span class="text-red-500">*</span></label>
                                     <input
                                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
@@ -312,7 +312,7 @@
                                     </div>
                                 </div>
                                 <div class="col-span-2 relative mb-4">
-                                    <label for="coupon" class="leading-7 text-sm text-gray-600">Coupon</label>
+                                    <label for="coupon" class="leading-7 text-sm text-gray-600">Company Coupon</label>
                                     <div class="flex">
                                         <input type="text" id="coupon" name="coupon" wire:model='coupon'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
@@ -354,7 +354,7 @@
                         </button>
                     @else
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            type="submit">
+                            type="submit" wire:loading.class="disabled">
                             Submit
                         </button>
                     @endif

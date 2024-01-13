@@ -25,12 +25,13 @@ class PlanSeeder extends Seeder
             $billing_cycle = $faker->randomElement(BillingCycleEnum::toArray());
             $type = $faker->randomElement(PlanTypeEnum::toArray());
             $duration = $faker->numberBetween($min = 1, $max = 3);
+            $categories = $faker->numberBetween($min = 1, $max = 3);
             // $plan = $price . ' ' . (($billing_cycle == "monthly") ? 'month' : 'year') . ($duration > 1 ? 's' : '');
             $plan = 'Plan ' . $price;
             Plan::create([
                 'name' => $plan,
                 'price' => $price,
-                'socials' => $duration,
+                'categories' => $categories,
                 'duration' => $duration,
                 'billing_cycle' => $billing_cycle,
                 'type' => $type,
@@ -39,7 +40,7 @@ class PlanSeeder extends Seeder
         }
 
         Coupon::create([
-            'code' => 'FISRTSUB',
+            'code' => 'FIRSTSUB',
             'discount_type' => DiscountTypeEnum::FREE_SUBSCRIPTION->value,
             'subscription_duration' => 1,
             'start_date' => now(),

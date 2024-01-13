@@ -27,25 +27,25 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid-rows-2 sm:grid-rows-3 gap-1">
                     {{-- row 1 --}}
                     <div class="col-span-2 lg:col-span-4">
-                        <img src="{{ asset('assets/images/default/wed4.jpg') }}" alt="Image 1"
+                        <img src="{{ asset('assets/images/defaults/wed-1.jpg') }}" alt="Image 1"
                             class="object-cover h-48 w-full rounded-md shadow-md" loading="lazy">
                     </div>
                     {{-- row 2 --}}
                     <div class="col-span-1  lg:col-span-2 row-start-2">
-                        <img src="{{ asset('assets/images/default/wed2.jpg') }}" alt="Image 2"
+                        <img src="{{ asset('assets/images/defaults/wed-2.jpg') }}" alt="Image 2"
                             class="object-cover h-48 w-full rounded-md shadow-md" loading="lazy">
                     </div>
-                    <div class="col-span-1  lg:col-span-2  row-start-2">
-                        <img src="{{ asset('assets/images/default/wed3.jpg') }}" alt="Image 3"
+                    <div class="hidden sm:block col-span-1  lg:col-span-2  row-start-2">
+                        <img src="{{ asset('assets/images/defaults/wed-3.jpg') }}" alt="Image 3"
                             class="object-cover h-48 w-full rounded-md shadow-md" loading="lazy">
                     </div>
                     {{--  row 3 --}}
                     <div class="hidden sm:block col-span-1  lg:col-span-3 row-start-3">
-                        <img src="{{ asset('assets/images/default/wed5.jpg') }}" alt="Image 4"
+                        <img src="{{ asset('assets/images/defaults/wed-5.jpg') }}" alt="Image 4"
                             class="object-cover h-48 w-full rounded-md shadow-md" loading="lazy">
                     </div>
                     <div class="hidden sm:block col-start-1 lg:col-start-4 row-start-3">
-                        <img src="{{ asset('assets/images/default/wed4.jpg') }}" alt="Image 5"
+                        <img src="{{ asset('assets/images/defaults/wed-4.jpg') }}" alt="Image 5"
                             class="object-cover h-48 w-full rounded-md shadow-md" loading="lazy">
                     </div>
                 </div>
@@ -163,9 +163,9 @@
                 </p>
             </div>
             <div class="flex flex-col justify-center items-center w-full">
-                <img src="{{ asset('assets/images/default/wed4.jpg') }}" id="mission-pic1"
+                <img src="{{ asset('assets/images/defaults/wed-1.jpg') }}" id="mission-pic1"
                     class="object-cover  pb-4" alt="Your Image" loading="lazy">
-                <img src="{{ asset('assets/images/default/wed2.jpg') }}" id="mission-pic2" class="object-cover"
+                <img src="{{ asset('assets/images/defaults/wed-5.jpg') }}" id="mission-pic2" class="object-cover"
                     alt="Your Image" loading="lazy">
             </div>
         </div>

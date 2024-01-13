@@ -12,6 +12,7 @@ use App\Models\SubscriberCompanyCategory;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Validator;
 
 class Create extends Component
 {
@@ -21,15 +22,17 @@ class Create extends Component
     public $owner_email;
     public $owner_phone;
 
-    public $company_logos = [];
-    public $company_names = [];
-    public $company_addresses = [];
-    public $company_phones = [];
-    public $company_price_ranges = [];
-    public $company_descriptions = [];
-    public $company_socials = [];
-    public $company_plans = [];
-    public $company_categories = [];
+
+    public $companies = [];
+    // public $company_logos = [];
+    // public $company_names = [];
+    // public $company_addresses = [];
+    // public $company_phones = [];
+    // public $company_price_ranges = [];
+    // public $company_descriptions = [];
+    // public $company_socials = [];
+    // public $company_plans = [];
+    // public $company_categories = [];
 
     public $proof_of_payment;
     public $coupon;
@@ -53,25 +56,76 @@ class Create extends Component
     }
 
 
+
+    private function validateData()
+    {
+        switch ($this->current_step) {
+            case 1:
+                $this->validate([
+                    'owner_name' => ['required', 'string'],
+                    'owner_phone' => ['required', 'string'],
+                    'owner_email' => ['required', 'string'],
+                    'company_count' => 'required',
+                ]);
+                break;
+            case 2:
+                /* $validator =   Validator::validate($this->companies, [
+                    'companies.*.logo' => 'required',
+                    'companies.*.name' => 'required',
+                    'companies.*.address' => 'required',
+                    'companies.*.phone' => 'required',
+                    'companies.*.price_range' => 'required',
+                    'companies.*.description' => 'required',
+                    'companies.*.socials' => 'required',
+                    'companies.*.plan' => 'required',
+                    'companies.*.categories' => 'required',
+                ]); */
+                // $this->validate([
+                //     'companies.*.logo' => 'required',
+                //     'companies.*.name' => 'required',
+                //     'companies.*.address' => 'required',
+                //     'companies.*.phone' => 'required',
+                //     'companies.*.price_range' => 'required',
+                //     'companies.*.description' => 'required',
+                //     'companies.*.socials' => 'required',
+                //     'companies.*.plan' => 'required',
+                //     'companies.*.categories' => 'required',
+                // ]);
+                // dd($validator);
+
+            case 3:
+                // dd(
+                //     $this->company_logos,
+                //     $this->company_names,
+                //     $this->company_addresses,
+                //     $this->company_phones,
+                //     $this->company_price_ranges,
+                //     $this->company_descriptions,
+                //     $this->company_socials,
+                //     $this->company_plans,
+                //     $this->company_categories,
+                // );
+                $this->validate([
+                    'proof_of_payment' => ['required'],
+                ]);
+
+                break;
+        }
+    }
     public function save()
     {
-        // dd(
-        //     $this->company_logos[0],
-        //     $this->company_names[1],
-        //     $this->company_addresses[1],
-        //     $this->company_phones[1],
-        //     $this->company_descriptions[1],
-        //     $this->company_plans[1],
-        //     $this->company_categories[1],
-        // );
+        dd(
+            $this->companies,
+        );
+        $this->resetErrorBag();
         $this->validateData();
+
+
         $subscriber_id = Subscriber::create([
             'name' => $this->owner_name,
             'email' => $this->owner_email,
             'phone' => $this->owner_phone,
         ])->id;
-
-
 
         for ($i = 0; $i < $this->company_count; $i++) {
             $company_file_name = $this->company_names[$i] . '.' . $this->company_logos[0]->getClientOriginalExtension();
@@ -127,49 +181,6 @@ class Create extends Component
         }
     }
 
-    private function validateData()
-    {
-        switch ($this->current_step) {
-            case 1:
-                $this->validate([
-                    'owner_name' => ['required', 'string'],
-                    'owner_phone' => ['required', 'string'],
-                    'owner_email' => ['required', 'string'],
-                    'company_count' => ['required'],
-                ]);
-                break;
-            case 2:
-                // $this->validate([
-                //     'company_logos' => ['required'],
-                //     'company_names' => ['required'],
-                //     'company_addresses' => ['required'],
-                //     'company_phones' => ['required'],
-                //     'company_price_ranges' => ['required'],
-                //     'company_descriptions' => ['required'],
-                //     'company_socials' => ['required'],
-                //     'company_plans' => ['required'],
-                //     'company_categories' => ['required'],
-                // ]);
-            case 3:
-                // dd(
-                //     $this->company_logos,
-                //     $this->company_names,
-                //     $this->company_addresses,
-                //     $this->company_phones,
-                //     $this->company_price_ranges,
-                //     $this->company_descriptions,
-                //     $this->company_socials,
-                //     $this->company_plans,
-                //     $this->company_categories,
-                // );
-                $this->validate([
-                    'proof_of_payment' => ['required'],
-                ]);
-
-                break;
-        }
-    }
-
     public function claimCoupon()
     {
         $this->resetErrorBag();
@@ -191,15 +202,17 @@ class Create extends Component
 
     private function getPayments()
     {
-        $this->selected_plans = Plan::find($this->company_plans);
+        foreach ($this->companies as $key => $company) {
+            $plan_ids[] = $company['plan'];
+        }
+        $this->selected_plans = Plan::find($plan_ids);
     }
 
     public function increaseStep()
     {
         $this->resetErrorBag();
-        if ($this->current_step != 2) {
-            $this->validateData();
-        }
+        $this->validateData();
+
 
         $this->current_step++;
 

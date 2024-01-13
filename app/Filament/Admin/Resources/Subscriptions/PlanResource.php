@@ -41,10 +41,10 @@ class PlanResource extends Resource
                                 TextInput::make('price')
                                     ->integer()
                                     ->required(),
-                                TextInput::make('socials')
+                                TextInput::make('categories')
                                     ->integer()
                                     ->required()
-                                    ->helperText('Total of Social media links subscribers can add'),
+                                    ->helperText('Total of categories subscribers can add'),
                                 TextInput::make('duration')
                                     ->integer()
                                     ->required()
@@ -74,7 +74,7 @@ class PlanResource extends Resource
                 TextColumn::make('name'),
                 TextColumn::make('price')
                     ->money('PHP'),
-                TextColumn::make('socials'),
+                TextColumn::make('categories'),
                 TextColumn::make('duration')
                     ->getStateUsing(function (Plan $record) {
                         $billing_cycle = ($record->billing_cycle === "monthly") ? 'Months' : 'Years';
