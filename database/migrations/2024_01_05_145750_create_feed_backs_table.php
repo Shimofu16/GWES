@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable()->default('anonymous');
             $table->string('email')->nullable();
-            $table->string('context')->nullable();
+            $table->longText('context')->nullable();
             $table->boolean('is_visible')->default(false);
             $table->softDeletes();
             $table->timestamps();

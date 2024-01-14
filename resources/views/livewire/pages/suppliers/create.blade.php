@@ -1,5 +1,5 @@
 <section class="">
-    <div class="container px-5 pb-10 pt-5 mx-auto">
+    <div class="container pb-10 pt-5 mx-auto">
         <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
             <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-bold text-gray-900 ">Become a supplier</h2>
             <p class="font-light text-gray-500 sm:text-xl">
@@ -11,8 +11,8 @@
 
             </p>
         </div>
-        <div class="flex flex-wrap justify-center -m-4">
-            <form wire:submit="save" class="bg-white p-10 shadow-lg">
+        <div class="flex flex-wrap px-5">
+            <form wire:submit="save" class="bg-white p-5 shadow-lg">
                 @switch($current_step)
                     @case(1)
                         <div class="flex flex-col ">
@@ -141,6 +141,73 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
+                                        <label for="company_plans" class="leading-7 text-sm text-gray-600">Company Plan <span
+                                                class="text-red-500">*</span></label>
+                                        <select id="company_plans" wire:model='companies.{{ $i }}.plan'
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                            <option selected>Choose a Plan</option>
+                                            @foreach ($plans as $key => $plan)
+                                                <option value="{{ $plan->id }}">{{ $plan->name }}</option>
+                                            @endforeach
+                                        </select>
+
+                                        <div>
+                                            @error('companies.*.plan')
+                                                <span class="text-red-500">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        {{-- @if (array_key_exists($i, $selected_plans_array))
+
+                                        <div class="flex">
+                                            @foreach ($selected_plans_array[$i] as $selected_plans_array)
+                                                {{ $selected_plans_array->name }}
+                                            @endforeach
+                                        </div>
+                                        @endif --}}
+                                    </div>
+                                    <div class="col-span-2 relative mb-4">
+                                        <div class="relative overflow-x-scroll shadow-md sm:rounded-lg">
+                                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                                    <tr>
+                                                        <th scope="col" class="px-3 md:px-5 py-3">
+                                                            Plan
+                                                        </th>
+                                                        <th scope="col" class="px-3 md:px-5 py-3">
+                                                            Duration
+                                                        </th>
+                                                        <th scope="col" class="px-3 md:px-5 py-3">
+                                                            No. of Allowed Categories
+                                                        </th>
+            
+                                                        <th scope="col" class="px-3 md:px-5 py-3">
+                                                            Price
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($plans as $plan)
+                                                        <tr class="odd:bg-white  even:bg-gray-50  border-b">
+                                                            <th scope="row"
+                                                                class="px-3 md:px-5 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                                {{ $plan->name }}
+                                                            </th>
+                                                            <td class="px-3 md:px-5 py-4">
+                                                               {{ $plan->duration }} {{ $plan->billing_cycle == 'monthly' ? 'Month' : 'Year' }}{{ $plan->duration > 1 ? 's' : '' }}
+                                                            </td>
+                                                            <td class="px-3 md:px-5 py-4">
+                                                                {{ $plan->categories }}
+                                                            </td>
+                                                            <td class="px-3 md:px-5 py-4">
+                                                                ₱ {{ number_format($plan->price) }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-2 lg:col-span-4 relative mb-4">
                                         <label for="company_socials" class="leading-7 text-sm text-gray-600">Company Socials (3)<span
                                                 class="text-red-500">*</span></label>
                                         <textarea id="company_socials" name="company_socials" wire:model='companies.{{ $i }}.socials'
@@ -155,24 +222,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-span-2 relative mb-4">
-                                        <label for="company_plans" class="leading-7 text-sm text-gray-600">Company Plan <span
-                                                class="text-red-500">*</span></label>
-                                        <select id="company_plans" wire:model='companies.{{ $i }}.plan'
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                            <option selected>Choose a Plan</option>
-                                            @foreach ($plans as $key => $plan)
-                                                <option value="{{ $plan->id }}">{{ $plan->name }} -
-                                                    {{ $plan->type }} - {{ $plan->categories }}</option>
-                                            @endforeach
-                                        </select>
-
-                                        <div>
-                                            @error('companies.*.plan')
-                                                <span class="text-red-500">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
                                         <label for="company_categories" class="leading-7 text-sm text-gray-600">Company Categories
                                             <span class="text-red-500">*</span>
@@ -222,115 +272,120 @@
                             <div class="flex justify-between items-center">
                                 <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Payment</h2>
                             </div>
-
-                            <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-4">
-                                <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">
-                                                Plan
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Duration
-                                            </th>
-
-                                            <th scope="col" class="px-6 py-3">
-                                                Price
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($selected_plans as $selected_plan)
-                                            @php
-                                                $selected_plan_sum += $selected_plan->price;
-                                            @endphp
-                                            <tr class="odd:bg-white  even:bg-gray-50  border-b">
-                                                <th scope="row"
-                                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                                    {{ $selected_plan->name }}
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    {{ $selected_plan->duration }} @if ($selected_plan->billing_cycle == 'monthly')
-                                                        {{ 'Month' }}
-                                                    @else
-                                                        {{ 'Year' }}
-                                                    @endif
-                                                    {{ $selected_plan->duration > 1 ? 's' : '' }}
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    ₱ {{ number_format($selected_plan->price) }}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        <tr class="">
-                                            <td></td>
-                                            <td></td>
-                                            <td class="py-4 px-3 text-">
-                                                <strong>Total: ₱ {{ number_format($selected_plan_sum) }}</strong>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-                            <div class="flex  justify-between mb-4">
-                                <img src="{{ asset('assets/images/gwd-gcash.jpg') }}" alt="G-Cash"
-                                    class="h-[300px] rounded mb-3 sm:mb-0">
-                                <div class="text sm:ms-3">
-                                    <div class="mb-4">
-                                        <h2 class="text-gray-700 font-bold mb-2">Thank you for choosing our services/products.
-                                        </h2>
-                                        <p>To expedite the confirmation of your payment, kindly follow the instructions below:
-                                        </p>
-                                    </div>
-                                    <ol class="list-decimal list-inside">
-                                        <li>Initiate a money transfer to the following account: <strong>(0966) 790 2816</strong></li>
-                                        <li>Once the transfer is completed, please take a screenshot of the transaction
-                                            confirmation.</li>
-                                        <li>Upload the screenshot as proof of payment</li>
-                                    </ol>
-                                    <p class="mt-4">Your prompt attention to this matter is greatly appreciated, and it will
-                                        help us ensure the timely processing of your service.</p>
-                                    <p class="mt-2">If you encounter any issues or have questions, feel free to reach out to
-                                        our customer support.</p>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
-                                <div class="col-span-2  relative ">
-                                    <label for="proof_of_payment" class="leading-7 text-sm text-gray-600">Company Proof of
-                                        Payment<span class="text-red-500">*</span></label>
-                                    <input
-                                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                                        id="proof_of_payment" type="file" name="proof_of_payment"
-                                        wire:model='proof_of_payment'>
-                                    <div wire:loading wire:target="proof_of_payment">Uploading...</div>
-                                    <div>
-                                        @error('proof_of_payment')
-                                            <span class="text-red-500">{{ $message }}</span>
-                                        @enderror
+                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                                <div class="col-span-2 lg:col-span-4">
+                                    <div class="relative overflow-x-scroll shadow-md sm:rounded-lg mb-4">
+                                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                                <tr>
+                                                    <th scope="col" class="px-3 md:px-5 py-3">
+                                                        Plan
+                                                    </th>
+                                                    <th scope="col" class="px-3 md:px-5 py-3">
+                                                        Duration
+                                                    </th>
+                                                    <th scope="col" class="px-3 md:px-5 py-3">
+                                                        No. of Allowed Categories
+                                                    </th>
+        
+                                                    <th scope="col" class="px-3 md:px-5 py-3">
+                                                        Price
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($selected_plans as $selected_plan)
+                                                    @php
+                                                        $selected_plan_sum += $selected_plan->price;
+                                                    @endphp
+                                                    <tr class="odd:bg-white  even:bg-gray-50  border-b">
+                                                        <th scope="row"
+                                                            class="px-3 md:px-5 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                                            {{ $selected_plan->name }}
+                                                        </th>
+                                                        <td class="px-3 md:px-5 py-4">
+                                                           {{ $selected_plan->duration }} {{ $selected_plan->billing_cycle == 'monthly' ? 'Month' : 'Year' }}{{ $selected_plan->duration > 1 ? 's' : '' }}
+                                                        </td>
+                                                        <td class="px-3 md:px-5 py-4">
+                                                            {{ $selected_plan->categories }}
+                                                        </td>
+                                                        <td class="px-3 md:px-5 py-4">
+                                                            ₱ {{ number_format($selected_plan->price) }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                <tr class="">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td class="py-4 px-3 text-">
+                                                        <strong>Total: ₱ {{ number_format($selected_plan_sum) }}</strong>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                                <div class="col-span-2 relative mb-4">
-                                    <label for="coupon" class="leading-7 text-sm text-gray-600">Company Coupon</label>
-                                    <div class="flex">
-                                        <input type="text" id="coupon" name="coupon" wire:model='coupon'
-                                            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                                        <button
-                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ms-2"
-                                            wire:click.prevent='claimCoupon' wire:loading.class="disabled">
-                                            Claim
-                                        </button>
-                                    </div>
-                                    <div>
-                                        @error('coupon')
-                                            <span class="text-green-500">{{ $message }}</span>
-                                        @enderror
-                                        @error('invalid_coupon')
-                                            <span class="text-red-500">{{ $message }}</span>
-                                        @enderror
+                                <div class="col-span-2 lg:col-span-4 mb-4">
+                                    <div class="flex  justify-between flex-wrap">
+                                        <img src="{{ asset('assets/images/gwd-gcash.jpg') }}" alt="G-Cash"
+                                            class="h-[300px] rounded mb-3 sm:mb-0">
+                                        <div class="text sm:ms-3">
+                                            <div class="mb-4">
+                                                <h2 class="text-gray-700 font-bold mb-2">Thank you for choosing our services/products.
+                                                </h2>
+                                                <p>To expedite the confirmation of your payment, kindly follow the instructions below:
+                                                </p>
+                                            </div>
+                                            <ol class="list-decimal list-inside">
+                                                <li>Initiate a money transfer to the following account: <strong>(0966) 790 2816</strong></li>
+                                                <li>Once the transfer is completed, please take a screenshot of the transaction
+                                                    confirmation.</li>
+                                                <li>Upload the screenshot as proof of payment</li>
+                                            </ol>
+                                            <p class="mt-4">Your prompt attention to this matter is greatly appreciated, and it will
+                                                help us ensure the timely processing of your service.</p>
+                                            <p class="mt-2">If you encounter any issues or have questions, feel free to reach out to
+                                                our customer support.</p>
+                                        </div>
                                     </div>
                                 </div>
+    
+    
+                                    <div class="col-span-2  relative mb-4">
+                                        <label for="proof_of_payment" class="leading-7 text-sm text-gray-600">Company Proof of
+                                            Payment<span class="text-red-500">*</span></label>
+                                        <input
+                                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                                            id="proof_of_payment" type="file" name="proof_of_payment"
+                                            wire:model='proof_of_payment'>
+                                        <div wire:loading wire:target="proof_of_payment">Uploading...</div>
+                                        <div>
+                                            @error('proof_of_payment')
+                                                <span class="text-red-500">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-span-2 relative mb-4">
+                                        <label for="coupon" class="leading-7 text-sm text-gray-600">Company Coupon</label>
+                                        <div class="flex">
+                                            <input type="text" id="coupon" name="coupon" wire:model='coupon'
+                                                class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                            <button
+                                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ms-2"
+                                                wire:click.prevent='claimCoupon' wire:loading.class="disabled">
+                                                Claim
+                                            </button>
+                                        </div>
+                                        <div>
+                                            @error('coupon')
+                                                <span class="text-green-500">{{ $message }}</span>
+                                            @enderror
+                                            @error('invalid_coupon')
+                                                <span class="text-red-500">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
                             </div>
                         </div>
                     @break

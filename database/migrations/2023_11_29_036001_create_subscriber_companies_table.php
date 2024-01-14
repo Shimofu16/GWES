@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone');
             $table->string('price_range');
-            $table->string('description');
+            $table->longText('description');
             $table->json('socials');
             $table->timestamps();
         });
