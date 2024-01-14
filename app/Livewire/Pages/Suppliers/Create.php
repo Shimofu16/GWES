@@ -37,8 +37,8 @@ class Create extends Component
     public $selected_plans = [];
     public $selected_plans_array = [];
 
-    public $company_count = 2;
-    public $current_step = 3;
+    public $company_count ;
+    public $current_step = 1;
     public $total_step = 3;
 
 
@@ -146,7 +146,7 @@ class Create extends Component
                 ]);
             }
 
-          
+
             Payment::create([
                 'subscriber_company_id' => $subscriber_company_id,
                 'plan_id' => $plan->id,

@@ -23,7 +23,7 @@
                 <div class="grid grid-cols-2 gap-4 sm:gap-3">
                     <div>
                         <div>
-                            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase text-white">Follow us</h2>
+                            <h2 class="mb-6 text-sm font-semibold  uppercase text-white">Follow us</h2>
                             <ul class="text-gray-500 text-white font-medium">
                                 <li class="mb-4 text-white flex flex-col sm:flex-row ">
                                     <span class="me-1 text-white">
@@ -42,7 +42,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase text-white">Address</h2>
+                            <h2 class="mb-6 text-sm font-semibold  uppercase text-white">Address</h2>
                             <ul class="text-gray-500 text-white font-medium">
                                 <li class="mb-4 text-white flex flex-col sm:flex-row ">
                                     <span class="me-1 text-white">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <div>
-                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase text-white">Contacts</h2>
+                        <h2 class="mb-6 text-sm font-semibold  uppercase text-white">Contacts</h2>
                         <ul class="text-gray-500 text-white font-medium">
                             <li class="mb-4 text-white flex flex-col xl:flex-row ">
                                 <span class="me-1">
@@ -93,7 +93,7 @@
                         </ul>
                     </div>
                     {{-- <div>
-                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase text-white">Legal</h2>
+                        <h2 class="mb-6 text-sm font-semibold  uppercase text-white">Legal</h2>
                         <ul class="text-gray-500 text-white font-medium">
                             <li class="mb-4">
                                 <a href="#" class="hover:underline">Privacy Policy</a>

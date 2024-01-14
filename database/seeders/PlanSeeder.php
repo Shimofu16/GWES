@@ -20,13 +20,12 @@ class PlanSeeder extends Seeder
     public function run(): void
     {
         $faker = Factory::create();
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $price = $faker->randomNumber(3);
             $billing_cycle = $faker->randomElement(BillingCycleEnum::toArray());
             $type = $faker->randomElement(PlanTypeEnum::toArray());
             $duration = $faker->numberBetween($min = 1, $max = 3);
             $categories = $faker->numberBetween($min = 1, $max = 3);
-            // $plan = $price . ' ' . (($billing_cycle == "monthly") ? 'month' : 'year') . ($duration > 1 ? 's' : '');
             $plan = 'Plan ' . $price;
             Plan::create([
                 'name' => $plan,

@@ -98,7 +98,7 @@ class PendingSubscriberResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    BulkAction::make('set_to_active')
+                    BulkAction::make('set_status_to_active')
                         ->action(function (Collection $records) {
                             try {
                                 foreach ($records as $record) {

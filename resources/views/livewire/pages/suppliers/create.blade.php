@@ -8,11 +8,10 @@
                        <strong> {{ session('success') }} </strong>
                     </div>
                 @endif
-
             </p>
         </div>
         <div class="flex flex-wrap px-5">
-            <form wire:submit="save" class="bg-white p-5 shadow-lg">
+            <form wire:submit="save" class="bg-white rounded p-5 shadow-lg mx-auto">
                 @switch($current_step)
                     @case(1)
                         <div class="flex flex-col ">
@@ -74,7 +73,7 @@
                                     <div>Company #{{ $i + 1 }}</div>
                                     <div></div>
                                 </div>
-                                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3" wire:key="{{ $i }}">
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
                                         <label for="company_logos" class="leading-7 text-sm text-gray-600">Company Logo <span
                                                 class="text-red-500">*</span></label>
@@ -179,7 +178,7 @@
                                                         <th scope="col" class="px-3 md:px-5 py-3">
                                                             No. of Allowed Categories
                                                         </th>
-            
+
                                                         <th scope="col" class="px-3 md:px-5 py-3">
                                                             Price
                                                         </th>
@@ -222,7 +221,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
                                         <label for="company_categories" class="leading-7 text-sm text-gray-600">Company Categories
                                             <span class="text-red-500">*</span>
@@ -287,7 +286,7 @@
                                                     <th scope="col" class="px-3 md:px-5 py-3">
                                                         No. of Allowed Categories
                                                     </th>
-        
+
                                                     <th scope="col" class="px-3 md:px-5 py-3">
                                                         Price
                                                     </th>
@@ -350,8 +349,8 @@
                                         </div>
                                     </div>
                                 </div>
-    
-    
+
+
                                     <div class="col-span-2  relative mb-4">
                                         <label for="proof_of_payment" class="leading-7 text-sm text-gray-600">Company Proof of
                                             Payment<span class="text-red-500">*</span></label>
