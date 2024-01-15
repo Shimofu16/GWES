@@ -82,7 +82,7 @@
                 <li>
                     <a href="{{ route('feedbacks.index') }}"
                         class="block py-1 px-2 mt-2 sm:mt-0   rounded hover:bg-white hover:text-[#c4bcaf] {{ (Route::is('feedbacks.index') || Route::is('feedbacks.create')) ? 'bg-white text-[#c4bcaf]' : 'text-white' }}">
-                        FeedBack
+                        Feedback
                     </a>
                 </li>
             </ul>

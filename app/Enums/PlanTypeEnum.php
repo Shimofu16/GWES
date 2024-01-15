@@ -9,8 +9,10 @@ enum PlanTypeEnum: string
 {
     case STANDARD_A= 'standard a';
     case STANDARD_B = 'standard b';
+    case STANDARD_C = 'standard c';
     case PREMIUM_A = 'premium a';
     case PREMIUM_B = 'premium b';
+    case PREMIUM_C = 'premium c';
 
     public static function toArray(): array
     {

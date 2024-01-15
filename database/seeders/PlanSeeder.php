@@ -19,24 +19,24 @@ class PlanSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Factory::create();
-        for ($i = 0; $i < 5; $i++) {
-            $price = $faker->randomNumber(3);
-            $billing_cycle = $faker->randomElement(BillingCycleEnum::toArray());
-            $type = $faker->randomElement(PlanTypeEnum::toArray());
-            $duration = $faker->numberBetween($min = 1, $max = 3);
-            $categories = $faker->numberBetween($min = 1, $max = 3);
-            $plan = 'Plan ' . $price;
-            Plan::create([
-                'name' => $plan,
-                'price' => $price,
-                'categories' => $categories,
-                'duration' => $duration,
-                'billing_cycle' => $billing_cycle,
-                'type' => $type,
-                'is_visible' => $faker->boolean(),
-            ]);
-        }
+        // $faker = Factory::create();
+        // for ($i = 0; $i < 5; $i++) {
+        //     $price = $faker->randomNumber(3);
+        //     $billing_cycle = $faker->randomElement(BillingCycleEnum::toArray());
+        //     $type = $faker->randomElement(PlanTypeEnum::toArray());
+        //     $duration = $faker->numberBetween($min = 1, $max = 3);
+        //     $categories = $faker->numberBetween($min = 1, $max = 3);
+        //     $plan = 'Plan ' . $price;
+        //     Plan::create([
+        //         'name' => $plan,
+        //         'price' => $price,
+        //         'categories' => $categories,
+        //         'duration' => $duration,
+        //         'billing_cycle' => $billing_cycle,
+        //         'type' => $type,
+        //         'is_visible' => $faker->boolean(),
+        //     ]);
+        // }
 
         Coupon::create([
             'code' => 'FIRSTSUB',

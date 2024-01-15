@@ -22,7 +22,7 @@
                                 <p class="leading-relaxed mb-3">{{  Str::of($blog->description)->limit(100) }}</p>
                                 <div class="flex items-center flex-wrap ">
                                     <a href="{{ route('blogs.show', ['blog_id' => $blog->id]) }}"
-                                        class="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                                        class="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">See More
                                         <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor"
                                             stroke-width="2" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round">

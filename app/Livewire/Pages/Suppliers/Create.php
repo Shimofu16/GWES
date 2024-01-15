@@ -39,7 +39,7 @@ class Create extends Component
     public $selected_plans = [];
     public $selected_plans_array = [];
 
-    public $company_count ;
+    public $company_count;
     public $current_step = 1;
     public $total_step = 3;
 
@@ -59,7 +59,7 @@ class Create extends Component
                 $this->validate([
                     'owner_name' => ['required', 'string'],
                     'owner_phone' => ['required', 'string'],
-                    'owner_email' => ['required', 'string'],
+                    'owner_email' => ['required', 'string', 'unique:subscribers,email'],
                     'company_count' => 'required',
                 ]);
                 break;
@@ -69,7 +69,8 @@ class Create extends Component
                     'companies.0.name' => 'required',
                     'companies.0.address' => 'required',
                     'companies.0.phone' => 'required',
-                    'companies.0.price_range' => 'required',
+                    'companies.0.from' => 'required',
+                    'companies.0.to' => 'required',
                     'companies.0.description' => 'required',
                     'companies.0.socials' => 'required',
                     'companies.0.plan' => 'required',
@@ -78,12 +79,14 @@ class Create extends Component
                     'companies.*.name' => 'required',
                     'companies.*.address' => 'required',
                     'companies.*.phone' => 'required',
-                    'companies.*.price_range' => 'required',
+                    'companies.*.from' => 'required',
+                    'companies.*.to' => 'required',
                     'companies.*.description' => 'required',
                     'companies.*.socials' => 'required',
                     'companies.*.plan' => 'required',
                     'companies.*.categories.*' => 'required',
                 ]);
+
                 break;
             case 3:
                 $this->validate([
@@ -112,8 +115,10 @@ class Create extends Component
             $company['logo']->storeAs('companies', $company_file_name, 'public');
             $proof_of_payment_file_name = $company['name'] . '.' . $this->proof_of_payment->getClientOriginalExtension();
             $this->proof_of_payment->storeAs('companies/payments', $proof_of_payment_file_name, 'public');
-            $price_range = explode('-', $company['price_range']);
-            $socials = explode(',', $company['socials']);
+            $links = explode(',', $company['socials']);
+            for ($i = 0; $i < 3; $i++) {
+                $socials[] = $links[$i];
+            }
             $plan = Plan::find($company['plan']);
             $isPremium = false;
             if ($plan->type == PlanTypeEnum::PREMIUM_A->value || $plan->type == PlanTypeEnum::PREMIUM_B->value) {
@@ -139,12 +144,16 @@ class Create extends Component
                 'name' => $company['name'],
                 'address' => $company['address'],
                 'phone' => $company['phone'],
-                'price_range' => $price_range[0] . ' - ' . $price_range[1],
+                'price_range' => $company['from'] . ' - ' . $company['to'],
                 'description' => $company['description'],
                 'socials' => $socials,
             ])->id;
-
+            $loop = 0;
             foreach ($company['categories'] as $key => $category) {
+                if ($plan->categories == $loop) {
+                    break;
+                }
+                $loop++;
                 SubscriberCompanyCategory::create([
                     'subscriber_company_id' => $subscriber_company_id,
                     'category_id' => $key
@@ -177,9 +186,11 @@ class Create extends Component
         } elseif ($coup->redemption_count > $coup->max_redemptions) {
             $this->coupon = null;
             $this->addError('invalid_coupon', 'Redemption Limit Reached!');
-        } elseif (Carbon::parse($coup->expiry_date)->lt(now())) {
-            $this->coupon = null;
-            $this->addError('invalid_coupon', 'Coupon is Expired');
+        } elseif ($coup->expiry_date) {
+            if (Carbon::parse($coup->expiry_date)->lt(now())) {
+                $this->coupon = null;
+                $this->addError('invalid_coupon', 'Coupon is Expired');
+            }
         } else {
             $this->redeemed_coupon = $coup;
             $this->getPayments();
@@ -195,13 +206,13 @@ class Create extends Component
         $this->selected_plans = Plan::find($plan_ids);
         $this->selected_plan_sum = 0;
         foreach ($this->selected_plans as $key => $plan) {
-            $this->selected_plan_sum+= $plan->price;
+            $this->selected_plan_sum += $plan->price;
         }
-       if ( $this->redeemed_coupon ) {
+        if ($this->redeemed_coupon) {
             if ($this->redeemed_coupon->discount_type == DiscountTypeEnum::FIXED_AMOUNT) {
                 $this->selected_plan_sum = $this->selected_plan_sum - $this->redeemed_coupon->discount_value;
             }
-       } 
+        }
     }
 
     public function increaseStep()

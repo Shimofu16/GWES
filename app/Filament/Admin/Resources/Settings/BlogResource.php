@@ -86,12 +86,10 @@ class BlogResource extends Resource
             ->schema([
                 ComponentsSection::make()
                     ->schema([
-                        TextEntry::make('title')
-                            ->searchable(),
+                        TextEntry::make('title'),
                         TextEntry::make('date')
                             ->date(),
-                        TextEntry::make('company.name')
-                            ->searchable(),
+                        TextEntry::make('company.name'),
                         TextEntry::make('description')
                             ->columnSpanFull(),
                         ImageEntry::make('images')

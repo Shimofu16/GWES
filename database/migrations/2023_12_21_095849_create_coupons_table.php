@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 255)->unique(); // Increased string length for flexibility
             $table->enum('discount_type', DiscountTypeEnum::toArray()); // Simplified enum values
-            $table->decimal('discount_value', 10, 2)->default(0); // Removed nullable, as it's always applicable
+            $table->decimal('discount_value', 10, 2)->nullable()->default(0); // Removed nullable, as it's always applicable
             $table->unsignedInteger('subscription_duration')->nullable(); // Renamed to 'subscription_duration' for clarity
             $table->dateTime('expiry_date')->nullable();
             $table->unsignedInteger('max_redemptions')->nullable(); // Made unsigned for consistency

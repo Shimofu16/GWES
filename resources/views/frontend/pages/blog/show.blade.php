@@ -16,7 +16,7 @@
                     <img src="{{ asset('storage/' . $blog->images) }}" id="blogpostpic" alt="Blog Post Image"
                         class="mb-4 rounded-lg w-full md:h-auto">
 
-                    <p class="mb-2">{{ $blog->description }}</p>
+                    <p class="mb-2 text-wrap">{!! $blog->description !!}</p>
                 </article>
             </div>
 

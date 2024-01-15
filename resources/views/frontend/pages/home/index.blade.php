@@ -45,7 +45,7 @@
                             class="object-cover h-48 w-full rounded-md shadow-md" loading="lazy">
                     </div>
                     <div class="hidden sm:block col-start-1 lg:col-start-4 row-start-3">
-                        <img src="{{ asset('assets/images/defaults/wed-4.jpg') }}" alt="Image 5"
+                        <img src="{{ asset('assets/images/defaults/wed-6.jpg') }}" alt="Image 5"
                             class="object-cover h-48 w-full rounded-md shadow-md" loading="lazy">
                     </div>
                 </div>
@@ -82,7 +82,8 @@
     <section class="container mx-auto px-5 mt-[50px] sm:mt-[100px]">
         <div class="flex flex-col md:flex-row justify-center">
             <div class="flex flex-col justify-center items-center w-full">
-                <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819]">About Us</h1>
+                <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-5">About Us</h1>
+                <img src="{{ asset('assets/images/defaults/wed-10.jpg') }}" class="object-cover rounded mb-5"  alt="Your Image">
             </div>
             <div class="flex flex-col justify-center w-full">
                 <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl mb-5">
@@ -93,7 +94,7 @@
                         Wedding's Directory
                     </span>
                 </h1>
-                <p class="text-justify">
+                <p class="text-justify md:px-10 mb-5">
                     One search engine that can help soon-to-wed couples find reliable wedding suppliers, an online
                     platform that offers a wide range of vetted and trusted suppliers for weddings. By using Great
                     Weddings Suppliers Directory, soon-to-wed couples can search for suppliers based on their specific
@@ -112,7 +113,7 @@
             <div class="flex flex-col justify-center w-full">
                 <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-5">Mission
                 </h1>
-                <p class="text-justify">
+                <p class="text-justify md:px-10 mb-5">
                     Our Mission is to simplify the wedding planning process, saving precious time ensuring stress free
                     journey and be the ease and peace of mind our directory brings in every wedding planning journey.
                 </p>

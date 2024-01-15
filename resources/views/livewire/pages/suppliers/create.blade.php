@@ -127,14 +127,38 @@
                                     <div class="col-span-2 relative mb-4">
                                         <label for="company_price_ranges" class="leading-7 text-sm text-gray-600">Company Price
                                             Range <span class="text-red-500">*</span></label>
-                                        <input type="text" id="company_price_ranges" name="company_price_ranges"
-                                            wire:model='companies.{{ $i }}.price_range'
-                                            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                                            placeholder="Ex: 10000 - 20000">
+                                        <div class="flex">
+                                            <div>
+                                                <label for="company_price_ranges_from"
+                                                    class="leading-7 text-sm text-gray-600">Minimum</label>
+                                                <input type="number" id="company_price_ranges_from"
+                                                    name="company_price_ranges_from"
+                                                    wire:model='companies.{{ $i }}.from'
+                                                    class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                                    placeholder="Ex: 10000">
+                                            </div>
+                                            <h1 class="mx-3 mt-8 text-xl">
+                                                <strong>-</strong>
+                                            </h1>
+                                            <div>
+                                                <label for="company_price_ranges_to"
+                                                    class="leading-7 text-sm text-gray-600">Maximum</label>
+                                                <input type="number" id="company_price_ranges_to"
+                                                    name="company_price_ranges_to"
+                                                    wire:model='companies.{{ $i }}.to'
+                                                    class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                                                    placeholder="Ex: 20000">
+
+                                            </div>
+                                        </div>
                                         <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                            Enter the minimum and maximum values in the price range fields.
                                         </p>
                                         <div>
-                                            @error('companies.*.price_range')
+                                            @error('companies.*.from')
+                                                <span class="text-red-500">{{ $message }}</span>
+                                            @enderror
+                                            @error('companies.*.to')
                                                 <span class="text-red-500">{{ $message }}</span>
                                             @enderror
                                         </div>
@@ -214,7 +238,8 @@
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                                             rows="3" placeholder="Ex: https://facebook.com, https://instagra.com, https://twitter.com/"></textarea>
                                         <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                            Make sure to add a comma and space after links.
+                                            Please ensure that each link is followed by a comma and a space. Note that a maximum
+                                            of 3 social media links will be accepted.
                                         </p>
                                         <div>
                                             @error('companies.*.socials')
@@ -240,7 +265,10 @@
                                                 </div>
                                             @endforeach
                                         </div>
-
+                                        <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                            Please note that only the number of categories permitted by the selected plan will
+                                            be accepted. Refer to the ‘Plans’ table above for more details.
+                                        </p>
                                         <div>
                                             @error('companies.*.categories')
                                                 <span class="text-red-500">{{ $message }}</span>
@@ -323,7 +351,8 @@
                                                         <td></td>
                                                         <td class="py-4 px-3">
                                                             @if ($redeemed_coupon->discount_type == 'fixed_amount')
-                                                                <strong>₱ {{ number_format($redeemed_coupon->discount_value) }}</strong>
+                                                                <strong>₱
+                                                                    {{ number_format($redeemed_coupon->discount_value) }}</strong>
                                                             @endif
                                                             @if ($redeemed_coupon->discount_type == 'free_subscription')
                                                                 <strong>Free {{ $redeemed_coupon->subscription_duration }}
@@ -397,7 +426,7 @@
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                         <button
                                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ms-2"
-                                            wire:click.prevent='claimCoupon' wire:loading.class="disabled">
+                                            wire:click.prevent='claimCoupon' wire:loading.class='disabled'>
                                             Claim
                                         </button>
                                     </div>
@@ -421,19 +450,19 @@
                     @else
                         <button
                             class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                            wire:click.prevent='decreaseStep' wire:loading.class="disabled">
+                            wire:click.prevent='decreaseStep' wire:loading.class='disabled'>
                             Back
                         </button>
                     @endif
 
                     @if ($current_step != $total_step)
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            wire:click.prevent='increaseStep' wire:loading.class="disabled">
+                            wire:click.prevent='increaseStep' wire:loading.class='disabled'>
                             Next
                         </button>
                     @else
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            type="submit" wire:loading.class="disabled">
+                            type="submit" wire:loading.class='disabled' wire:target="proof_of_payment">
                             Submit
                         </button>
                     @endif
