@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pages\Home;
 
+use App\Enums\PaymentStatusEnum;
 use App\Models\Category;
 use App\Models\SubscriberCompany;
 use Livewire\Attributes\Url;
@@ -23,12 +24,12 @@ class Search extends Component
     public function search()
     {
         return SubscriberCompany::query()
-            ->whereHas('companyCategories', function ($query) {
-                $query->whereHas('category', function ($que) {
-                    $que->where('name', 'like', '%' . $this->search . '%');
-                });
+            ->with('payments', 'companyCategories')
+            ->whereHas('payments', function ($query) {
+                $query->where('latest', true)
+                    ->where('status', PaymentStatusEnum::ACTIVE->value);
             })
-            ->OrWhere('name', 'like', '%' . $this->search . '%')
+            ->where('name', 'like', '%' . $this->search . '%')
             ->pluck('name', 'id');
     }
 

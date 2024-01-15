@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentStatusEnum;
 use App\Models\Category;
+use App\Models\SubscriberCompany;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -12,8 +14,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-        return view('frontend.pages.home.index');
+        $suppliers = SubscriberCompany::query()
+            ->with('payments')
+            ->whereHas('payments', function ($query) {
+                $query->where('latest', true)
+                    ->where('isPremium', true)
+                    ->where('status',  PaymentStatusEnum::ACTIVE->value);
+            })
+            ->pluck('logo', 'id');
+        return view('frontend.pages.home.index', compact('suppliers'));
     }
 
     /**

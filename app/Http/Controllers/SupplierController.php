@@ -46,8 +46,8 @@ class SupplierController extends Controller
      */
     public function show($id)
     {
-
-        return view('frontend.pages.suppliers.show', compact('suppliers'));
+        $supplier = SubscriberCompany::find($id);
+        return view('frontend.pages.suppliers.show', compact('supplier'));
     }
 
     /**

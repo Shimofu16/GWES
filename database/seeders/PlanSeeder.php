@@ -42,7 +42,6 @@ class PlanSeeder extends Seeder
             'code' => 'FIRSTSUB',
             'discount_type' => DiscountTypeEnum::FREE_SUBSCRIPTION->value,
             'subscription_duration' => 1,
-            'start_date' => now(),
             'expiry_date' => now()->addWeeks(1),
             'max_redemptions' => 30,
         ]);

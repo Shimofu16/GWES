@@ -23,8 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::prefix('suppliers')->name('suppliers.')->group(function () {
     Route::get('/', Create::class)->name('create');
-    Route::get('/search/{category_id?}', Index::class)->name('index');
-    Route::get('/{supplier_id}', [SupplierController::class, 'show'])->name('show');
+    Route::get('/search/{query?}/{id?}', Index::class)->name('index');
 });
 Route::controller(BlogController::class)->prefix('blogs')->name('blogs.')->group(function () {
     Route::get('/', 'index')->name('index');

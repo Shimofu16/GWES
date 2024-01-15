@@ -13,11 +13,13 @@ use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -55,11 +57,8 @@ class PlanResource extends Resource
                                 Select::make('type')
                                     ->options(PlanTypeEnum::toArray())
                                     ->required(),
-                                // Select::make('categories')
-                                //     ->multiple()
-                                //     ->searchable()
-                                //     ->options(Category::query()->pluck('name','id'))
-                                //     ->columnSpanFull()
+                                Toggle::make('is_visible')
+                                    ->label('Visibility')
                             ])
                             ->columns(2),
                     ])
@@ -82,6 +81,8 @@ class PlanResource extends Resource
                         return $duration;
                     }),
                 TextColumn::make('type'),
+                ToggleColumn::make('is_visible')
+                    ->label('Visibility')
             ])
             ->filters([
                 //

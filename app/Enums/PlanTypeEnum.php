@@ -7,8 +7,10 @@ use Illuminate\Support\Str;
 
 enum PlanTypeEnum: string
 {
-    case STANDARD = 'standard';
-    case PREMIUM = 'premium';
+    case STANDARD_A= 'standard a';
+    case STANDARD_B = 'standard b';
+    case PREMIUM_A = 'premium a';
+    case PREMIUM_B = 'premium b';
 
     public static function toArray(): array
     {

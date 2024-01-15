@@ -16,7 +16,7 @@
     <div
         class="shadow-lg rounded-md py-2 border mt-1 max-h-64 w-100 overflow-y-auto bg-white absolute px-2 {{ $search ? 'block' : 'hidden' }}">
         @forelse ($suppliers as $key=> $supplier)
-            <a href="#" wire:key="{{ $key }}"
+            <a href="{{ route('suppliers.index',['query' => 'supplier','id' => $key]) }}" wire:key="{{ $key }}"
                 class="hover:bg-[#c4bcaf] hover:text-white rounded p-1">
                 {{ $supplier }}
             </a>

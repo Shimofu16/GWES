@@ -32,7 +32,7 @@
                     </div>
                     {{-- row 2 --}}
                     <div class="col-span-1  lg:col-span-2 row-start-2">
-                        <img src="{{ asset('assets/images/defaults/wed-2.jpg') }}" alt="Image 2"
+                        <img src="{{ asset('assets/images/defaults/wed-7.jpg') }}" alt="Image 2"
                             class="object-cover h-48 w-full rounded-md shadow-md" loading="lazy">
                     </div>
                     <div class="hidden sm:block col-span-1  lg:col-span-2  row-start-2">
@@ -58,66 +58,23 @@
                 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-10 border-solid border-bottom border-white border-b-5">
                 Our Suppliers</h1>
             <div class="owl-carousel owl-theme owl-loaded owl-drag">
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
-                <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
-                    <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1" class="rounded-full"
-                        loading="lazy">
-                </div>
+                @foreach ($suppliers as $supplier)
+                    <div class="rounded-full bg-white w-[95px] h-[95px] mx-2 flex justify-center">
+                        <img src="{{ asset($supplier) }}" alt="Logo 1" class="rounded-full" loading="lazy">
+                    </div>
+                @endforeach
+                @if ($suppliers->count() < 15)
+                    @php
+                        $count = 15 - $suppliers->count();
+                    @endphp
+                    @for ($i = 0; $i < $count; $i++)
+                        <div class="rounded-full bg-white w-[95px] h-[95px] mx-2">
+                            <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" alt="Logo 1"
+                                class="rounded-full" loading="lazy">
+                        </div>
+                    @endfor
+                @endif
+
 
             </div>
         </div>
@@ -137,17 +94,15 @@
                     </span>
                 </h1>
                 <p class="text-justify">
-                    One search engine that can help clients find reliable wedding suppliers, an online platform that
-                    offers a wide range of vetted and trusted vendors for weddings.
-
-                    By using Great Weddings Suppliers Directory, clients can search for suppliers based on their
-                    specific location and wedding category, such as venues, photographers, caterers, florists, and more.
-                    The platform provides detailed vendor profiles, including their Facebook Page and Contact Number,
-                    this helps clients in making informed decisions and finding the right supplier that suits their
-                    preferences and needs.
-
-                    Overall, Great Weddings Suppliers Directory acts as a reliable and comprehensive search engine that
-                    assists clients in finding and connecting with trustworthy wedding suppliers for their special day.
+                    One search engine that can help soon-to-wed couples find reliable wedding suppliers, an online
+                    platform that offers a wide range of vetted and trusted suppliers for weddings. By using Great
+                    Weddings Suppliers Directory, soon-to-wed couples can search for suppliers based on their specific
+                    location and wedding category, such as venues, photographers, caterers, florists, and more. The
+                    platform provides detailed vendor profiles, including their Facebook Page and Contact Number, this
+                    helps soon-to-wed couples in making informed decisions and finding the right supplier that suits
+                    their preferences and needs. Overall, Great Weddings Suppliers Directory acts as a reliable and
+                    comprehensive search engine that assists soon-to-wed couples in finding and connecting with
+                    trustworthy wedding suppliers for their special day.
                 </p>
             </div>
         </div>
@@ -163,9 +118,9 @@
                 </p>
             </div>
             <div class="flex flex-col justify-center items-center w-full">
-                <img src="{{ asset('assets/images/defaults/wed-1.jpg') }}" id="mission-pic1"
-                    class="object-cover  pb-4" alt="Your Image" loading="lazy">
-                <img src="{{ asset('assets/images/defaults/wed-5.jpg') }}" id="mission-pic2" class="object-cover"
+                <img src="{{ asset('assets/images/defaults/wed-8.jpg') }}" id="mission-pic1" class="object-cover  pb-4"
+                    alt="Your Image" loading="lazy">
+                <img src="{{ asset('assets/images/defaults/wed-9.jpg') }}" id="mission-pic2" class="object-cover"
                     alt="Your Image" loading="lazy">
             </div>
         </div>

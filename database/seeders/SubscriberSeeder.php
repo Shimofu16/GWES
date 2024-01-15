@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PlanTypeEnum;
 use Carbon\Carbon;
 use Faker\Factory;
 use App\Models\Plan;
@@ -38,6 +39,10 @@ class SubscriberSeeder extends Seeder
                 for ($i = 0; $i < 2; $i++) {
 
                     $plan = Plan::find(random_int(1, $plans_count));
+                    $isPremium = false;
+                    if ($plan->type == PlanTypeEnum::PREMIUM_A->value || $plan->type == PlanTypeEnum::PREMIUM_B->value) {
+                        $isPremium = true;
+                    }
                     $subscription_duration = $plan->duration;
                     $billing_cycle = $plan->billing_cycle;
                     $due = Carbon::now()->addMonth($subscription_duration);
@@ -63,7 +68,8 @@ class SubscriberSeeder extends Seeder
                         'proof_of_payment' => $faker->imageUrl(),
                         'due_date' => $due,
                         'total' => $plan->price,
-                        'latest' => true
+                        'latest' => true,
+                        'isPremium' => $isPremium
                     ]);
                     for ($i = 0; $i < $plan->categories; $i++) {
                         SubscriberCompanyCategory::create([

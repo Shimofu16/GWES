@@ -63,7 +63,7 @@
                                                 {{ $case }}
                                             </span>
                                             @foreach ($categories as $category)
-                                                <a href="{{ route('suppliers.index', ['category_id' => $category->id]) }}"
+                                                <a href="{{ route('suppliers.index', ['query' => 'category','id' => $category->id]) }}"
                                                     class="rounded hover:text-white hover:bg-[#c4bcaf] px-1">{{ $category->name }}</a>
                                             @endforeach
                                         </div>

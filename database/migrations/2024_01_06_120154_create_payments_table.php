@@ -21,6 +21,7 @@ return new class extends Migration
             $table->double('total');
             $table->date('due_date');
             $table->boolean('latest')->default(false);
+            $table->boolean('isPremium')->default(false);
             $table->enum('status', PaymentStatusEnum::toArray())->default(PaymentStatusEnum::PENDING); // pending, active, inactive,
             $table->timestamps();
         });

@@ -5,7 +5,7 @@
             <p class="font-light text-gray-500 sm:text-xl">
                 @if (session('success'))
                     <div class="alert alert-success bg-green-400 text-white py-5 ">
-                       <strong> {{ session('success') }} </strong>
+                        <strong> {{ session('success') }} </strong>
                     </div>
                 @endif
             </p>
@@ -101,8 +101,8 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_phones" class="leading-7 text-sm text-gray-600">Company Phone no. <span
-                                                class="text-red-500">*</span></label>
+                                        <label for="company_phones" class="leading-7 text-sm text-gray-600">Company Phone no.
+                                            <span class="text-red-500">*</span></label>
                                         <input type="text" id="company_phones" name="company_phones"
                                             wire:model='companies.{{ $i }}.phone'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
@@ -113,8 +113,8 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_addresses" class="leading-7 text-sm text-gray-600">Company Address <span
-                                                class="text-red-500">*</span></label>
+                                        <label for="company_addresses" class="leading-7 text-sm text-gray-600">Company Address
+                                            <span class="text-red-500">*</span></label>
                                         <input type="text" id="company_addresses" name="company_addresses"
                                             wire:model='companies.{{ $i }}.address'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
@@ -192,7 +192,8 @@
                                                                 {{ $plan->name }}
                                                             </th>
                                                             <td class="px-3 md:px-5 py-4">
-                                                               {{ $plan->duration }} {{ $plan->billing_cycle == 'monthly' ? 'Month' : 'Year' }}{{ $plan->duration > 1 ? 's' : '' }}
+                                                                {{ $plan->duration }}
+                                                                {{ $plan->billing_cycle == 'monthly' ? 'Month' : 'Year' }}{{ $plan->duration > 1 ? 's' : '' }}
                                                             </td>
                                                             <td class="px-3 md:px-5 py-4">
                                                                 {{ $plan->categories }}
@@ -207,8 +208,8 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_socials" class="leading-7 text-sm text-gray-600">Company Socials (3)<span
-                                                class="text-red-500">*</span></label>
+                                        <label for="company_socials" class="leading-7 text-sm text-gray-600">Company Socials
+                                            (3)<span class="text-red-500">*</span></label>
                                         <textarea id="company_socials" name="company_socials" wire:model='companies.{{ $i }}.socials'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                                             rows="3" placeholder="Ex: https://facebook.com, https://instagra.com, https://twitter.com/"></textarea>
@@ -223,7 +224,8 @@
                                     </div>
 
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_categories" class="leading-7 text-sm text-gray-600">Company Categories
+                                        <label for="company_categories" class="leading-7 text-sm text-gray-600">Company
+                                            Categories
                                             <span class="text-red-500">*</span>
                                         </label>
                                         <div class="flex flex-wrap lg:w-1/2">
@@ -246,7 +248,8 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_descriptions" class="leading-7 text-sm text-gray-600">Company Description
+                                        <label for="company_descriptions" class="leading-7 text-sm text-gray-600">Company
+                                            Description
                                             <span class="text-red-500">*</span></label>
                                         <textarea id="company_descriptions" name="company_descriptions"
                                             wire:model='companies.{{ $i }}.description'
@@ -294,16 +297,14 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($selected_plans as $selected_plan)
-                                                    @php
-                                                        $selected_plan_sum += $selected_plan->price;
-                                                    @endphp
                                                     <tr class="odd:bg-white  even:bg-gray-50  border-b">
                                                         <th scope="row"
                                                             class="px-3 md:px-5 py-4 font-medium text-gray-900 whitespace-nowrap">
                                                             {{ $selected_plan->name }}
                                                         </th>
                                                         <td class="px-3 md:px-5 py-4">
-                                                           {{ $selected_plan->duration }} {{ $selected_plan->billing_cycle == 'monthly' ? 'Month' : 'Year' }}{{ $selected_plan->duration > 1 ? 's' : '' }}
+                                                            {{ $selected_plan->duration }}
+                                                            {{ $selected_plan->billing_cycle == 'monthly' ? 'Month' : 'Year' }}{{ $selected_plan->duration > 1 ? 's' : '' }}
                                                         </td>
                                                         <td class="px-3 md:px-5 py-4">
                                                             {{ $selected_plan->categories }}
@@ -313,11 +314,30 @@
                                                         </td>
                                                     </tr>
                                                 @endforeach
+                                                @if ($redeemed_coupon)
+                                                    <tr class="">
+                                                        <td class="py-4 px-3">
+                                                            <strong>Discount</strong>
+                                                        </td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="py-4 px-3">
+                                                            @if ($redeemed_coupon->discount_type == 'fixed_amount')
+                                                                <strong>₱ {{ number_format($redeemed_coupon->discount_value) }}</strong>
+                                                            @endif
+                                                            @if ($redeemed_coupon->discount_type == 'free_subscription')
+                                                                <strong>Free {{ $redeemed_coupon->subscription_duration }}
+                                                                    Month{{ $redeemed_coupon->subscription_duration > 1 ? 's' : '' }}</strong>
+                                                            @endif
+
+                                                        </td>
+                                                    </tr>
+                                                @endif
                                                 <tr class="">
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td class="py-4 px-3 text-">
+                                                    <td class="py-4 px-3">
                                                         <strong>Total: ₱ {{ number_format($selected_plan_sum) }}</strong>
                                                     </td>
                                                 </tr>
@@ -331,60 +351,65 @@
                                             class="h-[300px] rounded mb-3 sm:mb-0">
                                         <div class="text sm:ms-3">
                                             <div class="mb-4">
-                                                <h2 class="text-gray-700 font-bold mb-2">Thank you for choosing our services/products.
+                                                <h2 class="text-gray-700 font-bold mb-2">Thank you for choosing our
+                                                    services/products.
                                                 </h2>
-                                                <p>To expedite the confirmation of your payment, kindly follow the instructions below:
+                                                <p>To expedite the confirmation of your payment, kindly follow the instructions
+                                                    below:
                                                 </p>
                                             </div>
                                             <ol class="list-decimal list-inside">
-                                                <li>Initiate a money transfer to the following account: <strong>(0966) 790 2816</strong></li>
+                                                <li>Initiate a money transfer to the following account: <strong>(0966) 790
+                                                        2816</strong></li>
                                                 <li>Once the transfer is completed, please take a screenshot of the transaction
                                                     confirmation.</li>
                                                 <li>Upload the screenshot as proof of payment</li>
                                             </ol>
-                                            <p class="mt-4">Your prompt attention to this matter is greatly appreciated, and it will
+                                            <p class="mt-4">Your prompt attention to this matter is greatly appreciated, and
+                                                it will
                                                 help us ensure the timely processing of your service.</p>
-                                            <p class="mt-2">If you encounter any issues or have questions, feel free to reach out to
+                                            <p class="mt-2">If you encounter any issues or have questions, feel free to reach
+                                                out to
                                                 our customer support.</p>
                                         </div>
                                     </div>
                                 </div>
 
 
-                                    <div class="col-span-2  relative mb-4">
-                                        <label for="proof_of_payment" class="leading-7 text-sm text-gray-600">Company Proof of
-                                            Payment<span class="text-red-500">*</span></label>
-                                        <input
-                                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                                            id="proof_of_payment" type="file" name="proof_of_payment"
-                                            wire:model='proof_of_payment'>
-                                        <div wire:loading wire:target="proof_of_payment">Uploading...</div>
-                                        <div>
-                                            @error('proof_of_payment')
-                                                <span class="text-red-500">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+                                <div class="col-span-2  relative mb-4">
+                                    <label for="proof_of_payment" class="leading-7 text-sm text-gray-600">Company Proof of
+                                        Payment<span class="text-red-500">*</span></label>
+                                    <input
+                                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                                        id="proof_of_payment" type="file" name="proof_of_payment"
+                                        wire:model='proof_of_payment'>
+                                    <div wire:loading wire:target="proof_of_payment">Uploading...</div>
+                                    <div>
+                                        @error('proof_of_payment')
+                                            <span class="text-red-500">{{ $message }}</span>
+                                        @enderror
                                     </div>
-                                    <div class="col-span-2 relative mb-4">
-                                        <label for="coupon" class="leading-7 text-sm text-gray-600">Company Coupon</label>
-                                        <div class="flex">
-                                            <input type="text" id="coupon" name="coupon" wire:model='coupon'
-                                                class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                                            <button
-                                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ms-2"
-                                                wire:click.prevent='claimCoupon' wire:loading.class="disabled">
-                                                Claim
-                                            </button>
-                                        </div>
-                                        <div>
-                                            @error('coupon')
-                                                <span class="text-green-500">{{ $message }}</span>
-                                            @enderror
-                                            @error('invalid_coupon')
-                                                <span class="text-red-500">{{ $message }}</span>
-                                            @enderror
-                                        </div>
+                                </div>
+                                <div class="col-span-2 relative mb-4">
+                                    <label for="coupon" class="leading-7 text-sm text-gray-600">Company Coupon</label>
+                                    <div class="flex">
+                                        <input type="text" id="coupon" name="coupon" wire:model='coupon'
+                                            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                        <button
+                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ms-2"
+                                            wire:click.prevent='claimCoupon' wire:loading.class="disabled">
+                                            Claim
+                                        </button>
                                     </div>
+                                    <div>
+                                        @error('coupon')
+                                            <span class="text-green-500">{{ $message }}</span>
+                                        @enderror
+                                        @error('invalid_coupon')
+                                            <span class="text-red-500">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     @break

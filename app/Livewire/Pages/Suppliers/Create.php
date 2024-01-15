@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Pages\Suppliers;
 
+use App\Enums\DiscountTypeEnum;
+use App\Enums\PlanTypeEnum;
 use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\Payment;
@@ -113,7 +115,10 @@ class Create extends Component
             $price_range = explode('-', $company['price_range']);
             $socials = explode(',', $company['socials']);
             $plan = Plan::find($company['plan']);
-
+            $isPremium = false;
+            if ($plan->type == PlanTypeEnum::PREMIUM_A->value || $plan->type == PlanTypeEnum::PREMIUM_B->value) {
+                $isPremium = true;
+            }
             $duration = $plan->duration;
             if ($this->redeemed_coupon) {
                 if ($this->redeemed_coupon->discount_type == 'free_subscription') {
@@ -152,8 +157,9 @@ class Create extends Component
                 'plan_id' => $plan->id,
                 'proof_of_payment' => 'companies/payments/' . $proof_of_payment_file_name,
                 'total' => $plan->price,
-                'latest' => true,
                 'due_date' => $due_date,
+                'latest' => true,
+                'isPremium' => $isPremium,
             ]);
             session()->flash('success', 'Your application has been sent. Please wait for the confirmation.');
 
@@ -176,16 +182,26 @@ class Create extends Component
             $this->addError('invalid_coupon', 'Coupon is Expired');
         } else {
             $this->redeemed_coupon = $coup;
+            $this->getPayments();
             $this->addError('coupon', 'Successfully Redeem Coupon');
         }
     }
 
-    private function getPayments()
+    private function getPayments($value = null)
     {
         foreach ($this->companies as $key => $company) {
             $plan_ids[] = $company['plan'];
         }
         $this->selected_plans = Plan::find($plan_ids);
+        $this->selected_plan_sum = 0;
+        foreach ($this->selected_plans as $key => $plan) {
+            $this->selected_plan_sum+= $plan->price;
+        }
+       if ( $this->redeemed_coupon ) {
+            if ($this->redeemed_coupon->discount_type == DiscountTypeEnum::FIXED_AMOUNT) {
+                $this->selected_plan_sum = $this->selected_plan_sum - $this->redeemed_coupon->discount_value;
+            }
+       } 
     }
 
     public function increaseStep()
