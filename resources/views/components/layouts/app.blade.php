@@ -31,6 +31,7 @@
                     $("#suppliers-dropdown").show();
                 } else if (event.type === "mouseleave") {
                     $("#suppliers").removeClass("bg-white !text-[#c4bcaf]");
+                    $("#suppliers").addClass("text-white");
                     $("#suppliers-dropdown").hide();
                 }
             });
