@@ -60,7 +60,7 @@
             <div class="owl-carousel owl-theme owl-loaded owl-drag">
                 @foreach ($suppliers as $supplier)
                     <div class="rounded-full bg-white w-[95px] h-[95px] mx-2 flex justify-center">
-                        <img src="{{ asset($supplier) }}" alt="Logo 1" class="rounded-full" loading="lazy">
+                        <img src="{{ asset('storage/'.$supplier) }}" alt="Logo 1" class="rounded-full" loading="lazy">
                     </div>
                 @endforeach
                 @if ($suppliers->count() < 15)

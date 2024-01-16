@@ -66,6 +66,7 @@ class Create extends Component
             case 2:
                 $this->validate([
                     'companies.0.logo' => 'required',
+                    'companies.0.image' => 'required',
                     'companies.0.name' => 'required',
                     'companies.0.address' => 'required',
                     'companies.0.phone' => 'required',
@@ -76,6 +77,7 @@ class Create extends Component
                     'companies.0.plan' => 'required',
                     'companies.0.categories.*' => 'required',
                     'companies.*.logo' => 'required',
+                    'companies.*.image' => 'required',
                     'companies.*.name' => 'required',
                     'companies.*.address' => 'required',
                     'companies.*.phone' => 'required',
@@ -111,8 +113,11 @@ class Create extends Component
             'phone' => $this->owner_phone,
         ])->id;
         foreach ($this->companies as $key => $company) {
-            $company_file_name = $company['name'] . '.' . $company['logo']->getClientOriginalExtension();
-            $company['logo']->storeAs('companies', $company_file_name, 'public');
+            $company_logo_file_name = $company['name'] . '.' . $company['logo']->getClientOriginalExtension();
+            $company_image_file_name = $company['name'] . '.' . $company['image']->getClientOriginalExtension();
+            $company['logo']->storeAs('companies', $company_logo_file_name, 'public');
+            $company['image']->storeAs('companies', $company_image_file_name, 'public');
+
             $proof_of_payment_file_name = $company['name'] . '.' . $this->proof_of_payment->getClientOriginalExtension();
             $this->proof_of_payment->storeAs('companies/payments', $proof_of_payment_file_name, 'public');
             $links = explode(',', $company['socials']);
@@ -121,7 +126,7 @@ class Create extends Component
             }
             $plan = Plan::find($company['plan']);
             $isPremium = false;
-            if ($plan->type == PlanTypeEnum::PREMIUM_A->value || $plan->type == PlanTypeEnum::PREMIUM_B->value) {
+            if ($plan->type == PlanTypeEnum::PREMIUM_A->value || $plan->type == PlanTypeEnum::PREMIUM_B->value || $plan->type == PlanTypeEnum::PREMIUM_C->value) {
                 $isPremium = true;
             }
             $duration = $plan->duration;
@@ -140,7 +145,8 @@ class Create extends Component
 
             $subscriber_company_id = SubscriberCompany::create([
                 'subscriber_id' => $subscriber_id,
-                'logo' => 'companies/' . $company_file_name,
+                'logo' => 'companies/' . $company_logo_file_name,
+                'image' => 'companies/' . $company_image_file_name,
                 'name' => $company['name'],
                 'address' => $company['address'],
                 'phone' => $company['phone'],
@@ -179,22 +185,32 @@ class Create extends Component
     public function claimCoupon()
     {
         $this->resetErrorBag();
-        $coup = Coupon::where('code', $this->coupon)->first();
-        if (!$coup) {
-            $this->coupon = null;
-            $this->addError('invalid_coupon', 'Invalid Coupon');
-        } elseif ($coup->redemption_count > $coup->max_redemptions) {
-            $this->coupon = null;
-            $this->addError('invalid_coupon', 'Redemption Limit Reached!');
-        } elseif ($coup->expiry_date) {
-            if (Carbon::parse($coup->expiry_date)->lt(now())) {
+        try {
+            $coupon = Coupon::where('code', $this->coupon)->first();
+            if (!$coupon) {
+                dd('null');
                 $this->coupon = null;
-                $this->addError('invalid_coupon', 'Coupon is Expired');
+                $this->addError('invalid_coupon', 'Invalid Coupon');
             }
-        } else {
-            $this->redeemed_coupon = $coup;
-            $this->getPayments();
-            $this->addError('coupon', 'Successfully Redeem Coupon');
+            if ($coupon->redemption_count > $coupon->max_redemptions) {
+                dd('max');
+                $this->coupon = null;
+                $this->addError('invalid_coupon', 'Redemption Limit Reached!');
+            }
+            if ($coupon->expiry_date) {
+                if (Carbon::parse($coupon->expiry_date)->lt(now())) {
+                    dd('expired');
+                    $this->coupon = null;
+                    $this->addError('invalid_coupon', 'Coupon is Expired');
+                }
+            }
+            if ($coupon) {
+                $this->redeemed_coupon = $coupon;
+                $this->getPayments();
+                $this->addError('coupon', 'Successfully Redeemed Coupon');
+            }
+        } catch (\Throwable $th) {
+            $this->addError('invalid_coupon', $th->getMessage());
         }
     }
 

@@ -18,6 +18,7 @@ class Payment extends Model
         'total',
         'due_date',
         'latest',
+        'isPremium',
         'status',
     ];
 

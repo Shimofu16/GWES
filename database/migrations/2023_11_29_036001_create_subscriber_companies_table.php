@@ -15,7 +15,8 @@ return new class extends Migration
         Schema::create('subscriber_companies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('subscriber_id')->references('id')->on('subscribers');
-            $table->string('logo')->nullable();
+            $table->string('logo');
+            $table->string('image');
             $table->string('name');
             $table->string('address');
             $table->string('phone');

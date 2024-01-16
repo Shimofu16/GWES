@@ -29,9 +29,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             PlanSeeder::class,
-            SubscriberSeeder::class,
-            FeedBackSeeder::class,
-            BlogSeeder::class,
+            // SubscriberSeeder::class,
+            // FeedBackSeeder::class,
+            // BlogSeeder::class,
 
         ]);
     }

@@ -74,12 +74,14 @@
                                     <div></div>
                                 </div>
                                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3" wire:key="{{ $i }}">
-                                    <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_logos" class="leading-7 text-sm text-gray-600">Company Logo <span
+                                    <div class="col-span-2 relative mb-4">
+                                        <label for="company_logo_{{ $i }}"
+                                            class="leading-7 text-sm text-gray-600">Company Logo <span
                                                 class="text-red-500">*</span></label>
                                         <input
                                             class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                                            id="company_logos" type="file" name="company_logos"
+                                            id="company_logo_{{ $i }}" type="file"
+                                            name="company_logo_{{ $i }}"
                                             wire:model='companies.{{ $i }}.logo'>
                                         <div wire:loading wire:target="companies.{{ $i }}.logo">Uploading...</div>
                                         <div>
@@ -89,9 +91,27 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_names" class="leading-7 text-sm text-gray-600">Company Name <span
+                                        <label for="company_image_{{ $i }}"
+                                            class="leading-7 text-sm text-gray-600">Company Image <span
                                                 class="text-red-500">*</span></label>
-                                        <input type="text" id="company_names" name="company_names"
+                                        <input
+                                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                                            id="company_image_{{ $i }}" type="file"
+                                            name="company_image_{{ $i }}"
+                                            wire:model='companies.{{ $i }}.image'>
+                                        <div wire:loading wire:target="companies.{{ $i }}.image">Uploading...</div>
+                                        <div>
+                                            @error('companies.*.image')
+                                                <span class="text-red-500">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-span-2 relative mb-4">
+                                        <label for="company_name_{{ $i }}"
+                                            class="leading-7 text-sm text-gray-600">Company Name <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="text" id="company_name_{{ $i }}"
+                                            name="company_name_{{ $i }}"
                                             wire:model='companies.{{ $i }}.name'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                         <div>
@@ -101,9 +121,11 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_phones" class="leading-7 text-sm text-gray-600">Company Phone no.
+                                        <label for="company_phone_{{ $i }}"
+                                            class="leading-7 text-sm text-gray-600">Company Phone no.
                                             <span class="text-red-500">*</span></label>
-                                        <input type="text" id="company_phones" name="company_phones"
+                                        <input type="text" id="company_phone_{{ $i }}"
+                                            name="company_phone_{{ $i }}"
                                             wire:model='companies.{{ $i }}.phone'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                         <div>
@@ -113,9 +135,11 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_addresses" class="leading-7 text-sm text-gray-600">Company Address
+                                        <label for="company_address_{{ $i }}"
+                                            class="leading-7 text-sm text-gray-600">Company Address
                                             <span class="text-red-500">*</span></label>
-                                        <input type="text" id="company_addresses" name="company_addresses"
+                                        <input type="text" id="company_address_{{ $i }}"
+                                            name="company_address_{{ $i }}"
                                             wire:model='companies.{{ $i }}.address'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                         <div>
@@ -125,14 +149,15 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_price_ranges" class="leading-7 text-sm text-gray-600">Company Price
+                                        <label for="company_price_ranges" class="leading-7 text-sm text-gray-600">Company
+                                            Price
                                             Range <span class="text-red-500">*</span></label>
                                         <div class="flex">
                                             <div>
-                                                <label for="company_price_ranges_from"
+                                                <label for="company_price_ranges_from_{{ $i }}"
                                                     class="leading-7 text-sm text-gray-600">Minimum</label>
-                                                <input type="number" id="company_price_ranges_from"
-                                                    name="company_price_ranges_from"
+                                                <input type="number" id="company_price_ranges_from_{{ $i }}"
+                                                    name="company_price_ranges_from_{{ $i }}"
                                                     wire:model='companies.{{ $i }}.from'
                                                     class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                                     placeholder="Ex: 10000">
@@ -141,10 +166,10 @@
                                                 <strong>-</strong>
                                             </h1>
                                             <div>
-                                                <label for="company_price_ranges_to"
+                                                <label for="company_price_ranges_to_{{ $i }}"
                                                     class="leading-7 text-sm text-gray-600">Maximum</label>
-                                                <input type="number" id="company_price_ranges_to"
-                                                    name="company_price_ranges_to"
+                                                <input type="number" id="company_price_ranges_to_{{ $i }}"
+                                                    name="company_price_ranges_to_{{ $i }}"
                                                     wire:model='companies.{{ $i }}.to'
                                                     class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                                                     placeholder="Ex: 20000">
@@ -164,9 +189,11 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 relative mb-4">
-                                        <label for="company_plans" class="leading-7 text-sm text-gray-600">Company Plan <span
+                                        <label for="company_plan_{{ $i }}"
+                                            class="leading-7 text-sm text-gray-600">Company Plan <span
                                                 class="text-red-500">*</span></label>
-                                        <select id="company_plans" wire:model='companies.{{ $i }}.plan'
+                                        <select id="company_plan_{{ $i }}"
+                                            wire:model='companies.{{ $i }}.plan'
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                             <option selected>Choose a Plan</option>
                                             @foreach ($plans as $key => $plan)
@@ -218,6 +245,9 @@
                                                             <td class="px-3 md:px-5 py-4">
                                                                 {{ $plan->duration }}
                                                                 {{ $plan->billing_cycle == 'monthly' ? 'Month' : 'Year' }}{{ $plan->duration > 1 ? 's' : '' }}
+                                                                @if ($plan->type == 'premium a' || $plan->type == 'premium b' || $plan->type == 'premium c')
+                                                                    {{ 'With Logo ads' }}
+                                                                @endif
                                                             </td>
                                                             <td class="px-3 md:px-5 py-4">
                                                                 {{ $plan->categories }}
@@ -232,9 +262,9 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_socials" class="leading-7 text-sm text-gray-600">Company Socials
+                                        <label for="company_socials_{{ $i }}" class="leading-7 text-sm text-gray-600">Company Socials
                                             (3)<span class="text-red-500">*</span></label>
-                                        <textarea id="company_socials" name="company_socials" wire:model='companies.{{ $i }}.socials'
+                                        <textarea id="company_socials_{{ $i }}" name="company_socials_{{ $i }}" wire:model='companies.{{ $i }}.socials'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                                             rows="3" placeholder="Ex: https://facebook.com, https://instagra.com, https://twitter.com/"></textarea>
                                         <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -256,11 +286,11 @@
                                         <div class="flex flex-wrap lg:w-1/2">
                                             @foreach ($categories as $key => $category)
                                                 <div class="flex items-center mb-2 me-2">
-                                                    <input id="company_categories{{ $i }}{{ $key }}"
+                                                    <input id="company_categories_{{ $i }}_{{ $key }}"
                                                         type="checkbox" value="{{ $key }}"
                                                         wire:model.prevent='companies.{{ $i }}.categories.{{ $key }}'
                                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 focus:ring-2">
-                                                    <label for="company_categories{{ $i }}{{ $key }}"
+                                                    <label for="company_categories_{{ $i }}_{{ $key }}"
                                                         class="ms-2 text-sm font-medium text-gray-900 ">{{ $category }}</label>
                                                 </div>
                                             @endforeach
@@ -276,10 +306,10 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_descriptions" class="leading-7 text-sm text-gray-600">Company
+                                        <label for="company_description_{{ $i }}" class="leading-7 text-sm text-gray-600">Company
                                             Description
                                             <span class="text-red-500">*</span></label>
-                                        <textarea id="company_descriptions" name="company_descriptions"
+                                        <textarea id="company_description_{{ $i }}" name="company_description_{{ $i }}"
                                             wire:model='companies.{{ $i }}.description'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
                                         <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -333,6 +363,9 @@
                                                         <td class="px-3 md:px-5 py-4">
                                                             {{ $selected_plan->duration }}
                                                             {{ $selected_plan->billing_cycle == 'monthly' ? 'Month' : 'Year' }}{{ $selected_plan->duration > 1 ? 's' : '' }}
+                                                            @if ($selected_plan->type == 'premium a' || $selected_plan->type == 'premium b' || $selected_plan->type == 'premium c')
+                                                                {{ 'With Logo ads' }}
+                                                            @endif
                                                         </td>
                                                         <td class="px-3 md:px-5 py-4">
                                                             {{ $selected_plan->categories }}

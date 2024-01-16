@@ -16,6 +16,7 @@ class SubscriberCompany extends Model
     protected $fillable = [
         'subscriber_id',
         'logo',
+        'image',
         'name',
         'description',
         'address',
