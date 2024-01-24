@@ -110,7 +110,7 @@ class BlogResource extends Resource
                 TextColumn::make('date')
                     ->date(),
                 TextColumn::make('description')
-                    // ->limit(30)
+                    ->limit(30)
                     ->words(20)
 
             ])

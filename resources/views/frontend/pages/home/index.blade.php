@@ -60,7 +60,7 @@
             <div class="owl-carousel owl-theme owl-loaded owl-drag">
                 @foreach ($suppliers as $supplier)
                     <div class="rounded-full bg-white w-[95px] h-[95px] mx-2 flex justify-center">
-                        <img src="{{ asset('storage/'.$supplier) }}" alt="Logo 1" class="rounded-full" loading="lazy">
+                        <img src="{{ asset('storage/' . $supplier) }}" alt="Logo 1" class="rounded-full" loading="lazy">
                     </div>
                 @endforeach
                 @if ($suppliers->count() < 100)
@@ -77,13 +77,23 @@
 
 
             </div>
+            <div class="mt-10   text-center w-full">
+                <a href="{{ route('suppliers.index') }}"
+                    class="transform hover:scale-105 transition-all duration-200 bg-white text-[#c4bcaf] hover:text-[#ae9371]
+                     font-bold
+                     px-3 py-2.5  rounded-full mx-auto self-center mb-3">
+                    Suppliers
+                </a>
+            </div>
         </div>
     </section>
     <section class="container mx-auto px-5 mt-[50px] sm:mt-[100px]">
         <div class="flex flex-col md:flex-row justify-center">
             <div class="flex flex-col justify-center items-center w-full">
-                <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-5">About Us</h1>
-                <img src="{{ asset('assets/images/defaults/wed-10.jpg') }}" class="object-cover rounded mb-5"  alt="Your Image">
+                <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-5">About Us
+                </h1>
+                <img src="{{ asset('assets/images/defaults/wed-10.jpg') }}" class="object-cover rounded mb-5"
+                    alt="Your Image">
             </div>
             <div class="flex flex-col justify-center w-full">
                 <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl mb-5">

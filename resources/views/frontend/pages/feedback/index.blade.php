@@ -1,5 +1,5 @@
 <x-layouts.app>
-    <section class="container px-5 py-10  mx-auto h-dvh">
+    <section class="container px-5 py-10  mx-auto">
         <div class="">
             <div class="mb-12 flex flex-col text-center">
                 <h1 class="text-3xl font-medium title-font text-[#9b4819] mb-3 text-center ">Feedbacks</h1>
@@ -32,8 +32,8 @@
                         </div>
                     </div>
                 @empty
-                <div class="col-span-2 md:col-span-4 lg:col-span-6 px-4 w-full">
-                    <h1 class="text-2xl text-center">No feedback yet..</h1>
+                    <div class="col-span-2 md:col-span-4 lg:col-span-6 px-4 w-full h-dvh">
+                        <h1 class="text-2xl text-center">No feedback yet..</h1>
                     </div>
                 @endforelse
 
