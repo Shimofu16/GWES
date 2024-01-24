@@ -24,6 +24,9 @@ class Index extends Component
             ->whereHas('payments', function ($query) {
                 $query->where('latest', true)
                     ->where('status', PaymentStatusEnum::ACTIVE->value);
+            })
+            ->whereHas('subscriber', function ($query) {
+                $query->whereNull('deleted_at');
             });
         if ($query === 'category') {
             $suppliers
@@ -46,6 +49,9 @@ class Index extends Component
             ->whereHas('payments', function ($query) {
                 $query->where('latest', true)
                     ->where('status', PaymentStatusEnum::ACTIVE->value);
+            })
+            ->whereHas('subscriber', function ($query) {
+                $query->whereNull('deleted_at');
             });
 
         if ($this->category_id) {

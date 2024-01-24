@@ -18,7 +18,6 @@ class Subscriber extends Model
         'phone',
     ];
 
-
     public function companies()
     {
         return $this->hasMany(SubscriberCompany::class);

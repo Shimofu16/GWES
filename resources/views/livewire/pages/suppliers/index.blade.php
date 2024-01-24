@@ -1,7 +1,10 @@
 <section class="container mx-auto px-3 lg:px-0">
     <div class="flex justify-between flex-wrap mb-3">
-        <div class="search mb-2 sm:mb-0">
-            <div class="relative">
+        <div class="">
+
+        </div>
+        <div class="selects flex items-center flex-wrap px-3 sm:px-0">
+            <div class="relative mb-3 sm:mb-0 w-full sm:w-auto">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                     <svg class="w-4 h-4  text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 20 20">
@@ -14,9 +17,7 @@
                     class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Search for supplier..." wire:model.live.debounce.150ms="search">
             </div>
-        </div>
-        <div class="selects flex items-center">
-            <div class="me-3">
+            <div class="sm:ms-3 w-full sm:w-auto">
                 <select id="categories" wire:model.live='category_id'
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     <option selected value="">Choose a category</option>
@@ -39,30 +40,48 @@
         </div>
     </div>
     <div class="container px-2 py-3">
-        <div class="flex flex-wrap -m-3">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
             @forelse ($suppliers as $supplier)
-                <div class="p-4 lg:w-1/3">
-                    <div class="h-full bg-gray-100 bg-opacity-75 px-5 py-10 rounded-lg  relative">
-                        <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">
-                            {{ $supplier->name }}</h1>
-                        <p class="leading-relaxed mb-3">{{ $supplier->description }}</p>
+                <div class="p-4 col-span-2">
+                    <div class="h-full bg-gray-100 bg-opacity-75 p-5 pb-10 rounded-lg  relative ">
+                        <div class="relative overflow-hidden mb-3 w-full">
+                            <img class="lg:h-50 md:h-40 object-cover object-center rounded w-[100%]"
+                                src="{{ asset('storage/' . $supplier->image) }}" alt="supplier">
+                            @if ($supplier->isPremium)
+                                <div class="absolute top-3 right-3 bg-white p-0 rounded-full">
+                                    <img class="object-cover object-center rounded-full h-[50px] w-[50px] sm:h-[75px] sm:w-[75px]"
+                                        src="{{ asset('storage/' . $supplier->logo) }}" alt="supplier">
+                                </div>
+                            @endif
+                            <!-- <img class="w-full object-cover rounded h-" src="{{ asset('storage/' . $supplier->logo) }}"-->
+                            <!--alt="supplier"> -->
+                        </div>
 
-                        <span class="font-semibold">Socials</span>
+                        <h1 class="title-font sm:text-2xl  text-[#9b4819] text-xl font-medium mb-3 break-words ">
+                            {{ $supplier->name }}</h1>
+                        <p class="leading-relaxed mb-3 break-words hyphens-none ">
+                            {!! nl2br(e(Str::of($supplier->description)->limit(100))) !!}
+                        </p>
+
+                        <span class="font-semibold text-[#9b4819] ">Socials</span>
                         <ul class="mx-5 list-disc mb-3">
                             @foreach ($supplier->socials as $social)
-                                <li class=""><a href="{{ $social }}" target="_blank" rel="noopener noreferrer">{{ $social }}</a></li>
+                                <li class=""><a href="{{ url('https://' . $social) }}" target="_blank"
+                                        rel="noopener noreferrer">{{ $social }}</a></li>
                             @endforeach
                         </ul>
-                        <span class="font-semibold">Price range</span> <br>
+                        <span class="font-semibold text-[#9b4819] ">Price range</span> <br>
                         @php
-                            $data = explode(' - ', $supplier->price_range)
+                            $data = explode(' - ', $supplier->price_range);
                         @endphp
                         <span>₱{{ number_format($data[0]) }} - {{ number_format($data[1]) }}</span>
 
                     </div>
                 </div>
             @empty
-                <span>no suppliers</span>
+                <div class="col-span-2 md:col-span-4 lg:col-span-6 px-4 text-center h-dvh">
+                    <h1 class="text-2xl">No Suppliers Found</h1>
+                </div>
             @endforelse
         </div>
     </div>

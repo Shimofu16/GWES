@@ -115,13 +115,18 @@ class Create extends Component
         foreach ($this->companies as $key => $company) {
             $company_logo_file_name = $company['name'] . '.' . $company['logo']->getClientOriginalExtension();
             $company_image_file_name = $company['name'] . '.' . $company['image']->getClientOriginalExtension();
-            $company['logo']->storeAs('companies', $company_logo_file_name, 'public');
-            $company['image']->storeAs('companies', $company_image_file_name, 'public');
+            $company['logo']->storeAs('companies/logos', $company_logo_file_name, 'public');
+            $company['image']->storeAs('companies/images', $company_image_file_name, 'public');
 
             $proof_of_payment_file_name = $company['name'] . '.' . $this->proof_of_payment->getClientOriginalExtension();
             $this->proof_of_payment->storeAs('companies/payments', $proof_of_payment_file_name, 'public');
             $links = explode(',', $company['socials']);
-            for ($i = 0; $i < 3; $i++) {
+            $socials=[];
+            $loop_count = count($links);
+            if(count($links) > 3){
+                $loop_count = 3;
+            }
+            for ($i = 0; $i < $loop_count; $i++) {
                 $socials[] = $links[$i];
             }
             $plan = Plan::find($company['plan']);
@@ -145,8 +150,8 @@ class Create extends Component
 
             $subscriber_company_id = SubscriberCompany::create([
                 'subscriber_id' => $subscriber_id,
-                'logo' => 'companies/' . $company_logo_file_name,
-                'image' => 'companies/' . $company_image_file_name,
+                'logo' => 'companies/logos/' . $company_logo_file_name,
+                'image' => 'companies/images/' . $company_image_file_name,
                 'name' => $company['name'],
                 'address' => $company['address'],
                 'phone' => $company['phone'],

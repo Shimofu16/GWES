@@ -12,6 +12,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\ImageEntry;
@@ -56,7 +57,7 @@ class BlogResource extends Resource
                             ->label('Company')
                             ->required()
                             ->columnSpanFull(),
-                        MarkdownEditor::make('description')
+                        Textarea::make('description')
                             ->required()
                             ->columnSpanFull(),
                         FileUpload::make('images')

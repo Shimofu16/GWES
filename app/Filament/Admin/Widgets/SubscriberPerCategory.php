@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Widgets;
 
 use App\Models\Category;
+use App\Models\SubscriberCompany;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class SubscriberPerCategory extends ApexChartWidget
@@ -30,13 +31,22 @@ class SubscriberPerCategory extends ApexChartWidget
      */
     protected function getOptions(): array
     {
-        $series = [];
         $labels = [];
-        $categories = Category::all();
-        foreach ($categories as $category) {
-            $labels[] = $category->name;
-            $series[] = $category->companies()->count();
+        $series = [];
+        $categories = Category::pluck('name', 'id');
+        $companies = SubscriberCompany::with('subscriber', 'companyCategories')
+            ->whereHas('subscriber', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->get();
+
+        foreach ($categories as $key => $category) {
+            $labels[] = $category;
+            foreach ($companies as $company) {
+                $series[] = $company->companyCategories()->where('category_id', $key)->count();
+            }
         }
+        // dd($labels, $series,$companies,$categories);
         return [
             'chart' => [
                 'type' => 'pie',

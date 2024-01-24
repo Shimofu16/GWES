@@ -5,28 +5,37 @@ namespace App\Filament\Admin\Resources\Subscribers;
 use App\Enums\PaymentStatusEnum;
 use App\Filament\Admin\Resources\Subscribers\ActiveSubscriberResource\Pages;
 use App\Filament\Admin\Resources\Subscribers\ActiveSubscriberResource\RelationManagers;
+use App\Filament\Admin\Resources\Subscribers\ActiveSubscriberResource\RelationManagers\CompaniesRelationManager;
 use App\Models\Subscriber;
 use App\Models\SubscriberCompany;
 use App\Models\Subscribers\ActiveSubscriber;
 use Filament\Forms;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Tabs ;
+use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section as InfoListSection;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Tabs;
-use Filament\Infolists\Components\Tabs\Tab;
+use Filament\Infolists\Components\Tabs as ComponentsTabs;
+use Filament\Infolists\Components\Tabs\Tab as ComponentsTab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 
 class ActiveSubscriberResource extends Resource
 {
@@ -56,7 +65,10 @@ class ActiveSubscriberResource extends Resource
                     $q->where('latest', true)
                         ->where('status',  PaymentStatusEnum::ACTIVE->value);
                 });
-            });
+            })
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 
 
@@ -65,7 +77,18 @@ class ActiveSubscriberResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Section::make('Owner Information')
+                ->schema([
+                    TextInput::make('name')
+                        ->required(),
+                    TextInput::make('email')
+                        ->email()
+                        ->required(),
+                    TextInput::make('phone')
+                        ->length(11)
+                        ->required(),
+                ])
+
             ]);
     }
 
@@ -81,40 +104,85 @@ class ActiveSubscriberResource extends Resource
                 TextColumn::make('email')
                     ->icon('heroicon-o-envelope'),
             ])
-            ->filters([])
+            ->filters([
+                Tables\Filters\TrashedFilter::make(),
+                // ...
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make()
                     ->label('Companies'),
             ])
             ->bulkActions([
-                DeleteBulkAction::make('delete')
-                    ->action(function (Collection $records) {
-                        try {
-                            foreach ($records as $record) {
-                                $record->companies()->delete();
-                                $record->delete();
+                BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->name('Soft Delete Selected Subscribers')
+                        ->modalHeading('Soft Delete Subscribers')
+                        ->modalDescription('Are you sure you want to soft delete these subscribers?'),
+                    Tables\Actions\ForceDeleteBulkAction::make('Permanently Delete Selected Subscribers')
+                        ->action(function (Collection $records) {
+                            try {
+                                foreach ($records as $record) {
+                                    foreach ($record->companies as $key => $company) {
+                                        foreach ($company->payments as $key => $payment) {
+                                            Storage::delete($payment->proof_of_payment);
+                                            $payment->delete();
+                                        }
+                                        Storage::delete($company->logo);
+                                        Storage::delete($company->image);
+                                        $company->companyCategories()->delete();
+                                        $company->delete();
+                                    }
+                                    $record->delete();
+                                }
+                                Notification::make()
+                                    ->success()
+                                    ->title('Deleted Subscribers')
+                                    ->body('Successfully deleted Subscribers.')
+                                    ->duration(5000)
+                                    ->send();
+                                return redirect('admin/active/subscribers');
+                            } catch (\Throwable $th) {
+                                dd($th->getMessage());
+                                // Notification::make()
+                                //     ->danger()
+                                //     ->title('Error')
+                                //     ->body($th->getMessage())
+                                //     ->duration(5000)
+                                //     ->send();
                             }
-                            Notification::make()
-                                ->success()
-                                ->title('Deleted Subscribers')
-                                ->body('Successfully deleted Subscribers.')
-                                ->duration(5000)
-                                ->send();
-                            return redirect('admin/active/subscribers');
-                        } catch (\Throwable $th) {
-                            Notification::make()
-                                ->danger()
-                                ->title('Error')
-                                ->body($th->getMessage())
-                                ->duration(5000)
-                                ->send();
-                        }
-                    })
-                    ->icon('heroicon-o-trash')
-                    ->requiresConfirmation()
-                    ->modalHeading('Delete Subscribers')
-                    ->modalDescription('Are your sure you want to delete these subscribers?')
+                        })
+                        ->modalHeading('Permanently Delete Subscribers')
+                        ->modalDescription('Are your sure you want to permanently delete these subscribers?'),
+                    Tables\Actions\RestoreBulkAction::make('Restore Delete Selected Subscribers')
+                        ->modalHeading('Restore Subscribers')
+                        ->modalDescription('Are your sure you want to restore these subscribers?'),
+                    // DeleteBulkAction::make('delete')
+                    //     ->action(function (Collection $records) {
+                    //         try {
+                    //             foreach ($records as $record) {
+                    //                 $record->delete();
+                    //             }
+                    //             Notification::make()
+                    //                 ->success()
+                    //                 ->title('Deleted Subscribers')
+                    //                 ->body('Successfully deleted Subscribers.')
+                    //                 ->duration(5000)
+                    //                 ->send();
+                    //             return redirect('admin/active/subscribers');
+                    //         } catch (\Throwable $th) {
+                    //             Notification::make()
+                    //                 ->danger()
+                    //                 ->title('Error')
+                    //                 ->body($th->getMessage())
+                    //                 ->duration(5000)
+                    //                 ->send();
+                    //         }
+                    //     })
+                    //     ->icon('heroicon-o-trash')
+                    //     ->requiresConfirmation()
+
+                ])
             ])
             ->emptyStateActions([
                 // Tables\Actions\CreateAction::make(),
@@ -124,7 +192,7 @@ class ActiveSubscriberResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CompaniesRelationManager::class
         ];
     }
 
@@ -132,9 +200,9 @@ class ActiveSubscriberResource extends Resource
     {
         return $infolist
             ->schema([
-                Tabs::make('Tabs')
+                ComponentsTabs::make('Tabs')
                     ->tabs([
-                        Tab::make('Company Information')
+                        ComponentsTab::make('Company Information')
                             ->schema([
                                 RepeatableEntry::make('companies')
                                     ->schema([
@@ -257,7 +325,7 @@ class ActiveSubscriberResource extends Resource
         return [
             'index' => Pages\ListActiveSubscribers::route('/'),
             // 'create' => Pages\CreateActiveSubscriber::route('/create'),
-            // 'edit' => Pages\EditActiveSubscriber::route('/{record}/edit'),
+            'edit' => Pages\EditActiveSubscriber::route('/{record}/edit'),
         ];
     }
 }

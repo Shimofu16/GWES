@@ -29,6 +29,9 @@ class Search extends Component
                 $query->where('latest', true)
                     ->where('status', PaymentStatusEnum::ACTIVE->value);
             })
+            ->whereHas('subscriber', function ($query) {
+                $query->whereNull('deleted_at');
+            })
             ->where('name', 'like', '%' . $this->search . '%')
             ->pluck('name', 'id');
     }

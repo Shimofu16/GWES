@@ -4,6 +4,8 @@ namespace App\Filament\Admin\Resources\Subscribers\ActiveSubscriberResource\Page
 
 use App\Filament\Admin\Resources\Subscribers\ActiveSubscriberResource;
 use Filament\Actions;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditActiveSubscriber extends EditRecord
@@ -13,7 +15,21 @@ class EditActiveSubscriber extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Action::make('back')
+                ->action(function () {
+                    return redirect($this->getResource()::getUrl('index'));
+                }),
         ];
     }
+    protected function getSavedNotification(): ?Notification
+    {
+        return Notification::make()
+            ->success()
+            ->title('Updated Successfully')
+            ->body('Subscriber Updated successfully.');
+    }
+    //     protected function getRedirectUrl(): string
+    //     {
+    //         return $this->getResource()::getUrl('index');
+    //     }
 }

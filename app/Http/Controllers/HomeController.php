@@ -15,7 +15,7 @@ class HomeController extends Controller
     public function index()
     {
         $suppliers = SubscriberCompany::query()
-            ->with('payments')
+            ->with('payments','subscriber')
             ->whereHas('payments', function ($query) {
                 $query->where('latest', true)
                     ->where('isPremium', true)

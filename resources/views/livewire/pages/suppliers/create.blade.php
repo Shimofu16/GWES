@@ -1,7 +1,7 @@
 <section class="">
     <div class="container pb-10 pt-5 mx-auto">
         <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
-            <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-bold text-gray-900 ">Become a supplier</h2>
+            <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-bold text-gray-900 ">Become a Supplier</h2>
             <p class="font-light text-gray-500 sm:text-xl">
                 @if (session('success'))
                     <div class="alert alert-success bg-green-400 text-white py-5 ">
