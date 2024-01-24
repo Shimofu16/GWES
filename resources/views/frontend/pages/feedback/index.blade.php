@@ -1,8 +1,8 @@
 <x-layouts.app>
-    <section class="container px-5 py-10  mx-auto">
+    <section class="container px-5 py-10  mx-auto h-dvh">
         <div class="">
             <div class="mb-12 flex flex-col text-center">
-                <h1 class="text-3xl font-medium title-font text-gray-900 mb-3 text-center">Feedbacks</h1>
+                <h1 class="text-3xl font-medium title-font text-[#9b4819] mb-3 text-center ">Feedbacks</h1>
                 <a class="mx-auto bg-transparent hover:bg-[#c4bcaf] text-[#c4bcaf] font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent rounded"
                     href="{{ route('feedbacks.create') }}">
                     Write a Feedback
@@ -10,7 +10,7 @@
 
             </div>
             <div class="flex flex-wrap -m-4">
-                @foreach ($feedbacks as $feedback)
+                @forelse ($feedbacks as $feedback)
                     <div class="p-4 md:w-1/2 w-full">
                         <div class="h-full bg-gray-100 p-8 rounded">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
@@ -31,7 +31,11 @@
                             </a>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                <div class="col-span-2 md:col-span-4 lg:col-span-6 px-4 w-full">
+                    <h1 class="text-2xl text-center">No feedback yet..</h1>
+                    </div>
+                @endforelse
 
             </div>
         </div>

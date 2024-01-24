@@ -254,7 +254,7 @@ class ActiveSubscriberResource extends Resource
                                     // ->contained(false)
                                     ->label('')
                             ]),
-                        Tab::make('Payments')
+                            ComponentsTab::make('Payments')
                             ->schema([
                                 RepeatableEntry::make('companies')
                                     ->schema([

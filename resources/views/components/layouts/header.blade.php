@@ -44,13 +44,13 @@
                         class="block py-1 px-2 mt-2 sm:mt-0  rounded  hover:bg-white hover:text-[#c4bcaf] {{ Route::is('home.index') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}"
                         aria-current="page">Home</a>
                 </li>
-                <li class="relative">
-                    <a href="{{ route('suppliers.index') }}"
-                        class="block py-1 px-2 mt-2 sm:mt-0   rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('suppliers.index') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}"
+                <li class="relative group">
+                    <a href="#"
+                        class=" block py-1 px-2 mt-2 sm:mt-0  rounded hover:bg-white hover:text-[#c4bcaf] {{ Route::is('suppliers.index') ? 'bg-white text-[#c4bcaf]' : 'text-white' }}"
                         id="suppliers">
                         Supplier
                     </a>
-                    <div id="suppliers-dropdown" class="hidden  mt-1 max-h-64 w-100 overflow-auto absolute">
+                    <div id="suppliers-dropdown" class="hidden group-hover:block  mt-1 max-h-64 w-100 overflow-auto absolute">
                         <div class="px-3 pt-4 pb-3 bg-white shadow-lg rounded-md  border ">
                             <div class="flex flex-col sm:flex-row">
                                 @foreach (App\Enums\CategoryTypeEnum::toArray() as $case)
@@ -63,7 +63,7 @@
                                                 {{ $case }}
                                             </span>
                                             @foreach ($categories as $category)
-                                                <a href="{{ route('suppliers.index', ['query' => 'category','id' => $category->id]) }}"
+                                                <a href="{{ route('suppliers.index', ['category_id' => $category->id]) }}"
                                                     class="rounded hover:text-white hover:bg-[#c4bcaf] px-1">{{ $category->name }}</a>
                                             @endforeach
                                         </div>

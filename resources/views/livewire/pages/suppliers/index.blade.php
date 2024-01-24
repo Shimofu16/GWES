@@ -1,4 +1,4 @@
-<section class="container mx-auto px-3 lg:px-0">
+<section class="container mx-auto px-3 lg:px-0 h-dvh">
     <div class="flex justify-between flex-wrap mb-3">
         <div class="">
 
@@ -60,14 +60,14 @@
                         <h1 class="title-font sm:text-2xl  text-[#9b4819] text-xl font-medium mb-3 break-words ">
                             {{ $supplier->name }}</h1>
                         <p class="leading-relaxed mb-3 break-words hyphens-none ">
-                            {!! nl2br(e(Str::of($supplier->description)->limit(100))) !!}
+                            {!! nl2br(e(Str::of($supplier->description)->limit(200))) !!}
                         </p>
 
                         <span class="font-semibold text-[#9b4819] ">Socials</span>
                         <ul class="mx-5 list-disc mb-3">
                             @foreach ($supplier->socials as $social)
                                 <li class=""><a href="{{ url('https://' . $social) }}" target="_blank"
-                                        rel="noopener noreferrer">{{ $social }}</a></li>
+                                        rel="noopener noreferrer" class="break-words">{{ $social }}</a></li>
                             @endforeach
                         </ul>
                         <span class="font-semibold text-[#9b4819] ">Price range</span> <br>
@@ -75,12 +75,17 @@
                             $data = explode(' - ', $supplier->price_range);
                         @endphp
                         <span>₱{{ number_format($data[0]) }} - {{ number_format($data[1]) }}</span>
-
+                        <div class="mt-3 pt-3">
+                            <a href="{{ route('suppliers.show', ['supplier_id' => $supplier->id]) }}"
+                                class="transform hover:scale-105 transition-all duration-200 bg-[#c4bcaf] text-white font-bold px-3 py-2.5 rounded mb-3">
+                                Reed More.
+                            </a>
+                        </div>
                     </div>
                 </div>
             @empty
-                <div class="col-span-2 md:col-span-4 lg:col-span-6 px-4 text-center h-dvh">
-                    <h1 class="text-2xl">No Suppliers Found</h1>
+            <div class="col-span-2 md:col-span-4 lg:col-span-6 px-4 w-full">
+                <h1 class="text-2xl text-center">No Suppliers Found</h1>
                 </div>
             @endforelse
         </div>

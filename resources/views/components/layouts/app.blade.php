@@ -14,7 +14,7 @@
     @stack('styles')
 </head>
 
-<body class="bg-[#fffdef] h-full">
+<body class="bg-[#fffdef]">
     @include('components.layouts.header')
     <main class="mt-[90px] lg:mt-[180px]">
         {{ $slot }}
@@ -25,16 +25,27 @@
     <script src="{{ asset('assets/packages/jquery/jquery.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $("#suppliers, #suppliers-dropdown").hover(function(event) {
-                if (event.type === "mouseenter") {
-                    $("#suppliers").addClass("bg-white !text-[#c4bcaf]");
-                    $("#suppliers-dropdown").show();
-                } else if (event.type === "mouseleave") {
-                    $("#suppliers").removeClass("bg-white !text-[#c4bcaf]");
-                    $("#suppliers").addClass("text-white");
-                    $("#suppliers-dropdown").hide();
-                }
-            });
+            // $("#suppliers, #suppliers-dropdown").hover(function(event) {
+            //     if (event.type === "mouseenter") {
+            //         $("#suppliers").addClass("bg-white !text-[#c4bcaf]");
+            //         $("#suppliers-dropdown").show();
+            //     } else if (event.type === "mouseleave") {
+            //         $("#suppliers").removeClass("bg-white !text-[#c4bcaf]");
+            //         $("#suppliers").addClass("text-white");
+            //         $("#suppliers-dropdown").hide();
+            //     }
+            // });
+            //run this code when in mobile view or tablet view
+        //     $("#suppliers").click(function() {
+        //     if ($("#suppliers-dropdown").is(":visible")) {
+        //         $(this).removeClass("bg-white !text-[#c4bcaf]");
+        //         $(this).addClass("text-white");
+        //         $("#suppliers-dropdown").hide();
+        //     } else {
+        //         $(this).addClass("bg-white !text-[#c4bcaf]");
+        //         $("#suppliers-dropdown").show();
+        //     }
+        // });
         });
     </script>
     {{-- custom page scripts --}}
