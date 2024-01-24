@@ -17,7 +17,7 @@ class Index extends Component
     public $category_id;
     public $category_type;
 
-    public function mount(string $query = null, int $id = null)
+    public function mount(int $category_id = null)
     {
         $suppliers = SubscriberCompany::query()
             ->with('companyCategories', 'payments')
@@ -28,16 +28,14 @@ class Index extends Component
             ->whereHas('subscriber', function ($query) {
                 $query->whereNull('deleted_at');
             });
-        if ($query === 'category') {
-            $suppliers
-                ->whereHas('companyCategories', function ($query) use ($id) {
-                    $query->where('category_id', $id);
-                });
-            $this->category_id = $id;
-            $this->query = $suppliers->get();
-        } elseif ($query === 'supplier') {
-            $this->query = $suppliers->where('id', $id);
-        }
+            if ($category_id) {
+                $suppliers
+                    ->whereHas('companyCategories', function ($query) use ($category_id) {
+                        $query->where('category_id', $category_id);
+                    });
+                $this->category_id = $category_id;
+            }
+
         $this->query = $suppliers->get();
 
         // dd($this->query);

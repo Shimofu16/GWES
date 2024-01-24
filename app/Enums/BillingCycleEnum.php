@@ -9,6 +9,7 @@ enum BillingCycleEnum: string
 {
     case MONTHLY = 'monthly';
     case YEARLY = 'yearly';
+    case DAYS = 'days';
 
     public static function toArray(): array
     {

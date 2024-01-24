@@ -22,4 +22,14 @@ class Subscriber extends Model
     {
         return $this->hasMany(SubscriberCompany::class);
     }
+    protected $appends = ['active_subscribers'];
+
+    public function getActiveSubscribersAttribute()
+    {
+        return $this->companies()->whereHas('payments', function ($q) {
+            $q->where('latest', true)
+                ->where('status',  PaymentStatusEnum::ACTIVE->value);
+        })
+            ->get();
+    }
 }

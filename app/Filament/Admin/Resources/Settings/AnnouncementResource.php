@@ -2,24 +2,23 @@
 
 namespace App\Filament\Admin\Resources\Settings;
 
-use App\Filament\Admin\Resources\Settings\BlogResource\Pages;
-use App\Filament\Admin\Resources\Settings\BlogResource\RelationManagers;
-use App\Models\Blog;
-use App\Models\SubscriberCompany;
+use App\Filament\Admin\Resources\Settings\AnnouncementResource\Pages;
+use App\Filament\Admin\Resources\Settings\AnnouncementResource\RelationManagers;
+use App\Models\Announcement;
 use Filament\Forms;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Section as ComponentsSection;
+use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
@@ -36,44 +35,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Storage;
 
-class BlogResource extends Resource
+class AnnouncementResource extends Resource
 {
-    protected static ?string $model = Blog::class;
+    protected static ?string $model = Announcement::class;
 
     protected static ?string $navigationGroup = 'Settings';
-
-
-
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Section::make()
-                    ->schema([
-                        TextInput::make('title')
-                            ->required(),
-                        DatePicker::make('date')
-                            ->required(),
-                        Select::make('subscriber_company_id')
-                            ->options(SubscriberCompany::pluck('name', 'id'))
-                            ->label('Company')
-                            ->required()
-                            ->columnSpanFull(),
-                        Textarea::make('description')
-                            ->required()
-                            ->columnSpanFull(),
-                        FileUpload::make('images')
-                            ->required()
-                            ->image()
-                            ->directory('blogs')
-                            // ->multiple()
-                            ->imageEditor()
-                            ->columnSpanFull()
-
-                    ])
-                    ->columns(2)
-            ]);
-    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -82,23 +48,27 @@ class BlogResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
-
-    public static function infolist(Infolist $infolist): Infolist
+    public static function form(Form $form): Form
     {
-        return $infolist
+        return $form
             ->schema([
-                ComponentsSection::make()
+                Section::make('Announcement Information')
                     ->schema([
-                        TextEntry::make('title'),
-                        TextEntry::make('date')
-                            ->date(),
-                        TextEntry::make('company.name'),
-                        TextEntry::make('description')
+                        TextInput::make('title')
+                            ->required(),
+                        Toggle::make('is_visible'),
+                        Textarea::make('description')
+                            ->rows(5)
+                            ->required()
                             ->columnSpanFull(),
-                        ImageEntry::make('images')
-                            ->columnSpanFull(),
+                        FileUpload::make('image')
+                            ->image()
+                            ->disk('public')
+                            ->directory('announcements')
+                            ->columnSpanFull()
+                            ->required(),
                     ])
-                    ->columns(3)
+                    ->columns(2)
             ]);
     }
 
@@ -106,14 +76,9 @@ class BlogResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('company.name')
-                    ->searchable(),
                 TextColumn::make('title'),
-                TextColumn::make('date')
-                    ->date(),
                 TextColumn::make('description')
-                    ->limit(30)
-                    ->words(20)
+                ->limit(80),
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -126,12 +91,12 @@ class BlogResource extends Resource
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     ForceDeleteBulkAction::make()
-                    ->action(function(Collection $records){
-                        foreach ($records as $key => $record) {
-                            Storage::disk('public')->delete($record->images);
-                            $record->forceDelete();
-                        }
-                    }),
+                        ->action(function(Collection $records){
+                            foreach ($records as $key => $record) {
+                                Storage::disk('public')->delete($record->image);
+                                $record->forceDelete();
+                            }
+                        }),
                     RestoreBulkAction::make(),
                 ]),
             ])
@@ -139,11 +104,37 @@ class BlogResource extends Resource
                 CreateAction::make(),
             ]);
     }
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Split::make([
+                    ComponentsSection::make([
+                        TextEntry::make('title')
+                            ->weight(FontWeight::Bold),
+                        TextEntry::make('description')
+                            ->markdown()
+                            ->prose(),
+                        ImageEntry::make('image')
+                            ->columnSpanFull(),
+
+                    ]),
+                    ComponentsSection::make([
+                        TextEntry::make('created_at')
+                            ->dateTime(),
+                    ])->grow(false),
+                ])->from('md')
+                    ->columnSpanFull()
+
+            ]);
+    }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageBlogs::route('/'),
+            'index' => Pages\ListAnnouncements::route('/'),
+            'create' => Pages\CreateAnnouncement::route('/create'),
+            'edit' => Pages\EditAnnouncement::route('/{record}/edit'),
         ];
     }
 }

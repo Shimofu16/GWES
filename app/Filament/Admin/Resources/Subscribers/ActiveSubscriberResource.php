@@ -125,11 +125,11 @@ class ActiveSubscriberResource extends Resource
                                 foreach ($records as $record) {
                                     foreach ($record->companies as $key => $company) {
                                         foreach ($company->payments as $key => $payment) {
-                                            Storage::delete($payment->proof_of_payment);
+                                            Storage::disk('public')->delete($payment->proof_of_payment);
                                             $payment->delete();
                                         }
-                                        Storage::delete($company->logo);
-                                        Storage::delete($company->image);
+                                        Storage::disk('public')->delete($company->logo);
+                                        Storage::disk('public')->delete($company->image);
                                         $company->companyCategories()->delete();
                                         $company->delete();
                                     }
@@ -192,7 +192,7 @@ class ActiveSubscriberResource extends Resource
     public static function getRelations(): array
     {
         return [
-            CompaniesRelationManager::class
+            // 
         ];
     }
 
@@ -204,7 +204,7 @@ class ActiveSubscriberResource extends Resource
                     ->tabs([
                         ComponentsTab::make('Company Information')
                             ->schema([
-                                RepeatableEntry::make('companies')
+                                RepeatableEntry::make('active_subscribers')
                                     ->schema([
                                         ImageEntry::make('logo')
                                             ->label('Logo')
@@ -256,7 +256,7 @@ class ActiveSubscriberResource extends Resource
                             ]),
                             ComponentsTab::make('Payments')
                             ->schema([
-                                RepeatableEntry::make('companies')
+                                RepeatableEntry::make('active_subscribers')
                                     ->schema([
                                         InfoListSection::make()
                                             ->schema([

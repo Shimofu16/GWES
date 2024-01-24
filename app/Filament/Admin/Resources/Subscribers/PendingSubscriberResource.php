@@ -6,9 +6,16 @@ use App\Enums\PaymentStatusEnum;
 use App\Filament\Admin\Resources\Subscribers\PendingSubscriberResource\Pages;
 use App\Filament\Admin\Resources\Subscribers\PendingSubscriberResource\Pages\ListPendingSubscribers;
 use App\Filament\Admin\Resources\Subscribers\PendingSubscriberResource\RelationManagers;
+use App\Models\Category;
 use App\Models\SubscriberCompany;
 use App\Models\Subscribers\PendingSubscriber;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
@@ -54,7 +61,7 @@ class PendingSubscriberResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with('payments','companyCategories')
+            ->with('payments', 'companyCategories')
             ->whereHas('payments', function ($query) {
                 $query->where('latest', true)
                     ->where('status', '!=', PaymentStatusEnum::ACTIVE->value);
@@ -65,7 +72,66 @@ class PendingSubscriberResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Section::make(function ($record) {
+                    return $record->name . ' Information';
+                })
+                    ->schema([
+                        FileUpload::make('logo')
+                            ->image()
+                            ->avatar()
+                            ->disk('public')
+                            ->directory('companies/logos')
+                            ->required(),
+                        FileUpload::make('image')
+                            ->image()
+                            ->disk('public')
+                            ->directory('companies/images')
+                            ->required(),
+                        TextInput::make('name')
+                            ->required(),
+                        TextInput::make('phone')
+                            ->required()
+                            ->length(11),
+                        Textarea::make('address')
+                            ->rows(5)
+                            ->required(),
+                        Select::make('company_categories')
+                            ->label('Categories')
+                            ->multiple()
+                            ->searchable()
+                            ->options(Category::pluck('name', 'id'))
+                            ->maxItems(function($record){
+                                return $record->payment->plan->categories;
+                            })
+                            ->maxItemsMessage('You reach the maximum categories you can input.')
+                            ->helperText(function ($record) {
+                                return  'Note: Selecting categories here will change the current categories of the company.
+                             No of allowed categories : ' . $record->payment->plan->categories;
+                            }),
+                        Fieldset::make('Price Range')
+                            ->schema([
+                                TextInput::make('minimum')
+                                    ->numeric()
+                                    ->required(),
+                                TextInput::make('maximum')
+                                    ->numeric()
+                                    ->required(),
+                            ])
+                            ->columns(2),
+                        Textarea::make('description')
+                            ->rows(10)
+                            ->required()
+                            ->columnSpanFull(),
+                        Textarea::make('socials')
+                            ->required()
+                            ->columnSpanFull()
+                         
+                        //     ->helperText('Note:  Please ensure that each link is followed by a comma also remove https://. Note that a maximum
+                        // of 3 social media links will be accepted.'),
+                    ])
+                    ->columns(2),
+
+
             ]);
     }
 
@@ -93,7 +159,7 @@ class PendingSubscriberResource extends Resource
                 //
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
@@ -320,7 +386,7 @@ class PendingSubscriberResource extends Resource
         return [
             'index' => Pages\ListPendingSubscribers::route('/'),
             // 'create' => Pages\CreatePendingSubscriber::route('/create'),
-            // 'edit' => Pages\EditPendingSubscriber::route('/{record}/edit'),
+            'edit' => Pages\EditPendingSubscriber::route('/{record}/edit'),
         ];
     }
 }

@@ -36,13 +36,14 @@ class PlanResource extends Resource
             ->schema([
                 Group::make()
                     ->schema([
-                        Section::make('Plan Info.')
+                        Section::make('Plan Information')
                             ->schema([
                                 TextInput::make('name')
                                     ->required(),
                                 TextInput::make('price')
-                                    ->integer()
-                                    ->required(),
+                                    ->default(0)
+                                    ->required()
+                                    ->integer(),
                                 TextInput::make('categories')
                                     ->integer()
                                     ->required()
@@ -70,14 +71,29 @@ class PlanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                ->searchable(),
                 TextColumn::make('price')
                     ->money('PHP'),
                 TextColumn::make('categories'),
                 TextColumn::make('duration')
                     ->getStateUsing(function (Plan $record) {
                         $billing_cycle = ($record->billing_cycle === "monthly") ? 'Months' : 'Years';
+                        switch ($record->billing_cycle) {
+                            case 'monthly':
+                                $billing_cycle = 'Month';
+                                break;
+                            case 'yearly':
+                                $billing_cycle = 'Years';
+                                break;
+                            case 'days':
+                                $billing_cycle = 'Day';
+                                break;
+                        }
                         $duration = $record->duration . ' ' . $billing_cycle;
+                        if ($record->duration > 1) {
+                            $duration = $record->duration . ' ' . $billing_cycle . 's';
+                        }
                         return $duration;
                     }),
                 TextColumn::make('type'),
@@ -85,15 +101,15 @@ class PlanResource extends Resource
                     ->label('Visibility')
             ])
             ->filters([
-                //
+                
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->emptyStateActions([

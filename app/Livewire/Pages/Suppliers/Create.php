@@ -121,9 +121,9 @@ class Create extends Component
             $proof_of_payment_file_name = $company['name'] . '.' . $this->proof_of_payment->getClientOriginalExtension();
             $this->proof_of_payment->storeAs('companies/payments', $proof_of_payment_file_name, 'public');
             $links = explode(',', $company['socials']);
-            $socials=[];
+            $socials = [];
             $loop_count = count($links);
-            if(count($links) > 3){
+            if (count($links) > 3) {
                 $loop_count = 3;
             }
             for ($i = 0; $i < $loop_count; $i++) {
@@ -135,17 +135,33 @@ class Create extends Component
                 $isPremium = true;
             }
             $duration = $plan->duration;
-            if ($this->redeemed_coupon) {
-                if ($this->redeemed_coupon->discount_type == 'free_subscription') {
-                    $duration = $plan->duration + $this->redeemed_coupon->subscription_duration;
-                }
-                $this->redeemed_coupon->update([
-                    'redemption_count' => $this->redeemed_coupon->redemption_count++
-                ]);
-            }
-            $due_date = Carbon::now()->addMonths($duration);
-            if ($plan->billing_cycle === 'yearly') {
-                $due_date = Carbon::now()->addYears($duration);
+
+            switch ($plan->billing_cycle) {
+                case 'monthly':
+                    if ($this->redeemed_coupon) {
+                        if ($this->redeemed_coupon->discount_type == 'free_subscription') {
+                            $duration = $plan->duration + $this->redeemed_coupon->subscription_duration;
+                        }
+                        $this->redeemed_coupon->update([
+                            'redemption_count' => $this->redeemed_coupon->redemption_count++
+                        ]);
+                    }
+                    $due_date = Carbon::now()->addMonths($duration);
+                    break;
+                case 'yearly':
+                    if ($this->redeemed_coupon) {
+                        if ($this->redeemed_coupon->discount_type == 'free_subscription') {
+                            $duration = $plan->duration + $this->redeemed_coupon->subscription_duration;
+                        }
+                        $this->redeemed_coupon->update([
+                            'redemption_count' => $this->redeemed_coupon->redemption_count++
+                        ]);
+                    }
+                    $due_date = Carbon::now()->addYears($duration);
+                    break;
+                case 'days':
+                    $due_date = Carbon::now()->addDays($duration);
+                    break;
             }
 
             $subscriber_company_id = SubscriberCompany::create([
