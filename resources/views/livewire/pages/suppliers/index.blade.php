@@ -1,4 +1,4 @@
-<section class="container mx-auto px-3 lg:px-0 h-dvh">
+<section class="container mx-auto px-3 lg:px-0">
     <div class="flex justify-between flex-wrap mb-3">
         <div class="">
 
