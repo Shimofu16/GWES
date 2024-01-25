@@ -244,7 +244,20 @@
                                                             </th>
                                                             <td class="px-3 md:px-5 py-4">
                                                                 {{ $plan->duration }}
-                                                                {{ $plan->billing_cycle == 'monthly' ? 'Month' : 'Year' }}{{ $plan->duration > 1 ? 's' : '' }}
+                                                                @switch($plan->billing_cycle)
+                                                                    @case('monthly')
+                                                                        {{ 'Month' }}{{ $plan->duration > 1 ? 's' : '' }}
+                                                                    @break
+
+                                                                    @case('yearly')
+                                                                        {{ 'Year' }}{{ $plan->duration > 1 ? 's' : '' }}
+                                                                    @break
+
+                                                                    @case('days')
+                                                                        {{ 'Day' }}{{ $plan->duration > 1 ? 's' : '' }}
+                                                                    @break
+                                                                @endswitch
+                                                                
                                                                 @if ($plan->type == 'premium a' || $plan->type == 'premium b' || $plan->type == 'premium c')
                                                                     {{ 'With Logo ads' }}
                                                                 @endif
@@ -262,9 +275,11 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_socials_{{ $i }}" class="leading-7 text-sm text-gray-600">Company Socials
+                                        <label for="company_socials_{{ $i }}"
+                                            class="leading-7 text-sm text-gray-600">Company Socials
                                             (3)<span class="text-red-500">*</span></label>
-                                        <textarea id="company_socials_{{ $i }}" name="company_socials_{{ $i }}" wire:model='companies.{{ $i }}.socials'
+                                        <textarea id="company_socials_{{ $i }}" name="company_socials_{{ $i }}"
+                                            wire:model='companies.{{ $i }}.socials'
                                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                                             rows="3" placeholder="Ex: https://facebook.com, https://instagra.com, https://twitter.com/"></textarea>
                                         <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -306,7 +321,8 @@
                                         </div>
                                     </div>
                                     <div class="col-span-2 lg:col-span-4 relative mb-4">
-                                        <label for="company_description_{{ $i }}" class="leading-7 text-sm text-gray-600">Company
+                                        <label for="company_description_{{ $i }}"
+                                            class="leading-7 text-sm text-gray-600">Company
                                             Description
                                             <span class="text-red-500">*</span></label>
                                         <textarea id="company_description_{{ $i }}" name="company_description_{{ $i }}"
@@ -362,7 +378,20 @@
                                                         </th>
                                                         <td class="px-3 md:px-5 py-4">
                                                             {{ $selected_plan->duration }}
-                                                            {{ $selected_plan->billing_cycle == 'monthly' ? 'Month' : 'Year' }}{{ $selected_plan->duration > 1 ? 's' : '' }}
+                                                            @switch($selected_plan->billing_cycle)
+                                                                @case('monthly')
+                                                                    {{ 'Month' }}
+                                                                @break
+
+                                                                @case('yearly')
+                                                                    {{ 'Year' }}
+                                                                @break
+
+                                                                @case('days')
+                                                                    {{ 'Day' }}
+                                                                @break
+                                                            @endswitch
+                                                            {{ $selected_plan->duration > 1 ? 's' : '' }}
                                                             @if ($selected_plan->type == 'premium a' || $selected_plan->type == 'premium b' || $selected_plan->type == 'premium c')
                                                                 {{ 'With Logo ads' }}
                                                             @endif
