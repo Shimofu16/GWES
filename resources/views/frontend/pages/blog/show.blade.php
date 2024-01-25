@@ -1,5 +1,5 @@
 <x-layouts.app>
-    <section class="h-dvh">
+    <section class="">
         <div class="container px-5 pb-10 pt-5 mx-auto">
             {{-- <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
                 <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-bold text-gray-900 ">Our Blogs</h2>

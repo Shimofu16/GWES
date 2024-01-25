@@ -92,7 +92,7 @@
         <section class="container mx-auto mt-[50px] sm:mt-[100px]">
             <!--Announcement Container-->
             <div class="px-5">
-                <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-7">Announcement</h1>
+                {{-- <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-7">Announcement</h1> --}}
                 <div class="flex flex-col md:flex-row justify-center">
                     <!--Announcement Title/Description-->
                     <div class="flex flex-col justify-center w-full md:px-10">
@@ -100,7 +100,8 @@
                             {{ $announcement->title }}
                         </h1>
                         <p class="text-justify text-gray-600">
-                            {!! nl2br(e(Str::of($announcement->description)->limit(500))) !!}
+                            {{ Str::of($announcement->description)->limit(500) }}
+                            {{-- {!! nl2br(e(Str::of($announcement->description)->limit(500))) !!} --}}
                         </p>
                         <!--Announcement Button-->
                         <div class="ml-6 pt-5 text-center">
