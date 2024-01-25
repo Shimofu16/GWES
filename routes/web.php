@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
@@ -35,4 +36,8 @@ Route::controller(FeedbackController::class)->prefix('feedbacks')->name('feedbac
     Route::get('/', 'index')->name('index');
     Route::get('/write', 'create')->name('create');
     Route::post('/write', 'store')->name('store');
+});
+Route::controller(AnnouncementController::class)->prefix('announcements')->name('announcements.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/{announcement_id}', 'show')->name('show');
 });

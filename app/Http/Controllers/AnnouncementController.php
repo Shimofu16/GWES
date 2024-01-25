@@ -2,29 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\PaymentStatusEnum;
 use App\Models\Announcement;
-use App\Models\Category;
-use App\Models\SubscriberCompany;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class AnnouncementController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $suppliers = SubscriberCompany::query()
-            ->with('payments','subscriber')
-            ->whereHas('payments', function ($query) {
-                $query->where('latest', true)
-                    ->where('isPremium', true)
-                    ->where('status',  PaymentStatusEnum::ACTIVE->value);
-            })
-            ->pluck('logo', 'id');
-        $announcement = Announcement::where('is_visible', true)->first();
-        return view('frontend.pages.home.index', compact('suppliers','announcement'));
+        //
     }
 
     /**
@@ -46,9 +34,10 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $announcement = Announcement::find($id);
+        return view('frontend.pages.announcement.show', compact('announcement'));
     }
 
     /**

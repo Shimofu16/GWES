@@ -60,7 +60,8 @@
             <div class="owl-carousel owl-theme owl-loaded owl-drag">
                 @foreach ($suppliers as $supplier)
                     <div class="rounded-full bg-white w-[95px] h-[95px] mx-2 flex justify-center">
-                        <img src="{{ asset('storage/' . $supplier) }}" alt="Logo 1" class="rounded-full" loading="lazy">
+                        <img src="{{ asset('storage/' . $supplier) }}" alt="Logo 1" class="rounded-full"
+                            loading="lazy">
                     </div>
                 @endforeach
                 @if ($suppliers->count() < 100)
@@ -87,7 +88,40 @@
             </div>
         </div>
     </section>
+    @if ($announcement)
+        <section class="container mx-auto mt-[50px] sm:mt-[100px]">
+            <!--Announcement Container-->
+            <div class="px-5">
+                <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-7">Announcement</h1>
+                <div class="flex flex-col md:flex-row justify-center">
+                    <!--Announcement Title/Description-->
+                    <div class="flex flex-col justify-center w-full md:px-10">
+                        <h1 class="text-center text-2xl font-serif  md:text-3xl lg:text-4xl mb-5">
+                            {{ $announcement->title }}
+                        </h1>
+                        <p class="text-justify text-gray-600">
+                            {!! nl2br(e(Str::of($announcement->description)->limit(500))) !!}
+                        </p>
+                        <!--Announcement Button-->
+                        <div class="ml-6 pt-5 text-center">
+                            <a href="{{ route('announcements.show', ['announcement_id' => $announcement->id]) }}"
+                                class="transform hover:scale-105 transition-all duration-200 bg-[#c4bcaf] text-white font-bold px-3 py-2.5 rounded mb-3">
+                                Reed More.
+                            </a>
+                        </div>
+                    </div>
+                    <!--Announcement Picture-->
+                    <div class="flex flex-col justify-center items-center w-full">
+                        <img src="{{ asset('storage/' . $announcement->image) }}" class="object-cover mb-5 rounded"
+                            alt="Your Image">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    @endif
     <section class="container mx-auto px-5 mt-[50px] sm:mt-[100px]">
+
         <div class="flex flex-col md:flex-row justify-center">
             <div class="flex flex-col justify-center items-center w-full">
                 <h1 class="text-center text-2xl font-semibold  md:text-3xl lg:text-4xl text-[#9b4819] mb-5">About Us

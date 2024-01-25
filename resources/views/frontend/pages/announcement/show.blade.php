@@ -9,14 +9,14 @@
             </div> --}}
             <div class="flex flex-wrap -m-4 px-3">
                 <article class="bg-white p-4 md:p-8 rounded-lg shadow-md md:mr-4 md:flex-1">
-                    <h2 class="text-2xl md:text-3xl font-bold mb-2 text-[#9b4819]">{{ $blog->title }}</h2>
-                    <p class="text-gray-600 mb-2 md:mb-4">Published on {{ date('M d, Y', strtotime($blog->date)) }}</p>
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2 text-[#9b4819]">{{ $announcement->title }}</h2>
+                    <p class="text-gray-600 mb-2 md:mb-4">Published on {{ date('M d, Y', strtotime($announcement->date)) }}</p>
 
-                    <img src="{{ asset('storage/' . $blog->images) }}" id="blogpostpic" alt="Blog Post Image"
+                    <img src="{{ asset('storage/' . $announcement->image) }}" alt="{{ $announcement->title }}"
                         class="mb-4 rounded-lg" loading="lazy">
 
                     <p class="mb-2 text-wrap">
-                        {!! nl2br(e($blog->description)) !!}
+                        {!! nl2br(e($announcement->description)) !!}
                         {{-- {!! $blog->description !!} --}}
                     </p>
                 </article>
