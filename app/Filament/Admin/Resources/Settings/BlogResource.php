@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Settings;
 
+use App\Enums\PaymentStatusEnum;
 use App\Filament\Admin\Resources\Settings\BlogResource\Pages;
 use App\Filament\Admin\Resources\Settings\BlogResource\RelationManagers;
 use App\Models\Blog;
@@ -55,7 +56,16 @@ class BlogResource extends Resource
                         DatePicker::make('date')
                             ->required(),
                         Select::make('subscriber_company_id')
-                            ->options(SubscriberCompany::pluck('name', 'id'))
+                            ->options(
+                                function () {
+                                    return SubscriberCompany::with('payments')
+                                        ->whereHas('payments', function ($query) {
+                                            $query->where('latest', true)
+                                                ->where('status',PaymentStatusEnum::ACTIVE->value);
+                                        })
+                                        ->pluck('name', 'id');
+                                }
+                            )
                             ->label('Company')
                             ->required()
                             ->columnSpanFull(),
@@ -126,12 +136,12 @@ class BlogResource extends Resource
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     ForceDeleteBulkAction::make()
-                    ->action(function(Collection $records){
-                        foreach ($records as $key => $record) {
-                            Storage::disk('public')->delete($record->images);
-                            $record->forceDelete();
-                        }
-                    }),
+                        ->action(function (Collection $records) {
+                            foreach ($records as $key => $record) {
+                                Storage::disk('public')->delete($record->images);
+                                $record->forceDelete();
+                            }
+                        }),
                     RestoreBulkAction::make(),
                 ]),
             ])

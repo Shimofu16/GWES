@@ -101,11 +101,11 @@ class CategoryResource extends Resource
                     Tables\Actions\DeleteBulkAction::make()
                         ->action(function (Collection $records) {
                             foreach ($records as $record) {
-                                if ($record->subscribersCount() > 0) {
+                                if ($record->companies()->count() > 0) {
                                     Notification::make()
                                         ->danger()
-                                        ->title('Has subscribers')
-                                        ->body($record->name . ' has subscribers')
+                                        ->title('Error deleting category')
+                                        ->body("The category $record->name  has companies")
                                         ->send();
                                 } else {
                                     $record->delete();

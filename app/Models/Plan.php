@@ -29,8 +29,15 @@ class Plan extends Model
         // 'type' => enum,
     ];
 
-    public function companies()
+    protected $appends = ['companies'];
+
+    public function getCompaniesAttribute()
     {
-        return $this->hasMany(SubscriberCompany::class);
+        return $this->payments()->where('latest', true)->count();
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

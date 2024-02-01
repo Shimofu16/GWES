@@ -33,6 +33,7 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -65,7 +66,10 @@ class PendingSubscriberResource extends Resource
             ->whereHas('payments', function ($query) {
                 $query->where('latest', true)
                     ->where('status', '!=', PaymentStatusEnum::ACTIVE->value);
-            });
+            })
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 
     public static function form(Form $form): Form
@@ -100,7 +104,7 @@ class PendingSubscriberResource extends Resource
                             ->multiple()
                             ->searchable()
                             ->options(Category::pluck('name', 'id'))
-                            ->maxItems(function($record){
+                            ->maxItems(function ($record) {
                                 return $record->payment->plan->categories;
                             })
                             ->maxItemsMessage('You reach the maximum categories you can input.')
@@ -125,13 +129,11 @@ class PendingSubscriberResource extends Resource
                         Textarea::make('socials')
                             ->required()
                             ->columnSpanFull()
-                         
+
                         //     ->helperText('Note:  Please ensure that each link is followed by a comma also remove https://. Note that a maximum
                         // of 3 social media links will be accepted.'),
                     ])
                     ->columns(2),
-
-
             ]);
     }
 
@@ -156,7 +158,7 @@ class PendingSubscriberResource extends Resource
                     ->label('Price Range'),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -175,6 +177,7 @@ class PendingSubscriberResource extends Resource
                                         ->update([
                                             'status' => PaymentStatusEnum::ACTIVE->value,
                                         ]);
+                                    $record->restore();
                                 }
                                 Notification::make()
                                     ->success()
@@ -197,7 +200,15 @@ class PendingSubscriberResource extends Resource
                         ->color(Color::Emerald)
                         ->requiresConfirmation()
                         ->modalHeading('Accept Subscribers')
-                        ->modalDescription('Are you sure you want to accept these subscribers?'),
+                        ->modalDescription('Are you sure you want to accept these subscribers?')
+                        ->hidden(function (HasTable $livewire): bool {
+                            $trashedFilterState = $livewire->getTableFilterState(Tables\Filters\TrashedFilter::class);
+                            if ($trashedFilterState['value']) {
+                                // dd($trashedFilterState);
+                                return true;
+                            }
+                            return false;
+                        }),
                     BulkAction::make('set_status_to_renewal')
                         ->action(function (Collection $records) {
                             try {
@@ -232,6 +243,21 @@ class PendingSubscriberResource extends Resource
                         ->requiresConfirmation()
                         ->modalHeading('Update Status')
                         ->modalDescription('Are you sure you want to set inactive status for these subscribers?'),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->name('Soft Delete Selected Subscribers')
+                        ->modalHeading('Soft Delete Subscribers')
+                        ->modalDescription('Are you sure you want to soft delete these subscribers?'),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->modalHeading('Permanently Delete Subscribers')
+                        ->modalDescription('Are your sure you want to permanently delete these subscribers?'),
+                    Tables\Actions\RestoreBulkAction::make()
+                        // ->action(function (Collection $records) {
+                        //     foreach ($records as $key => $record) {
+                        //         $record->restore();
+                        //     }
+                        // })
+                        ->modalHeading('Restore Subscribers')
+                        ->modalDescription('Are your sure you want to restore these subscribers?'),
                 ]),
             ])
             ->emptyStateActions([

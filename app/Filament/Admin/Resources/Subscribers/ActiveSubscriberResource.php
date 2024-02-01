@@ -2,40 +2,50 @@
 
 namespace App\Filament\Admin\Resources\Subscribers;
 
+use Filament\Forms;
+use Filament\Tables;
+use App\Models\Category;
+use Filament\Forms\Form;
+use App\Models\Subscriber;
+use Filament\Tables\Table;
 use App\Enums\PaymentStatusEnum;
+use Filament\Infolists\Infolist;
+use Filament\Resources\Resource;
+use App\Models\SubscriberCompany;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Storage;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\FileUpload;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Filters\TrashedFilter;
+use App\Models\Subscribers\ActiveSubscriber;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Tables\Actions\BulkActionGroup;
+use Illuminate\Database\Eloquent\Collection;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Infolists\Components\Tabs as ComponentsTabs;
+use Filament\Infolists\Components\Tabs\Tab as ComponentsTab;
+use Filament\Infolists\Components\Section as InfoListSection;
 use App\Filament\Admin\Resources\Subscribers\ActiveSubscriberResource\Pages;
 use App\Filament\Admin\Resources\Subscribers\ActiveSubscriberResource\RelationManagers;
 use App\Filament\Admin\Resources\Subscribers\ActiveSubscriberResource\RelationManagers\CompaniesRelationManager;
-use App\Models\Subscriber;
-use App\Models\SubscriberCompany;
-use App\Models\Subscribers\ActiveSubscriber;
-use Filament\Forms;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Tabs ;
-use Filament\Forms\Components\Tabs\Tab;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Infolists\Components\Section as InfoListSection;
-use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\ImageEntry;
-use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Tabs as ComponentsTabs;
-use Filament\Infolists\Components\Tabs\Tab as ComponentsTab;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
-use Filament\Notifications\Notification;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\ForceDeleteBulkAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Storage;
+use App\Models\SubscriberCompanyCategory;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Get;
 
 class ActiveSubscriberResource extends Resource
 {
@@ -78,17 +88,116 @@ class ActiveSubscriberResource extends Resource
         return $form
             ->schema([
                 Section::make('Owner Information')
-                ->schema([
-                    TextInput::make('name')
-                        ->required(),
-                    TextInput::make('email')
-                        ->email()
-                        ->required(),
-                    TextInput::make('phone')
-                        ->length(11)
-                        ->required(),
-                ])
+                    ->schema([
+                        TextInput::make('name')
+                            ->required(),
+                        TextInput::make('email')
+                            ->email()
+                            ->required(),
+                        TextInput::make('phone')
+                            ->length(11)
+                            ->required(),
+                    ]),
+                Repeater::make('companies')
+                    ->relationship()
+                    ->schema([
+                        Section::make(function ($record) {
+                            return $record->name . ' Information';
+                        })
+                            ->schema([
+                                FileUpload::make('logo')
+                                    ->image()
+                                    ->avatar()
+                                    ->disk('public')
+                                    ->directory('companies/logos')
+                                    ->required(),
+                                FileUpload::make('image')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('companies/images')
+                                    ->required(),
+                                Hidden::make('id'),
+                                TextInput::make('name')
+                                    ->required(),
+                                TextInput::make('phone')
+                                    ->required()
+                                    ->length(11),
+                                Textarea::make('address')
+                                    ->rows(5)
+                                    ->required(),
+                                Select::make('company_categories')
+                                    ->label('Categories')
+                                    ->multiple()
+                                    ->searchable()
+                                    ->options(Category::pluck('name', 'id'))
+                                    ->maxItems(function ($record) {
+                                        return $record->payment->plan->categories;
+                                    })
+                                    ->maxItemsMessage('You reach the maximum categories you can input.')
+                                    ->helperText(function ($record) {
+                                        return  'Note: Selecting categories here will change the current categories of the company.
+                                 No of allowed categories : ' . $record->payment->plan->categories;
+                                    }),
+                                Fieldset::make('Price Range')
+                                    ->schema([
+                                        TextInput::make('minimum')
+                                            ->numeric()
+                                            ->required(),
+                                        TextInput::make('maximum')
+                                            ->numeric()
+                                            ->required(),
+                                    ])
+                                    ->columns(2),
+                                Textarea::make('description')
+                                    ->rows(10)
+                                    ->required()
+                                    ->columnSpanFull(),
+                                Textarea::make('socials')
+                                    ->required()
+                                    ->columnSpanFull()
 
+                                //     ->helperText('Note:  Please ensure that each link is followed by a comma also remove https://. Note that a maximum
+                                // of 3 social media links will be accepted.'),
+                            ])
+                            ->columns(2),
+                    ])
+                    ->columnSpanFull()
+                    ->addable(false)
+                    ->deletable(false)
+                    ->reorderable(false)
+                    ->reorderableWithDragAndDrop(false)
+                    ->collapsed()
+                    ->mutateRelationshipDataBeforeFillUsing(function (array $data): array {
+                        $price_range = explode(' - ', $data['price_range']);
+                        $data['minimum'] = $price_range[0];
+                        $data['maximum'] = $price_range[1];
+
+                        return $data;
+                    })
+                    ->mutateRelationshipDataBeforeSaveUsing(function (Get $get, array $data): array {
+                        // dd($data);
+                        $data['price_range'] = $data['minimum'] . ' - ' . $data['maximum'];
+                        if (!is_array($data['socials'])) {
+                            $data['socials'] = implode(',', $data['socials']);
+                        }
+                        // dd($data, $record->payment->plan->categories);
+                        $categories = $data['company_categories']; // from form
+                        if ($categories) {
+                            // delete current company categories
+                            $companyCategories = SubscriberCompanyCategory::where('subscriber_company_id', $data['id'])->get();
+                            foreach ($companyCategories as $key => $companyCategory) {
+                                $companyCategory->delete();
+                            }
+                            foreach ($categories as $key => $category) {
+
+                                SubscriberCompanyCategory::create([
+                                    'subscriber_company_id' => $data['id'],
+                                    'category_id' => $category,
+                                ]);
+                            }
+                        }
+                        return $data;
+                    })
             ]);
     }
 
@@ -128,12 +237,17 @@ class ActiveSubscriberResource extends Resource
                                             Storage::disk('public')->delete($payment->proof_of_payment);
                                             $payment->delete();
                                         }
+                                        foreach ($company->blogs as $key => $blog) {
+                                            Storage::disk('public')->delete($blog->images);
+                                            $blog->forceDelete();
+                                            // dd($company,$company->blogs);
+                                        }
                                         Storage::disk('public')->delete($company->logo);
                                         Storage::disk('public')->delete($company->image);
                                         $company->companyCategories()->delete();
-                                        $company->delete();
+                                        $company->forceDelete();
                                     }
-                                    $record->delete();
+                                    $record->forceDelete();
                                 }
                                 Notification::make()
                                     ->success()
@@ -192,7 +306,7 @@ class ActiveSubscriberResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // 
+            //
         ];
     }
 
@@ -254,7 +368,7 @@ class ActiveSubscriberResource extends Resource
                                     // ->contained(false)
                                     ->label('')
                             ]),
-                            ComponentsTab::make('Payments')
+                        ComponentsTab::make('Payments')
                             ->schema([
                                 RepeatableEntry::make('active_subscribers')
                                     ->schema([

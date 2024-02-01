@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SubscriberCompany extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'subscriber_id',
@@ -74,5 +75,9 @@ class SubscriberCompany extends Model
     public function companyCategories(): HasMany
     {
         return $this->hasMany(SubscriberCompanyCategory::class);
+    }
+    public function blogs(): HasMany
+    {
+        return $this->hasMany(Blog::class)->withTrashed();
     }
 }

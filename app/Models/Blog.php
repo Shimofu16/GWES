@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Blog extends Model
@@ -23,8 +24,8 @@ class Blog extends Model
     //     'images' => 'array',
     // ];
 
-    public function company()
+    public function company(): BelongsTo
     {
-        return $this->belongsTo(SubscriberCompany::class, 'subscriber_company_id');
+        return $this->belongsTo(SubscriberCompany::class);
     }
 }

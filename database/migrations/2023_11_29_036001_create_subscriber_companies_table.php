@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('price_range');
             $table->longText('description');
             $table->json('socials');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

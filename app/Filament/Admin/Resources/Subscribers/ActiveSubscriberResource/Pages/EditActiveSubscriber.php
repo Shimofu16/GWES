@@ -28,8 +28,18 @@ class EditActiveSubscriber extends EditRecord
             ->title('Updated Successfully')
             ->body('Subscriber Updated successfully.');
     }
-    //     protected function getRedirectUrl(): string
-    //     {
-    //         return $this->getResource()::getUrl('index');
-    //     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        // dd($data);
+        // $price_range = explode(' - ', $data['active_subscribers'][0]['price_range']);
+        // $data['minimum'] = $price_range[0];
+        // $data['maximum'] = $price_range[1];
+        return $data;
+    }
+
+        protected function getRedirectUrl(): string
+        {
+            return $this->getResource()::getUrl('index');
+        }
 }

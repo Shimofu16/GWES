@@ -18,10 +18,18 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
+use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PlanResource extends Resource
@@ -67,12 +75,20 @@ class PlanResource extends Resource
             ]);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 TextColumn::make('name')
-                ->searchable(),
+                    ->searchable(),
                 TextColumn::make('price')
                     ->money('PHP'),
                 TextColumn::make('categories'),
@@ -101,15 +117,35 @@ class PlanResource extends Resource
                     ->label('Visibility')
             ])
             ->filters([
-                
+                TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
+                EditAction::make(),
+                ViewAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()
+                        ->action(function (Collection $records) {
+                            foreach ($records as $key => $record) {
+                                if ($record->companies == 0) {
+                                    $record->delete();
+                                } else {
+                                    Notification::make()
+                                        ->title('Error Deleting Plan')
+                                        ->body("The Plan $record->name  has companies")
+                                        ->info()
+                                        ->send();
+                                }
+                            }
+                        }),
+                    ForceDeleteBulkAction::make()
+                        ->action(function (Collection $records) {
+                            foreach ($records as $key => $record) {
+                                $record->forceDelete();
+                            }
+                        }),
+                    RestoreBulkAction::make(),
                 ]),
             ])
             ->emptyStateActions([
