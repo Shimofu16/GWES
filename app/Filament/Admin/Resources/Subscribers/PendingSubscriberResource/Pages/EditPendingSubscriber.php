@@ -32,7 +32,7 @@ class EditPendingSubscriber extends EditRecord
     {
         $data['price_range'] = $data['minimum'] . ' - ' . $data['maximum'];
         if (!is_array($data['socials'])) {
-            $data['socials'] = implode(',', $data['socials']);
+            $data['socials'] = explode(',', $data['socials']);
         }
 
         return $data;

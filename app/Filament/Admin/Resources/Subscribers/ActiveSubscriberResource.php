@@ -178,7 +178,7 @@ class ActiveSubscriberResource extends Resource
                         // dd($data);
                         $data['price_range'] = $data['minimum'] . ' - ' . $data['maximum'];
                         if (!is_array($data['socials'])) {
-                            $data['socials'] = implode(',', $data['socials']);
+                            $data['socials'] = explode(',', $data['socials']);
                         }
                         // dd($data, $record->payment->plan->categories);
                         $categories = $data['company_categories']; // from form
