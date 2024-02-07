@@ -13,12 +13,12 @@
                     suppliers for all your wedding needs. </h1> --}}
 
                 <div class="text-center sm:text-start mt-3">
-                    <!--<a href="{{ route('suppliers.create') }}"-->
-                    <!--    class="text-white transform hover:scale-105 transition-all duration-200 bg-[#c4bcaf] hover:bg-[#ae9371]-->
-                    <!--     font-bold-->
-                    <!--     px-3 py-2.5 text-center rounded-full">-->
-                    <!--    Become a Supplier-->
-                    <!--</a>-->
+                    <a href="{{ route('suppliers.create') }}"
+                        class="text-white transform hover:scale-105 transition-all duration-200 bg-[#c4bcaf] hover:bg-[#ae9371]
+                         font-bold
+                         px-3 py-2.5 text-center rounded-full">
+                        Become a Supplier
+                    </a>
 
                 </div>
             </div>

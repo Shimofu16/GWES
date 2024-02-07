@@ -11,12 +11,12 @@
                         <img src="{{ asset('assets/images/gwes-logo-wbg.png') }}" class="h-20 rounded-full mx-auto my-3"
                         alt="{{ Config::get('app.name') }}" />
                     </a>
-                    {{-- <a href="{{ route('suppliers.create') }}"
+                    <a href="{{ route('suppliers.create') }}"
                         class="transform hover:scale-105 transition-all duration-200 bg-white text-[#c4bcaf] hover:text-[#ae9371]
                              font-bold
                              px-3 py-2.5 text-center rounded-full mx-auto self-center mb-3">
                         Become a Supplier
-                    </a> --}}
+                    </a>
                 </div>
             </div>
             <div>
