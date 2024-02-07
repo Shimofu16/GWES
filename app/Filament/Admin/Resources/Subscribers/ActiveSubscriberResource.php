@@ -46,6 +46,7 @@ use App\Models\SubscriberCompanyCategory;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
+use Filament\Tables\Filters\Filter;
 
 class ActiveSubscriberResource extends Resource
 {
@@ -215,7 +216,27 @@ class ActiveSubscriberResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
-                // ...
+                Filter::make('created_at')
+                    ->form([
+                        Select::make('company')
+                            ->label('Companies')
+                            ->searchable()
+                            ->options(SubscriberCompany::with('payments', 'companyCategories')
+                                ->whereHas('payments', function ($query) {
+                                    $query->where('latest', true)
+                                        ->where('status', PaymentStatusEnum::ACTIVE->value);
+                                })
+                                ->pluck('name', 'name'))
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        if ($data['company']) {
+                            return $query
+                                ->whereHas('companies', function ($que) use ($data) {
+                                    return $que->where('name', $data['company']);
+                                });
+                        }
+                        return $query;
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

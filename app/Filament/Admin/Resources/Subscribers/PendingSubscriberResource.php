@@ -38,6 +38,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
 
 class PendingSubscriberResource extends Resource
 {
@@ -247,7 +248,41 @@ class PendingSubscriberResource extends Resource
                         ->name('Soft Delete Selected Subscribers')
                         ->modalHeading('Soft Delete Subscribers')
                         ->modalDescription('Are you sure you want to soft delete these subscribers?'),
-                    Tables\Actions\ForceDeleteBulkAction::make()
+                    Tables\Actions\ForceDeleteBulkAction::make('Permanently Delete Selected Subscribers')
+                        ->action(function (Collection $records) {
+                            try {
+                                foreach ($records as $record) {
+                                    foreach ($record->payments as $key => $payment) {
+                                        Storage::disk('public')->delete($payment->proof_of_payment);
+                                        $payment->delete();
+                                    }
+                                    foreach ($record->blogs as $key => $blog) {
+                                        Storage::disk('public')->delete($blog->images);
+                                        $blog->forceDelete();
+                                        // dd($company,$company->blogs);
+                                    }
+                                    Storage::disk('public')->delete($record->logo);
+                                    Storage::disk('public')->delete($record->image);
+                                    $record->companyCategories()->delete();
+                                    $record->forceDelete();
+                                }
+                                Notification::make()
+                                    ->success()
+                                    ->title('Deleted Subscribers')
+                                    ->body('Successfully deleted Subscribers.')
+                                    ->duration(5000)
+                                    ->send();
+                                return redirect('admin/pending/subscribers');
+                            } catch (\Throwable $th) {
+                                dd($th->getMessage());
+                                // Notification::make()
+                                //     ->danger()
+                                //     ->title('Error')
+                                //     ->body($th->getMessage())
+                                //     ->duration(5000)
+                                //     ->send();
+                            }
+                        })
                         ->modalHeading('Permanently Delete Subscribers')
                         ->modalDescription('Are your sure you want to permanently delete these subscribers?'),
                     Tables\Actions\RestoreBulkAction::make()
